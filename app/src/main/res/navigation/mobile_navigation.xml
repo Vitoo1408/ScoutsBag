@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/mobile_navigation">
+
+
+    <fragment
+    android:id="@+id/navigation_activity"
+    android:name="pt.ipca.scoutsbag.ui.FragmentActivity"
+    android:label="Atividades"
+    android:layout="@layout/fragment_activity" />
+
+    <fragment
+        android:id="@+id/navigation_invites"
+        android:name="pt.ipca.scoutsbag.ui.FragmentInvite"
+        android:label="Convites"
+        android:layout="@layout/fragment_invite" />
+
+    <fragment
+        android:id="@+id/navigation_catalog"
+        android:name="pt.ipca.scoutsbag.ui.FragmentCatalog"
+        android:label="Catalogo"
+        android:layout="@layout/fragment_catalog" />
+
+    <fragment
+        android:id="@+id/navigation_more"
+        android:name="pt.ipca.scoutsbag.ui.FragmentMore"
+        android:label="Mais"
+        android:layout="@layout/fragment_more" />
+
+</navigation>
