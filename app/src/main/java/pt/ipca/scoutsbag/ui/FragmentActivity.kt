@@ -23,7 +23,7 @@ class FragmentActivity : Fragment() {
 
     // Global Variables
     lateinit var listView : ListView
-    lateinit var adapter : ActivityAdapter
+    // lateinit var adapter : ActivityAdapter
     var activities : MutableList<Activity> = arrayListOf()
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,7 +34,7 @@ class FragmentActivity : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
+/*
         // Start Corroutine
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -68,10 +68,10 @@ class FragmentActivity : Fragment() {
             }
 
         }
-
+*/
     }
 
-    inner class ActivityAdapter : BaseAdapter() {
+   /* inner class ActivityAdapter : BaseAdapter() {
         override fun getCount(): Int {
             return activities.size
         }
@@ -84,8 +84,8 @@ class FragmentActivity : Fragment() {
             return 0
         }
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val rowView = layoutInflater.inflate(R.layout.row_activity, parent, false)
+      override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            // val rowView = layoutInflater.inflate(R.layout.row_activity, parent, false)
 
             // Variables
             // val textViewCod = rowView.findViewById<TextView>(R.id.textViewCodCavalo)
@@ -95,8 +95,8 @@ class FragmentActivity : Fragment() {
             // textViewCod.text = activities[position].codCavalo.toString()
             // textViewNomeCavalo.text = activities[position].nomeCavalo
 
-            return rowView
+           // return rowView
         }
     }
-
+ */
 }

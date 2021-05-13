@@ -34,7 +34,7 @@ class FragmentCatalog : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
+/*
         // Start Corroutine
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -68,7 +68,7 @@ class FragmentCatalog : Fragment() {
             }
 
         }
-
+*/
     }
 
     inner class CatalogAdapter : BaseAdapter() {

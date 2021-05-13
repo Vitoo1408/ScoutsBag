@@ -33,7 +33,7 @@ class FragmentInvite : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
+/*
         // Start Corroutine
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -67,7 +67,7 @@ class FragmentInvite : Fragment() {
             }
 
         }
-
+*/
     }
 
     inner class InviteAdapter : BaseAdapter() {
