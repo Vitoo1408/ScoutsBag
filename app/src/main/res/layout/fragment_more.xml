@@ -60,4 +60,5 @@
         app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnInventario" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
