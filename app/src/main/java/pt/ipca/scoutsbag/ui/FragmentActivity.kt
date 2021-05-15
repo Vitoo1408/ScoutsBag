@@ -6,34 +6,46 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Activity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONArray
-import org.json.JSONObject
-
 
 
 class FragmentActivity : Fragment() {
 
     // Global Variables
     lateinit var listView : ListView
-    // lateinit var adapter : ActivityAdapter
+    lateinit var adapter : ActivitiesAdapter
     var activities : MutableList<Activity> = arrayListOf()
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_activity, container, false)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        // Create the layout for this fragment
+        val rootView = inflater.inflate(R.layout.fragment_activity, container, false)
+
+        // Set data
+        listView = rootView.findViewById(R.id.listViewActivities)
+        adapter = ActivitiesAdapter()
+        listView.adapter = adapter
+
+        return rootView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activities.add(Activity())
+        activities.add(Activity())
+        activities.add(Activity())
+        activities.add(Activity())
+        activities.add(Activity())
+        activities.add(Activity())
+
 /*
         // Start Corroutine
         GlobalScope.launch(Dispatchers.IO) {
@@ -71,7 +83,7 @@ class FragmentActivity : Fragment() {
 */
     }
 
-   /* inner class ActivityAdapter : BaseAdapter() {
+    inner class ActivitiesAdapter : BaseAdapter() {
         override fun getCount(): Int {
             return activities.size
         }
@@ -84,19 +96,12 @@ class FragmentActivity : Fragment() {
             return 0
         }
 
-      override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            // val rowView = layoutInflater.inflate(R.layout.row_activity, parent, false)
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_activity, parent, false)
 
-            // Variables
-            // val textViewCod = rowView.findViewById<TextView>(R.id.textViewCodCavalo)
-            // val textViewNomeCavalo = rowView.findViewById<TextView>(R.id.textViewNomeCavalo)
-
-            // Set data
-            // textViewCod.text = activities[position].codCavalo.toString()
-            // textViewNomeCavalo.text = activities[position].nomeCavalo
-
-           // return rowView
+            return rowView
         }
+
     }
- */
+
 }

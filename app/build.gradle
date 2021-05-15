@@ -53,5 +53,7 @@ dependencies {
     // ok http
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
 
+    // shadows
+    implementation 'com.sdsmdg.harjot:longshadows:1.0.1'
 
 }
