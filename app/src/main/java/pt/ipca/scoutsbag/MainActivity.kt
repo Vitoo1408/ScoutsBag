@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
+        navView.itemIconTintList = null;
 
         // Passing each fragment ID as a set of Ids
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_activity))
