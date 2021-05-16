@@ -1,14 +1,10 @@
-package pt.ipca.scoutsbag
+package pt.ipca.scoutsbag.activityManagement
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
+import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 
 
 class CreateActivityActivity : AppCompatActivity() {

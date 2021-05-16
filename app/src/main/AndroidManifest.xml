@@ -10,8 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ScoutsBag" >
-        <activity android:name=".CreateActivityActivity" > </activity>
+        android:theme="@style/Theme.ScoutsBag"
+        android:usesCleartextTraffic="true" >
+
+        <activity android:name=".activityManagement.CreateActivityActivity" > </activity>
         <activity
             android:name=".LogInOrRegisterActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" >

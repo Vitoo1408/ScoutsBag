@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.ui
+package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import pt.ipca.scoutsbag.CreateActivityActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONArray
+import org.json.JSONObject
+import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Activity
 
@@ -49,15 +56,6 @@ class FragmentActivity : Fragment() {
             startActivity(intent)
         }
 
-        activities.add(Activity())
-        activities.add(Activity())
-        activities.add(Activity())
-        activities.add(Activity())
-        activities.add(Activity())
-        activities.add(Activity())
-
-
-/*
         // Start Corroutine
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -65,7 +63,7 @@ class FragmentActivity : Fragment() {
             val client = OkHttpClient()
 
             // criação do pedido http á api do .NET
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/Activity").build()
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities").build()
 
             // fazer a chamada com o pedido http e analisar a resposta
             client.newCall(request).execute().use { response ->
@@ -91,7 +89,7 @@ class FragmentActivity : Fragment() {
             }
 
         }
-*/
+/**/
     }
 
     inner class ActivitiesAdapter : BaseAdapter() {

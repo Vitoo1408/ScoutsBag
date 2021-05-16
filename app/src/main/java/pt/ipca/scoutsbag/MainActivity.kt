@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val IP: String = "3.8.19.24"
-        val PORT: String = "3306"
+        val PORT: String = "60000"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
