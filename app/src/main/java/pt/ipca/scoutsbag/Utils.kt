@@ -7,6 +7,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import java.util.*
 
 object Utils {
@@ -14,10 +15,10 @@ object Utils {
 
     /*
         This function create a Date picker
-        @dateButton = the button responsible for select the date
+        @dateTextView = the textView responsible for select the date
         @context = activity that the date picker is in
      */
-    fun initDatePicker(dateButton: Button, context: Context): DatePickerDialog {
+    fun initDatePicker(dateTextView: TextView, context: Context): DatePickerDialog {
 
         // After the user finish selecting a date, change the date in the button
         val dateSetListener =
@@ -25,10 +26,10 @@ object Utils {
 
                 // Add the date to the button
                 val date = "$day/${month+1}/$year"
-                dateButton.text = date
+                dateTextView.text = date
 
                 // Call the time pop up window
-                val timePickerDialog = initTimePicker(dateButton, context)
+                val timePickerDialog = initTimePicker(dateTextView, context)
                 timePickerDialog.show()
             }
 
@@ -46,16 +47,16 @@ object Utils {
 
     /*
         This function create a Time picker and join the time with the date previous selected
-        @dateButton = the button responsible for select the date
+        @dateTextView = the textView responsible for select the date
         @context = activity that the date picker is in
      */
-    private fun initTimePicker(dateButton: Button, context: Context): TimePickerDialog {
+    private fun initTimePicker(dateTextView: TextView, context: Context): TimePickerDialog {
 
         // After the user finish selecting a time, join the time in the previous string
         val timeSetListener =
             TimePickerDialog.OnTimeSetListener {_, hour, minute ->
                 val time = "$hour:$minute"
-                "${dateButton.text} | $time".also { dateButton.text = it }
+                "${dateTextView.text} | $time".also { dateTextView.text = it }
             }
 
         // Get the data to create the time picker
