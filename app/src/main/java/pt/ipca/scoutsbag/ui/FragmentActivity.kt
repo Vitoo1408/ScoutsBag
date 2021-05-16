@@ -1,11 +1,14 @@
 package pt.ipca.scoutsbag.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import pt.ipca.scoutsbag.CreateActivityActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Activity
 
@@ -17,6 +20,7 @@ class FragmentActivity : Fragment() {
     lateinit var adapter : ActivitiesAdapter
     var activities : MutableList<Activity> = arrayListOf()
 
+    lateinit var buttonAdd : FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +32,7 @@ class FragmentActivity : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_activity, container, false)
 
         // Set data
+        buttonAdd = rootView.findViewById(R.id.buttonAddActivity)
         listView = rootView.findViewById(R.id.listViewActivities)
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
@@ -39,12 +44,18 @@ class FragmentActivity : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        buttonAdd.setOnClickListener() {
+            val intent = Intent(activity, CreateActivityActivity::class.java)
+            startActivity(intent)
+        }
+
         activities.add(Activity())
         activities.add(Activity())
         activities.add(Activity())
         activities.add(Activity())
         activities.add(Activity())
         activities.add(Activity())
+
 
 /*
         // Start Corroutine
