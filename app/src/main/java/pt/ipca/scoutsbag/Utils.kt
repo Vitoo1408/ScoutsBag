@@ -4,11 +4,9 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.text.format.DateFormat
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import java.util.*
+import java.util.regex.Pattern
 
 object Utils {
 
@@ -69,4 +67,117 @@ object Utils {
         return TimePickerDialog(context, style, timeSetListener, hour, minute, true)
     }
 
+
+    /*
+        This function convert mySqlDateTime to an date string
+        @mysqlDateTime = mysql value
+     */
+    fun mySqlDateToString(mysqlDateTime: String): String {
+
+        // Split the string into date
+        val strArray = Pattern.compile("T").split(mysqlDateTime)
+
+        // Only return the first element, which is the date
+        return strArray[0]
+    }
+
+
+    /*
+        This function convert mySqlDateTime to an time string
+        @mysqlDateTime = mysql value
+     */
+    fun mySqlTimeToString(mysqlDateTime: String): String {
+
+        // Split the string into date and time
+        val strArray = Pattern.compile("T").split(mysqlDateTime)
+
+        // Split the time into hours, minutes, seconds and millis
+        val strArray2 = Pattern.compile(":").split(strArray[1])
+
+        // Only return the hours and the minutes
+        return "${strArray2[0]}:${strArray2[1]}"
+    }
+
+
+    /*
+        This function convert default mySqlDate to a European date format
+        @date = default date
+     */
+    fun changeDateFormat(date: String): String {
+
+        // String Array
+        val strArray = Pattern.compile("-").split(date)
+
+        // Date variables
+        val day: String = strArray[2]
+        val month: String = strArray[1]
+        val year: String = strArray[0]
+
+        return "$day/$month/$year"
+    }
+
+
+    /*
+        This function split the date and return only the day
+        @date = default date
+     */
+    fun getDay(date: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("-").split(date)
+        val strArray2 = Pattern.compile("T").split(strArray[2])
+
+        return strArray2[0]
+    }
+
+
+    /*
+        This function split the date and return only the month in text
+        @date = default date
+     */
+    fun getMonth(date: String): String {
+
+        // Split the date
+        val strArray = Pattern.compile("-").split(date)
+
+        return getMonthFormat(strArray[1].toString().toInt())
+    }
+
+
+    /*
+        This function return the month value in text
+        @month = month id
+     */
+    private fun getMonthFormat(month: Int): String {
+        return when (month) {
+            1 -> "JAN"
+            2 -> "FEB"
+            3 -> "MAR"
+            4 -> "ABR"
+            5 -> "MAI"
+            6 -> "JUN"
+            7 -> "JUL"
+            8 -> "AGO"
+            9 -> "SET"
+            10 -> "OUT"
+            11 -> "NOV"
+            12 -> "DEC"
+            else -> "none"
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

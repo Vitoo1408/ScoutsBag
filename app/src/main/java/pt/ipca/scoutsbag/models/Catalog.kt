@@ -1,45 +1,47 @@
-package pt.ipca.scoutsbag.models
+package com.example.scoutsteste1
 
 import org.json.JSONObject
 
-class Catalog
-{
-    // "id_catalogo"
-    // "nome_catalogo"
-    // "descricao"
-    // "classificacao"
-    // "tempo"
+class Catalog {
 
-    var idCatalogo        : Int?    = null
-    var nomeCatalogo      : String? = null
-    var descricaoCatalogo : Int?    = null
-    var classificacao     : String? = null
-    var tempo             : String? = null
+    // "id_catalog"
+    // "name_catalog"
+    // "catalog_description"
+    // "classification"
+    // "instructions_time"
+
+    var idCatalog          : Int?    = null
+    var nameCatalog        : String? = null
+    var catalogDescription : Int?    = null
+    var classification     : String? = null
+    var instructionsTime   : String? = null
 
     constructor(){
 
     }
 
-    constructor(idCatalogo: Int?,
-                nomeCatalogo: String?,
-                descricaoCatalogo: Int?,
-                classificacao: String?,
-                tempo: String?) {
-        this.idCatalogo = idCatalogo
-        this.nomeCatalogo = nomeCatalogo
-        this.descricaoCatalogo = descricaoCatalogo
-        this.classificacao = classificacao
-        this.tempo = tempo
+    constructor(
+        idCatalog: Int?,
+        nameCatalog: String?,
+        catalogDescription: Int?,
+        classification: String?,
+        instructionsTime: String?
+    ) {
+        this.idCatalog = idCatalog
+        this.nameCatalog = nameCatalog
+        this.catalogDescription = catalogDescription
+        this.classification = classification
+        this.instructionsTime = instructionsTime
     }
 
     fun toJson() : JSONObject {
         val jsonObject = JSONObject()
 
-        jsonObject.put("id_catalogo"   , idCatalogo        )
-        jsonObject.put("nome_catalogo" , nomeCatalogo      )
-        jsonObject.put("descricao"     , descricaoCatalogo )
-        jsonObject.put("classificacao" , classificacao     )
-        jsonObject.put("tempo"         , tempo             )
+        jsonObject.put("id_catalog"          , idCatalog          )
+        jsonObject.put("name_catalog"        , nameCatalog        )
+        jsonObject.put("catalog_description" , catalogDescription )
+        jsonObject.put("classification"      , classification     )
+        jsonObject.put("instructions_time"   , instructionsTime   )
 
         return jsonObject
     }
@@ -47,11 +49,11 @@ class Catalog
     companion object {
         fun fromJson(jsonObject: JSONObject) : Catalog {
             val catalog = Catalog()
-            catalog.idCatalogo        = if (!jsonObject.isNull("id_catalogo"   )) jsonObject.getInt   ("id_catalogo"   )else null
-            catalog.nomeCatalogo      = if (!jsonObject.isNull("nome_catalogo" )) jsonObject.getString("nome_catalogo" )else null
-            catalog.descricaoCatalogo = if (!jsonObject.isNull("descricao"     )) jsonObject.getInt   ("descricao"     )else null
-            catalog.classificacao     = if (!jsonObject.isNull("classificacao" )) jsonObject.getString("classificacao" )else null
-            catalog.tempo             = if (!jsonObject.isNull("tempo"         )) jsonObject.getString("tempo"         )else null
+            catalog.idCatalog          = if (!jsonObject.isNull("id_catalog"          )) jsonObject.getInt   ("id_catalog"          )else null
+            catalog.nameCatalog        = if (!jsonObject.isNull("name_catalog"        )) jsonObject.getString("name_catalog"        )else null
+            catalog.catalogDescription = if (!jsonObject.isNull("catalog_description" )) jsonObject.getInt   ("catalog_description" )else null
+            catalog.classification     = if (!jsonObject.isNull("classification"      )) jsonObject.getString("classification"      )else null
+            catalog.instructionsTime   = if (!jsonObject.isNull("instructions_time"   )) jsonObject.getString("instructions_time"   )else null
 
             return catalog
         }

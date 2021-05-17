@@ -1,76 +1,78 @@
-package pt.ipca.scoutsbag.models
+package com.example.scoutsteste1
 
 import org.json.JSONObject
 
-class Activity
-{
-// "id_atividade"
-    // "nome_atividade"
-    // "id_tipo"
-    // "descricao"
-    // "local"
-    // "data_inicio"
-    // "data_fim"
-    // "coordenadas_gps"
-    // "local_inicio"
-    // "local_fim"
-    // "custo"
+class Activity {
 
-    var idAtividade     : Int?    = null
-    var nomeAtividade   : String? = null
-    var idTipo          : Int?    = null
-    var descricao       : String? = null
-    var local           : String? = null
-    var dataInicio      : String? = null
-    var dataFim         : String? = null
-    var coordenadasGps  : String? = null
-    var localInicio     : String? = null
-    var localFim        : String? = null
-    var custo           : String?  = null
+    // "id_activity"
+    // "name_activity"
+    // "id_type"
+    // "activity_description"
+    // "activity_site"
+    // "start_date"
+    // "finish_date"
+    // "gps_coordinates"
+    // "start_site"
+    // "finish_site"
+    // "price"
+
+    var idActivity          : Int?    = null
+    var nameActivity        : String? = null
+    var idType              : Int?    = null
+    var activityDescription : String? = null
+    var activitySite        : String? = null
+    var startDate           : String? = null
+    var finishDate          : String? = null
+    var gpsCoordinates      : String? = null
+    var startSite           : String? = null
+    var finishSite          : String? = null
+    var price               : String? = null
 
     constructor(){
 
     }
 
     constructor(
-        idAtividade: Int?,
-        nomeAtividade: String?,
-        idTipo: Int?,
-        descricao: String?,
-        local: String?,
-        dataInicio: String?,
-        dataFim: String?,
-        coordenadasGps: String?,
-        localInicio: String?,
-        localFim: String?,
-        custo: String?) {
-        this.idAtividade = idAtividade
-        this.nomeAtividade = nomeAtividade
-        this.idTipo = idTipo
-        this.descricao = descricao
-        this.local = local
-        this.dataInicio = dataInicio
-        this.dataFim = dataFim
-        this.coordenadasGps = coordenadasGps
-        this.localInicio = localInicio
-        this.localFim = localFim
-        this.custo = custo
+        idActivity: Int?,
+        nameActivity: String?,
+        idType: Int?,
+        activityDescription: String?,
+        activitySite: String?,
+        startDate: String?,
+        finishDate: String?,
+        gpsCoordinates: String?,
+        startSite: String?,
+        finishSite: String?,
+        price: String?
+    ) {
+        this.idActivity = idActivity
+        this.nameActivity = nameActivity
+        this.idType = idType
+        this.activityDescription = activityDescription
+        this.activitySite = activitySite
+        this.startDate = startDate
+        this.finishDate = finishDate
+        this.gpsCoordinates = gpsCoordinates
+        this.startSite = startSite
+        this.finishSite = finishSite
+        this.price = price
     }
+
 
     fun toJson() : JSONObject {
         val jsonObject = JSONObject()
 
-        jsonObject.put("id_atividade"    , idAtividade    )
-        jsonObject.put("nome_atividade"  , nomeAtividade  )
-        jsonObject.put("id_tipo"         , idTipo         )
-        jsonObject.put("descricao"       , descricao      )
-        jsonObject.put("local"           , local          )
-        jsonObject.put("data_inicio"     , dataInicio     )
-        jsonObject.put("data_fim"        , dataFim        )
-        jsonObject.put("coordenadas_gps" , coordenadasGps )
-        jsonObject.put("local_inicio"    , localInicio    )
-        jsonObject.put("local_fim"       , localFim       )
-        jsonObject.put("custo"           , custo          )
+        jsonObject.put("id_activity"          , idActivity          )
+        jsonObject.put("name_activity"        , nameActivity        )
+        jsonObject.put("id_type"              , idType              )
+        jsonObject.put("activity_description" , activityDescription )
+        jsonObject.put("activity_site"        , activitySite        )
+        jsonObject.put("start_date"           , startDate           )
+        jsonObject.put("finish_date"          , finishDate          )
+        jsonObject.put("gps_coordinates"      , gpsCoordinates      )
+        jsonObject.put("start_site"           , startSite           )
+        jsonObject.put("finish_site"          , finishSite          )
+        jsonObject.put("price"                , price               )
 
         return jsonObject
     }
@@ -78,19 +80,20 @@ class Activity
     companion object {
         fun fromJson(jsonObject: JSONObject) : Activity {
             val activity = Activity()
-            activity.idAtividade    = if (!jsonObject.isNull("id_atividade"     )) jsonObject.getInt   ("id_atividade"    )else null
-            activity.nomeAtividade  = if (!jsonObject.isNull("nome_atividade"   )) jsonObject.getString("nome_atividade"  )else null
-            activity.idTipo         = if (!jsonObject.isNull("id_tipo"          )) jsonObject.getInt   ("id_tipo"         )else null
-            activity.descricao      = if (!jsonObject.isNull("descricao"        )) jsonObject.getString("descricao"       )else null
-            activity.local          = if (!jsonObject.isNull("local"            )) jsonObject.getString("local"           )else null
-            activity.dataInicio     = if (!jsonObject.isNull("data_inicio"      )) jsonObject.getString("data_inicio"     )else null
-            activity.dataFim        = if (!jsonObject.isNull("data_fim"         )) jsonObject.getString("data_fim"        )else null
-            activity.coordenadasGps = if (!jsonObject.isNull("coordenadas_gps"  )) jsonObject.getString("coordenadas_gps" )else null
-            activity.localInicio    = if (!jsonObject.isNull("local_inicio"     )) jsonObject.getString("local_inicio"    )else null
-            activity.localFim       = if (!jsonObject.isNull("local_fim"        )) jsonObject.getString("local_fim"       )else null
-            activity.custo          = if (!jsonObject.isNull("custo"            )) jsonObject.getString("custo"           )else null
+            activity.idActivity          = if (!jsonObject.isNull("id_activity"          )) jsonObject.getInt   ("id_activity"          )else null
+            activity.nameActivity        = if (!jsonObject.isNull("name_activity"        )) jsonObject.getString("name_activity"        )else null
+            activity.idType              = if (!jsonObject.isNull("id_type"              )) jsonObject.getInt   ("id_type"              )else null
+            activity.activityDescription = if (!jsonObject.isNull("activity_description" )) jsonObject.getString("activity_description" )else null
+            activity.activitySite        = if (!jsonObject.isNull("activity_site"        )) jsonObject.getString("activity_site"        )else null
+            activity.startDate           = if (!jsonObject.isNull("start_date"           )) jsonObject.getString("start_date"           )else null
+            activity.finishDate          = if (!jsonObject.isNull("finish_date"          )) jsonObject.getString("finish_date"          )else null
+            activity.gpsCoordinates      = if (!jsonObject.isNull("gps_coordinates"      )) jsonObject.getString("gps_coordinates"      )else null
+            activity.startSite           = if (!jsonObject.isNull("start_site"           )) jsonObject.getString("start_site"           )else null
+            activity.finishSite          = if (!jsonObject.isNull("finish_site"          )) jsonObject.getString("finish_site"          )else null
+            activity.price               = if (!jsonObject.isNull("price"                )) jsonObject.getString("price"                )else null
 
             return activity
         }
     }
+
 }
