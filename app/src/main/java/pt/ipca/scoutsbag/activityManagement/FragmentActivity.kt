@@ -29,6 +29,7 @@ class FragmentActivity : Fragment() {
     lateinit var listView : ListView
     lateinit var adapter : ActivitiesAdapter
     var activities : MutableList<Activity> = arrayListOf()
+    var activitiesTypes : MutableList<ActivityType> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
 
 
@@ -60,43 +61,15 @@ class FragmentActivity : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonAdd.setOnClickListener() {
+        // Get the values to the list
+        activities = getActivitiesList()
+        activitiesTypes = getActivityTypesList()
+
+        // Button on click events
+        buttonAdd.setOnClickListener {
             val intent = Intent(activity, CreateActivityActivity::class.java)
             startActivity(intent)
         }
-
-        // Start Corroutine
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // OkHttp possibilita o envio de pedidos http e a leitura das respostas
-            val client = OkHttpClient()
-
-            // criação do pedido http á api do .NET
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities").build()
-
-            // fazer a chamada com o pedido http e analisar a resposta
-            client.newCall(request).execute().use { response ->
-
-                // resposta do pedido http retornada em string
-                val activityJsonArrayStr : String = response.body!!.string()
-
-                // converter a str em um array de json, e esse json é de cavalos
-                val activityJsonArray = JSONArray(activityJsonArrayStr)
-
-                // add the horses to the list
-                for (index in 0 until activityJsonArray.length()) {
-                    val jsonArticle = activityJsonArray.get(index) as JSONObject
-                    val activity = Activity.fromJson(jsonArticle)
-                    activities.add(activity)
-                }
-
-                // Refresh the list adapter
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        }
-
     }
 
 
@@ -127,6 +100,7 @@ class FragmentActivity : Fragment() {
             val dataFim = Utils.changeDateFormat(Utils.mySqlDateToString(activity.finishDate.toString()))
             val horaInicio = Utils.mySqlTimeToString(activity.startDate.toString())
             val horaFim = Utils.mySqlTimeToString(activity.finishDate.toString())
+            val activityType = getActivityTypeById(activity.idType!!)
 
             // Variables in the row
             val textViewDay = rowView.findViewById<TextView>(R.id.textView_activity_day)
@@ -140,45 +114,105 @@ class FragmentActivity : Fragment() {
             // Set values in the row
             textViewDay.text = Utils.getDay(activity.startDate.toString())
             textViewMonth.text = Utils.getMonth(activity.startDate.toString())
-            textViewActivityType.text = activity.idType.toString()
+            textViewActivityType.text = activityType.designation
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
             textViewTime.text = "Hora: $horaInicio - $horaFim"
             textViewLocality.text = activity.startSite.toString()
+
             return rowView
         }
     }
 
 
-    fun getActivityType(id: Int): ActivityType {
+    /*
+        This function returns all activities in the api by a list
+     */
+    private fun getActivitiesList(): MutableList<Activity> {
 
-        var activityType: ActivityType? = null
+        // List that will be returned
+        val activitiesList : MutableList<Activity> = arrayListOf()
 
+        // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
 
-            // Variables
-            val client = OkHttpClient()
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes").build()
-            var activityTypesList : MutableList<ActivityType> = arrayListOf()
+            // Create the http request
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities").build()
 
-            client.newCall(request).execute().use { response ->
+            // Send the request and analyze the response
+            OkHttpClient().newCall(request).execute().use { response ->
 
-                val activityTypeJsonArrayStr : String = response.body!!.string()
-                val activityTypeJsonArray = JSONArray(activityTypeJsonArrayStr)
+                // Convert the response into string then into JsonArray
+                val activityJsonArrayStr : String = response.body!!.string()
+                val activityJsonArray = JSONArray(activityJsonArrayStr)
 
-                for (index in 0 until activityTypeJsonArray.length()) {
-                    val jsonArticle = activityTypeJsonArray.get(index) as JSONObject
-                    var activityType = ActivityType.fromJson(jsonArticle)
-
-                    activityTypesList.add(activityType!!)
+                // Add the elements in the list
+                for (index in 0 until activityJsonArray.length()) {
+                    val jsonArticle = activityJsonArray.get(index) as JSONObject
+                    val activity = Activity.fromJson(jsonArticle)
+                    activitiesList.add(activity)
                 }
 
-                // Find the activity corret
+                // Update the list
+                GlobalScope.launch (Dispatchers.Main) {
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
 
-        return activityType!!
+        return activitiesList
+    }
 
+
+    /*
+        This function returns all activity types in the api by a list
+     */
+    private fun getActivityTypesList(): MutableList<ActivityType> {
+
+        // List that will be returned
+        val activityTypesList : MutableList<ActivityType> = arrayListOf()
+
+        // Coroutine start
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Create the http request
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes").build()
+
+            // Send the request and analyze the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                // Convert the response into string then into JsonArray
+                val activityTypeJsonArrayStr : String = response.body!!.string()
+                val activityTypeJsonArray = JSONArray(activityTypeJsonArrayStr)
+
+                // Add the elements in the list
+                for (index in 0 until activityTypeJsonArray.length()) {
+                    val jsonArticle = activityTypeJsonArray.get(index) as JSONObject
+                    val activityType = ActivityType.fromJson(jsonArticle)
+                    activityTypesList.add(activityType)
+                }
+            }
+        }
+
+        return activityTypesList
+    }
+
+
+    /*
+        This function returns the activity type designation
+     */
+    private fun getActivityTypeById(id: Int): ActivityType {
+
+        // Variables
+        var response: ActivityType? = null
+
+        // Find the activity type
+        for (element in activitiesTypes) {
+            if (element.idType == id)
+                response = element
+        }
+
+        return response!!
     }
 
 }
