@@ -2,7 +2,7 @@ package com.example.scoutsteste1
 
 import org.json.JSONObject
 
-class Activity {
+class ScoutActivity {
 
     // "id_activity"
     // "name_activity"
@@ -26,7 +26,7 @@ class Activity {
     var gpsCoordinates      : String? = null
     var startSite           : String? = null
     var finishSite          : String? = null
-    var price               : String? = null
+    var price               : Float? = null
 
     constructor(){
 
@@ -43,7 +43,7 @@ class Activity {
         gpsCoordinates: String?,
         startSite: String?,
         finishSite: String?,
-        price: String?
+        price: Float?
     ) {
         this.idActivity = idActivity
         this.nameActivity = nameActivity
@@ -77,9 +77,10 @@ class Activity {
         return jsonObject
     }
 
+
     companion object {
-        fun fromJson(jsonObject: JSONObject) : Activity {
-            val activity = Activity()
+        fun fromJson(jsonObject: JSONObject) : ScoutActivity {
+            val activity = ScoutActivity()
             activity.idActivity          = if (!jsonObject.isNull("id_activity"          )) jsonObject.getInt   ("id_activity"          )else null
             activity.nameActivity        = if (!jsonObject.isNull("name_activity"        )) jsonObject.getString("name_activity"        )else null
             activity.idType              = if (!jsonObject.isNull("id_type"              )) jsonObject.getInt   ("id_type"              )else null
@@ -90,7 +91,7 @@ class Activity {
             activity.gpsCoordinates      = if (!jsonObject.isNull("gps_coordinates"      )) jsonObject.getString("gps_coordinates"      )else null
             activity.startSite           = if (!jsonObject.isNull("start_site"           )) jsonObject.getString("start_site"           )else null
             activity.finishSite          = if (!jsonObject.isNull("finish_site"          )) jsonObject.getString("finish_site"          )else null
-            activity.price               = if (!jsonObject.isNull("price"                )) jsonObject.getString("price"                )else null
+            activity.price               = if (!jsonObject.isNull("price"                )) jsonObject.getString("price"                ).toFloat() else null
 
             return activity
         }

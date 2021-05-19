@@ -1,19 +1,27 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.scoutsteste1.ScoutActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 
 
 class CreateActivityActivity : AppCompatActivity() {
-
-    // Global Variables
-    lateinit var dateStartTextView: TextView
-    lateinit var dateEndTextView: TextView
 
     //
     private var onClickImage: (view: View)->Unit = {
@@ -21,7 +29,7 @@ class CreateActivityActivity : AppCompatActivity() {
 
         imageView.isHovered = !imageView.isHovered
 
-        if (imageView.isHovered)
+        if (!imageView.isHovered)
             imageView.setBackgroundResource(0)
         else
             imageView.setBackgroundResource(R.drawable.border)
@@ -36,8 +44,9 @@ class CreateActivityActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_activity)
 
         // Pass the view objects to variables
-        dateStartTextView = findViewById(R.id.dateStartButton)
-        dateEndTextView = findViewById(R.id.dateEndButton)
+        val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
+        val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
+        val addButton = findViewById<TextView>(R.id.buttonAddActivity)
 
         // Create the pop up window to select the date
         val dateStartPickerDialog = Utils.initDatePicker(dateStartTextView, this)
@@ -56,6 +65,67 @@ class CreateActivityActivity : AppCompatActivity() {
 
         dateEndTextView.setOnClickListener {
             dateEndPickerDialog.show()
+        }
+
+        addButton.setOnClickListener {
+
+            addActivity(this)
+
+        }
+
+    }
+
+
+    private fun addActivity(context: Context) {
+
+        //scoutActivity.idType = findViewById<TextView>(R.id.textView_activity_name).toString(),
+        //scoutActivity.gpsCoordinates,
+        //scoutActivity.price = findViewById<TextView>(R.id.),
+
+
+        //
+        GlobalScope.launch(Dispatchers.IO) {
+            val client = OkHttpClient()
+
+            //
+            val scoutActivity = ScoutActivity(
+                intent.getIntExtra("idActivity", 0),
+                findViewById<TextView>(R.id.editTextActivityName).toString(),
+                1,
+                findViewById<TextView>(R.id.editTextActivityDescription).toString(),
+                findViewById<TextView>(R.id.editTextActivityLocalizationStart).toString(),
+                findViewById<TextView>(R.id.dateStartButton).toString(),
+                findViewById<TextView>(R.id.dateEndButton).toString(),
+                "1234",
+                findViewById<TextView>(R.id.editTextActivityLocalizationStart).toString(),
+                findViewById<TextView>(R.id.editTextActivityLocalizationEnd).toString(),
+                12f,
+            )
+
+            //
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                scoutActivity.toJson().toString()
+            )
+
+            //
+            val request = Request.Builder()
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities")
+                .post(requestBody)
+                .build()
+
+            //
+            client.newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main){
+
+                    if (response.message == "OK"){
+                        val returnIntent = Intent(context, MainActivity::class.java)
+                        startActivity(returnIntent)
+                    }
+
+                }
+            }
         }
 
     }

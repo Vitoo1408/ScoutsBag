@@ -1,6 +1,7 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.scoutsteste1.Activity
+import androidx.core.view.size
+import com.example.scoutsteste1.ScoutActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,8 +30,7 @@ class FragmentActivity : Fragment() {
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : ActivitiesAdapter
-    var activities : MutableList<Activity> = arrayListOf()
-    var activitiesTypes : MutableList<ActivityType> = arrayListOf()
+    var activities : MutableList<ScoutActivity> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
 
 
@@ -63,11 +64,11 @@ class FragmentActivity : Fragment() {
 
         // Get the values to the list
         activities = getActivitiesList()
-        activitiesTypes = getActivityTypesList()
 
         // Button on click events
         buttonAdd.setOnClickListener {
             val intent = Intent(activity, CreateActivityActivity::class.java)
+            intent.putExtra("idActivity", listView.size)
             startActivity(intent)
         }
     }
@@ -100,7 +101,6 @@ class FragmentActivity : Fragment() {
             val dataFim = Utils.changeDateFormat(Utils.mySqlDateToString(activity.finishDate.toString()))
             val horaInicio = Utils.mySqlTimeToString(activity.startDate.toString())
             val horaFim = Utils.mySqlTimeToString(activity.finishDate.toString())
-            val activityType = getActivityTypeById(activity.idType!!)
 
             // Variables in the row
             val textViewDay = rowView.findViewById<TextView>(R.id.textView_activity_day)
@@ -111,10 +111,11 @@ class FragmentActivity : Fragment() {
             val textViewTime = rowView.findViewById<TextView>(R.id.textView_activity_time)
             val textViewLocality = rowView.findViewById<TextView>(R.id.textView_activity_locality)
 
+            putActivityTypeInTextView(activity.idType!!, textViewActivityType)
+
             // Set values in the row
             textViewDay.text = Utils.getDay(activity.startDate.toString())
             textViewMonth.text = Utils.getMonth(activity.startDate.toString())
-            textViewActivityType.text = activityType.designation
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
             textViewTime.text = "Hora: $horaInicio - $horaFim"
@@ -128,10 +129,10 @@ class FragmentActivity : Fragment() {
     /*
         This function returns all activities in the api by a list
      */
-    private fun getActivitiesList(): MutableList<Activity> {
+    private fun getActivitiesList(): MutableList<ScoutActivity> {
 
         // List that will be returned
-        val activitiesList : MutableList<Activity> = arrayListOf()
+        val activitiesList : MutableList<ScoutActivity> = arrayListOf()
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
@@ -149,7 +150,7 @@ class FragmentActivity : Fragment() {
                 // Add the elements in the list
                 for (index in 0 until activityJsonArray.length()) {
                     val jsonArticle = activityJsonArray.get(index) as JSONObject
-                    val activity = Activity.fromJson(jsonArticle)
+                    val activity = ScoutActivity.fromJson(jsonArticle)
                     activitiesList.add(activity)
                 }
 
@@ -165,18 +166,17 @@ class FragmentActivity : Fragment() {
 
 
     /*
-        This function returns all activity types in the api by a list
+        This function write the activity type id in the text view
      */
-    private fun getActivityTypesList(): MutableList<ActivityType> {
+    private fun putActivityTypeInTextView(id: Int, textView: TextView) {
 
-        // List that will be returned
-        val activityTypesList : MutableList<ActivityType> = arrayListOf()
+        var activityType = ActivityType()
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
 
             // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes").build()
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes/" + id).build()
 
             // Send the request and analyze the response
             OkHttpClient().newCall(request).execute().use { response ->
@@ -188,31 +188,16 @@ class FragmentActivity : Fragment() {
                 // Add the elements in the list
                 for (index in 0 until activityTypeJsonArray.length()) {
                     val jsonArticle = activityTypeJsonArray.get(index) as JSONObject
-                    val activityType = ActivityType.fromJson(jsonArticle)
-                    activityTypesList.add(activityType)
+                    activityType = ActivityType.fromJson(jsonArticle)
                 }
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    textView.text = activityType.designation
+                }
+
             }
         }
 
-        return activityTypesList
-    }
-
-
-    /*
-        This function returns the activity type designation
-     */
-    private fun getActivityTypeById(id: Int): ActivityType {
-
-        // Variables
-        var response: ActivityType? = null
-
-        // Find the activity type
-        for (element in activitiesTypes) {
-            if (element.idType == id)
-                response = element
-        }
-
-        return response!!
     }
 
 }
