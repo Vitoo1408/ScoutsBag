@@ -31,6 +31,7 @@ class FragmentActivity : Fragment() {
     lateinit var listView : ListView
     lateinit var adapter : ActivitiesAdapter
     var activities : MutableList<ScoutActivity> = arrayListOf()
+    var activitiesTypes : MutableList<ActivityType> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
 
 
@@ -64,6 +65,7 @@ class FragmentActivity : Fragment() {
 
         // Get the values to the list
         activities = getActivitiesList()
+        activitiesTypes = getActivityTypesList()
 
         // Button on click events
         buttonAdd.setOnClickListener {
@@ -111,11 +113,10 @@ class FragmentActivity : Fragment() {
             val textViewTime = rowView.findViewById<TextView>(R.id.textView_activity_time)
             val textViewLocality = rowView.findViewById<TextView>(R.id.textView_activity_locality)
 
-            putActivityTypeInTextView(activity.idType!!, textViewActivityType)
-
             // Set values in the row
             textViewDay.text = Utils.getDay(activity.startDate.toString())
             textViewMonth.text = Utils.getMonth(activity.startDate.toString())
+            textViewActivityType.text = getActivityTypeById(activity.idType!!).designation
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
             textViewTime.text = "Hora: $horaInicio - $horaFim"
@@ -166,17 +167,18 @@ class FragmentActivity : Fragment() {
 
 
     /*
-        This function write the activity type id in the text view
+        This function returns all activity types in the api by a list
      */
-    private fun putActivityTypeInTextView(id: Int, textView: TextView) {
+    private fun getActivityTypesList(): MutableList<ActivityType> {
 
-        var activityType = ActivityType()
+        // List that will be returned
+        val activityTypesList : MutableList<ActivityType> = arrayListOf()
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
 
             // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes/" + id).build()
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activityTypes").build()
 
             // Send the request and analyze the response
             OkHttpClient().newCall(request).execute().use { response ->
@@ -188,16 +190,32 @@ class FragmentActivity : Fragment() {
                 // Add the elements in the list
                 for (index in 0 until activityTypeJsonArray.length()) {
                     val jsonArticle = activityTypeJsonArray.get(index) as JSONObject
-                    activityType = ActivityType.fromJson(jsonArticle)
-                }
-
-                GlobalScope.launch(Dispatchers.Main) {
-                    textView.text = activityType.designation
+                    val activityType = ActivityType.fromJson(jsonArticle)
+                    activityTypesList.add(activityType)
                 }
 
             }
         }
 
+        return activityTypesList
+    }
+
+
+    /*
+        This function returns the activity type designation
+     */
+    private fun getActivityTypeById(id: Int): ActivityType {
+
+        // Variables
+        var response: ActivityType? = null
+
+        // Find the activity type
+        for (element in activitiesTypes) {
+            if (element.idType == id)
+                response = element
+        }
+
+        return response!!
     }
 
 }
