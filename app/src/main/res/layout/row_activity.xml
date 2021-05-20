@@ -89,7 +89,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_nome"
+            android:id="@+id/textView_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -105,7 +105,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_tipo" />
 
         <TextView
-            android:id="@+id/textView_data"
+            android:id="@+id/textView_section"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -118,10 +118,10 @@
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_nome" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 
         <TextView
-            android:id="@+id/textView_hora"
+            android:id="@+id/textView_team"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -134,10 +134,10 @@
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_data" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_section" />
 
         <TextView
-            android:id="@+id/textView_localidade"
+            android:id="@+id/textView_nin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -152,7 +152,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_hora" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_team" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
