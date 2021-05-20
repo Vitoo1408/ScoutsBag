@@ -19,6 +19,7 @@ import okhttp3.RequestBody
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import java.util.*
 
 
 class CreateActivityActivity : AppCompatActivity() {
@@ -68,54 +69,52 @@ class CreateActivityActivity : AppCompatActivity() {
         }
 
         addButton.setOnClickListener {
-
             addActivity(this)
-
         }
 
     }
 
 
+    /*
+
+     */
     private fun addActivity(context: Context) {
 
-        //scoutActivity.idType = findViewById<TextView>(R.id.textView_activity_name).toString(),
-        //scoutActivity.gpsCoordinates,
-        //scoutActivity.price = findViewById<TextView>(R.id.),
-
-
-        //
+        // Start coroutine
         GlobalScope.launch(Dispatchers.IO) {
-            val client = OkHttpClient()
 
-            //
+            // Falta saber o que fazer quando a data estiver errada
+            // e algum campo vazio
+
+            // Build the activity
             val scoutActivity = ScoutActivity(
                 intent.getIntExtra("idActivity", 0),
-                findViewById<TextView>(R.id.editTextActivityName).toString(),
+                findViewById<TextView>(R.id.editTextActivityName).text.toString(),
                 1,
-                findViewById<TextView>(R.id.editTextActivityDescription).toString(),
-                findViewById<TextView>(R.id.editTextActivityLocalizationStart).toString(),
-                findViewById<TextView>(R.id.dateStartButton).toString(),
-                findViewById<TextView>(R.id.dateEndButton).toString(),
+                findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
+                findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
+                Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
                 "1234",
-                findViewById<TextView>(R.id.editTextActivityLocalizationStart).toString(),
-                findViewById<TextView>(R.id.editTextActivityLocalizationEnd).toString(),
-                12f,
+                findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
+                10.5f,
             )
 
-            //
+            // Prepare the from body request
             val requestBody = RequestBody.create(
                 "application/json".toMediaTypeOrNull(),
                 scoutActivity.toJson().toString()
             )
 
-            //
+            // Build the request
             val request = Request.Builder()
                 .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities")
                 .post(requestBody)
                 .build()
 
-            //
-            client.newCall(request).execute().use { response ->
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
 
                 GlobalScope.launch (Dispatchers.Main){
 

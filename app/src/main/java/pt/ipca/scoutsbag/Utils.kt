@@ -54,7 +54,7 @@ object Utils {
         val timeSetListener =
             TimePickerDialog.OnTimeSetListener {_, hour, minute ->
                 val time = "$hour:$minute"
-                "${dateTextView.text} | $time".also { dateTextView.text = it }
+                "${dateTextView.text} - $time".also { dateTextView.text = it }
             }
 
         // Get the data to create the time picker
@@ -96,6 +96,32 @@ object Utils {
 
         // Only return the hours and the minutes
         return "${strArray2[0]}:${strArray2[1]}"
+    }
+
+
+    /*
+        This function convert conventional Date and Time format to a format that mySql accept
+        @dateTime = conventional dateTime
+     */
+    fun dateTimeToMySql(dateTime: String): String {
+
+        // Split the dateTime in date and time
+        val strDateTimeArray = Pattern.compile(" - ").split(dateTime, 2)
+        val date = strDateTimeArray[0]
+        val time = strDateTimeArray[1]
+
+        // Split the Date in day, month and year
+        val strDateArray = Pattern.compile("/").split(date, 3)
+        val day: String = strDateArray[0]
+        val month: String = strDateArray[1]
+        val year: String = strDateArray[2]
+
+        // Split the Time in hours and min
+        val strTimeArray = Pattern.compile(":").split(time, 2)
+        val hour: String = strTimeArray[0]
+        val min: String = strTimeArray[1]
+
+        return "$year-$month-$day $hour:$min:00"
     }
 
 
