@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
+import com.example.scoutsteste1.Catalog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,8 +17,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.models.Activity
-import pt.ipca.scoutsbag.models.Catalog
 
 class FragmentCatalog : Fragment() {
 

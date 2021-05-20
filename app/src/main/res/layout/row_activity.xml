@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView_mes"
+            android:id="@+id/textView_activity_month"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
@@ -29,10 +29,10 @@
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_dia" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_activity_day" />
 
         <TextView
-            android:id="@+id/textView_dia"
+            android:id="@+id/textView_activity_day"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageView_activity"
             android:layout_width="74dp"
             android:layout_height="0dp"
             android:layout_marginStart="15dp"
@@ -72,7 +72,7 @@
             app:srcCompat="@drawable/custom_button_orange" />
 
         <TextView
-            android:id="@+id/textView_tipo"
+            android:id="@+id/textView_activity_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -85,11 +85,11 @@
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/imageView_activity"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_name"
+            android:id="@+id/textView_activity_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -101,11 +101,11 @@
             android:textSize="15sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_tipo" />
+            app:layout_constraintStart_toEndOf="@+id/imageView_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView_activity_type" />
 
         <TextView
-            android:id="@+id/textView_section"
+            android:id="@+id/textView_activity_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -117,11 +117,11 @@
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_name" />
+            app:layout_constraintStart_toEndOf="@+id/imageView_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView_activity_name" />
 
         <TextView
-            android:id="@+id/textView_team"
+            android:id="@+id/textView_activity_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -133,11 +133,11 @@
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_section" />
+            app:layout_constraintStart_toEndOf="@+id/imageView_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView_activity_date" />
 
         <TextView
-            android:id="@+id/textView_nin"
+            android:id="@+id/textView_activity_locality"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -151,8 +151,8 @@
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView_team" />
+            app:layout_constraintStart_toEndOf="@+id/imageView_activity"
+            app:layout_constraintTop_toBottomOf="@+id/textView_activity_time" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,36 +1,37 @@
-package pt.ipca.scoutsbag.models
+package com.example.scoutsteste1
 
 import org.json.JSONObject
 
-class Invite
-{
-    // "id_atividade"
-    // "id_equipa"
-    // "convocado"
+class Invite {
 
-    var idAtividade : Int?     = null
-    var idEquipa    : Int?  = null
-    var convocado   : Boolean? = null
+    // "id_activity"
+    // "id_team"
+    // "invited"
+
+    var idActivity : Int?     = null
+    var idTeam     : Int?     = null
+    var invited    : Boolean? = null
 
     constructor(){
 
     }
 
     constructor(
-        idAtividade: Int?,
-        idEquipa: Int?,
-        convocado: Boolean?) {
-        this.idAtividade = idAtividade
-        this.idEquipa = idEquipa
-        this.convocado = convocado
+        idActivity: Int?,
+        idTeam: Int?,
+        invited: Boolean?
+    ) {
+        this.idActivity = idActivity
+        this.idTeam = idTeam
+        this.invited = invited
     }
 
     fun toJson() : JSONObject {
         val jsonObject = JSONObject()
 
-        jsonObject.put("id_atividade" , idAtividade )
-        jsonObject.put("id_equipa"    , idEquipa    )
-        jsonObject.put("convocado"    , convocado   )
+        jsonObject.put("id_activity" , idActivity )
+        jsonObject.put("id_team"     , idTeam     )
+        jsonObject.put("invited"     , invited    )
 
         return jsonObject
     }
@@ -38,11 +39,12 @@ class Invite
     companion object {
         fun fromJson(jsonObject: JSONObject) : Invite {
             val invite = Invite()
-            invite.idAtividade = if (!jsonObject.isNull("id_atividade" )) jsonObject.getInt     ("id_atividade" )else null
-            invite.idEquipa    = if (!jsonObject.isNull("id_equipa"    )) jsonObject.getInt     ("id_equipa"    )else null
-            invite.convocado   = if (!jsonObject.isNull("convocado"    )) jsonObject.getBoolean ("convocado"    )else null
+            invite.idActivity = if (!jsonObject.isNull("id_activity" )) jsonObject.getInt     ("id_activity" )else null
+            invite.idTeam     = if (!jsonObject.isNull("id_team"     )) jsonObject.getInt     ("id_team"     )else null
+            invite.invited    = if (!jsonObject.isNull("invited"     )) jsonObject.getBoolean ("invited"     )else null
 
             return invite
         }
     }
+
 }

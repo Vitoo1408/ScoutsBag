@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.scoutsteste1.Invite
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.models.Invite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
