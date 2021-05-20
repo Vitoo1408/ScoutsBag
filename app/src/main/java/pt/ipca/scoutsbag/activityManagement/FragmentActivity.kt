@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.size
+import androidx.navigation.fragment.findNavController
 import com.example.scoutsteste1.ScoutActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -122,6 +123,12 @@ class FragmentActivity : Fragment() {
             textViewTime.text = "Hora: $horaInicio - $horaFim"
             textViewLocality.text = activity.startSite.toString()
 
+            // Show activity details button event
+            rowView.setOnClickListener {
+                val action = FragmentActivityDirections.actionNavigationActivityToNavigationActivityDetails(activity.toJson().toString())
+                this@FragmentActivity.findNavController().navigate(action)
+            }
+
             return rowView
         }
     }
@@ -203,6 +210,7 @@ class FragmentActivity : Fragment() {
 
     /*
         This function returns the activity type designation
+        @id = activity type id
      */
     private fun getActivityTypeById(id: Int): ActivityType {
 
