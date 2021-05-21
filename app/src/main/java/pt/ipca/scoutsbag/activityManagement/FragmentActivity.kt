@@ -65,8 +65,8 @@ class FragmentActivity : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Get the values to the list
-        activities = getActivitiesList()
-        activitiesTypes = getActivityTypesList()
+        getActivitiesList()
+        getActivityTypesList()
 
         // Button on click events
         buttonAdd.setOnClickListener {
@@ -135,12 +135,9 @@ class FragmentActivity : Fragment() {
 
 
     /*
-        This function returns all activities in the api by a list
+        This function returns all activities in the api to an list
      */
-    private fun getActivitiesList(): MutableList<ScoutActivity> {
-
-        // List that will be returned
-        val activitiesList : MutableList<ScoutActivity> = arrayListOf()
+    private fun getActivitiesList() {
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
@@ -159,7 +156,7 @@ class FragmentActivity : Fragment() {
                 for (index in 0 until activityJsonArray.length()) {
                     val jsonArticle = activityJsonArray.get(index) as JSONObject
                     val activity = ScoutActivity.fromJson(jsonArticle)
-                    activitiesList.add(activity)
+                    activities.add(activity)
                 }
 
                 // Update the list
@@ -169,17 +166,13 @@ class FragmentActivity : Fragment() {
             }
         }
 
-        return activitiesList
     }
 
 
     /*
-        This function returns all activity types in the api by a list
+        This function returns all activity types in the api to an list
      */
-    private fun getActivityTypesList(): MutableList<ActivityType> {
-
-        // List that will be returned
-        val activityTypesList : MutableList<ActivityType> = arrayListOf()
+    private fun getActivityTypesList() {
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
@@ -198,13 +191,12 @@ class FragmentActivity : Fragment() {
                 for (index in 0 until activityTypeJsonArray.length()) {
                     val jsonArticle = activityTypeJsonArray.get(index) as JSONObject
                     val activityType = ActivityType.fromJson(jsonArticle)
-                    activityTypesList.add(activityType)
+                    activitiesTypes.add(activityType)
                 }
 
             }
         }
 
-        return activityTypesList
     }
 
 

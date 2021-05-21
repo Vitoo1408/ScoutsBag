@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FragmentInvite">
-
+    tools:context=".ui.FragmentInvite"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/textViewDates"
@@ -16,4 +16,5 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

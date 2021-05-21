@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        navView.itemIconTintList = null;
+        navView.itemIconTintList = null
 
         // Passing each fragment ID as a set of Ids
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_activity))
@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         // Build the navigation view
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // Hide the action bar in the top
+        supportActionBar?.hide()
     }
 
 }
