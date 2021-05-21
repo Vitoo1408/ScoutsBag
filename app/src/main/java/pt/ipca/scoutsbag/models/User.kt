@@ -24,15 +24,15 @@ class User {
     var bithDate   : String?  = null
     var email      : String?  = null
     var pass       : String?  = null
-    var codType    : Int?     = null
+    var codType    : String?     = null
     var contact    : String?  = null
     var gender     : String?  = null
     var adress     : String?  = null
     var nin        : String?  = null
     var postalCode : String?  = null
     var imageUrl   : String?  = null
-    var userActive : Boolean? = null
-    var accepted   : Boolean? = null
+    var userActive : Int? = null
+    var accepted   : Int? = null
 
     constructor(){
 
@@ -44,15 +44,15 @@ class User {
         bithDate: String?,
         email: String?,
         pass: String?,
-        codType: Int?,
+        codType: String?,
         contact: String?,
         gender: String?,
         adress: String?,
         nin: String?,
         postalCode: String?,
         imageUrl: String?,
-        userActive: Boolean?,
-        accepted: Boolean?
+        userActive: Int?,
+        accepted: Int?
     ) {
         this.idUser = idUser
         this.userName = userName
@@ -100,15 +100,15 @@ class User {
             user.bithDate   = if (!jsonObject.isNull("bith_date"   )) jsonObject.getString ("bith_date"   )else null
             user.email      = if (!jsonObject.isNull("email"       )) jsonObject.getString ("email"       )else null
             user.pass       = if (!jsonObject.isNull("pass"        )) jsonObject.getString ("pass"        )else null
-            user.codType    = if (!jsonObject.isNull("cod_type"    )) jsonObject.getInt    ("cod_type"    )else null
+            user.codType    = if (!jsonObject.isNull("cod_type"    )) jsonObject.getString ("cod_type"    )else null
             user.contact    = if (!jsonObject.isNull("contact"     )) jsonObject.getString ("contact"     )else null
             user.gender     = if (!jsonObject.isNull("gender"      )) jsonObject.getString ("gender"      )else null
             user.adress     = if (!jsonObject.isNull("adress"      )) jsonObject.getString ("adress"      )else null
             user.nin        = if (!jsonObject.isNull("nin"         )) jsonObject.getString ("nin"         )else null
             user.postalCode = if (!jsonObject.isNull("postal_code" )) jsonObject.getString ("postal_code" )else null
             user.imageUrl   = if (!jsonObject.isNull("image_url"   )) jsonObject.getString ("image_url"   )else null
-            user.userActive = if (!jsonObject.isNull("user_active" )) jsonObject.getBoolean("user_active" )else null
-            user.accepted   = if (!jsonObject.isNull("accepted"    )) jsonObject.getBoolean("accepted"    )else null
+            user.userActive = if (!jsonObject.isNull("user_active" )) jsonObject.getInt("user_active" )else null
+            user.accepted   = if (!jsonObject.isNull("accepted"    )) jsonObject.getInt("accepted"    )else null
 
             return user
         }

@@ -5,10 +5,10 @@
     android:id="@+id/row_fullBrackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="40dp">
+    android:paddingBottom="0dp">
 
     <TextView
-        android:id="@+id/textView_team"
+        android:id="@+id/textView_user_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -20,11 +20,11 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_section"
-        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
+        app:layout_constraintStart_toEndOf="@+id/textView_user_section"
+        app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
 
     <TextView
-        android:id="@+id/textView_section"
+        android:id="@+id/textView_user_section"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -36,10 +36,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
 
     <TextView
-        android:id="@+id/textView_name"
+        android:id="@+id/textView_user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -59,13 +59,14 @@
         android:layout_height="70dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/custom_button_orange" />
 
     <TextView
-        android:id="@+id/textView_nin"
+        android:id="@+id/textView_user_nin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -77,6 +78,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/textView_team" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_user_team" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

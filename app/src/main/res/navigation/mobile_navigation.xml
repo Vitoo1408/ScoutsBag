@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_more"
-        android:name="pt.ipca.scoutsbag.ui.FragmentMore"
+        android:name="pt.ipca.scoutsbag.FragmentMore"
         android:label="Mais"
         tools:layout="@layout/fragment_more" />
 
