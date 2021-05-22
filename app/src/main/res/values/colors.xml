@@ -10,5 +10,6 @@
     <color name="orange">#FF7900</color>
     <color name="green">#20B787</color>
     <color name="background_color">#EEFCF7</color>
+    <color name="actionBarText">#000000</color>
 
 </resources>

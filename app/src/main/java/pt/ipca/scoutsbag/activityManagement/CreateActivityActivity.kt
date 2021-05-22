@@ -72,6 +72,8 @@ class CreateActivityActivity : AppCompatActivity() {
             addActivity(this)
         }
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
     }
 
 
