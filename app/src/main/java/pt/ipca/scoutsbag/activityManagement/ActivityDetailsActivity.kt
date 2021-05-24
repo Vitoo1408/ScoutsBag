@@ -1,14 +1,12 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +14,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
@@ -25,71 +21,39 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
 
-
-class FragmentActivityDetails : Fragment() {
+class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
-
-    private lateinit var textViewName: TextView
-    private lateinit var textViewDescription: TextView
-    private lateinit var textViewStartDate: TextView
-    private lateinit var textViewEndDate: TextView
-    private lateinit var textViewStartLocal: TextView
-    private lateinit var textViewEndLocal: TextView
     private lateinit var textViewTeams: TextView
 
     private var teams: MutableList<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Initial Settings
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_details)
 
         // Get the selected activity
-        arguments?.let {
-            val activityJsonStr = it.getString("activity")
-            val activityJson = JSONObject(activityJsonStr)
-            activity = ScoutActivity.fromJson(activityJson)
-        }
-
-        // Get lists from db
-        getInvitedTeamsList(activity.idActivity!!)
-
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_activity_details, container, false)
-
-        // Send the objects in the view to the variables
-        textViewName = rootView.findViewById(R.id.textViewName)
-        textViewDescription = rootView.findViewById(R.id.textViewDescription)
-        textViewStartDate = rootView.findViewById(R.id.textViewStartDate)
-        textViewEndDate = rootView.findViewById(R.id.textViewEndDate)
-        textViewStartLocal = rootView.findViewById(R.id.textViewLocalizationStart)
-        textViewEndLocal = rootView.findViewById(R.id.textViewLocalizationEnd)
-        textViewTeams = rootView.findViewById(R.id.textViewInvitedTeams)
-
-        // Get the section images and display in the rootView
-        getSectionImage(1, rootView, 1)
-        getSectionImage(2, rootView, 2)
-
-        return rootView
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val activityJsonStr = intent.getStringExtra("activity")
+        val activityJson = JSONObject(activityJsonStr)
+        activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
         val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
 
-        // Fill the text Views
+        // Variables in the activity
+        val textViewName = findViewById<TextView>(R.id.textViewName)
+        val textViewDescription = findViewById<TextView>(R.id.textViewDescription)
+        val textViewStartDate = findViewById<TextView>(R.id.textViewStartDate)
+        val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
+        val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
+        val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
+        textViewTeams = findViewById<TextView>(R.id.textViewInvitedTeams)
+
+        // Set data in the views
         textViewName.text = activity.nameActivity
         textViewDescription.text = activity.activityDescription
         textViewStartDate.text = startDate
@@ -97,13 +61,20 @@ class FragmentActivityDetails : Fragment() {
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
+        // Get section images
+        getSectionImage(1, 1)
+        getSectionImage(2, 2)
+
+        // Get lists from db
+        getInvitedTeamsList(activity.idActivity!!)
+
     }
 
 
     /*
 
      */
-    private fun getSectionImage(section: Int, rootView: View, position: Int) {
+    private fun getSectionImage(section: Int, position: Int) {
 
         // Get the position of the image in the view
         val imageSlot = when (position) {
@@ -122,7 +93,7 @@ class FragmentActivityDetails : Fragment() {
         }
 
         // Add section image in the selected position
-        val imageView = rootView.findViewById<ImageView>(imageSlot)
+        val imageView = findViewById<ImageView>(imageSlot)
         imageView.setImageResource(imageResource)
     }
 
