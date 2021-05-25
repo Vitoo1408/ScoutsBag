@@ -39,11 +39,11 @@ class CreateActivityActivity : AppCompatActivity() {
         imageView.isHovered = !imageView.isHovered
 
         if (!imageView.isHovered) {
-            removeTeamsFromList()
+            removeSectionTeams(1)
             imageView.setBackgroundResource(0)
         }
         else {
-            getTeamsList()
+            getSectionTeams(1)
             imageView.setBackgroundResource(R.drawable.border)
         }
 
@@ -116,9 +116,6 @@ class CreateActivityActivity : AppCompatActivity() {
         // Start coroutine
         GlobalScope.launch(Dispatchers.IO) {
 
-            // Falta saber o que fazer quando a data estiver errada
-            // e algum campo vazio
-
             // Build the activity
             val scoutActivity = ScoutActivity(
                 intent.getIntExtra("idActivity", 0),
@@ -165,10 +162,7 @@ class CreateActivityActivity : AppCompatActivity() {
     /*
 
      */
-    private fun getTeamsList() {
-
-        // Reset lists
-        teams.clear()
+    private fun getSectionTeams(idSection: Int) {
 
         // Coroutine start
         GlobalScope.launch(Dispatchers.IO) {
@@ -187,7 +181,8 @@ class CreateActivityActivity : AppCompatActivity() {
                 for (index in 0 until teamJsonArray.length()) {
                     val jsonArticle = teamJsonArray.get(index) as JSONObject
                     val team = Team.fromJson(jsonArticle)
-                    teams.add(team)
+                    if (team.idSection == idSection)
+                        teams.add(team)
                 }
 
                 GlobalScope.launch(Dispatchers.Main) {
@@ -201,10 +196,14 @@ class CreateActivityActivity : AppCompatActivity() {
     /*
 
      */
-    private fun removeTeamsFromList() {
+    private fun removeSectionTeams(idSection: Int) {
 
-        // Reset lists
-        teams.clear()
+        // Find the teams of the selected section
+        for (team in teams) {
+            if (team.idSection == idSection)
+                teams.remove(team)
+        }
+
         listViewTeams.adapter = TeamsAdapter()
 
     }
