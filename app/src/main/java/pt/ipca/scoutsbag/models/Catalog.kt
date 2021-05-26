@@ -12,8 +12,8 @@ class Catalog {
 
     var idCatalog          : Int?    = null
     var nameCatalog        : String? = null
-    var catalogDescription : Int?    = null
-    var classification     : String? = null
+    var catalogDescription : String?    = null
+    var classification     : Int? = null
     var instructionsTime   : String? = null
 
     constructor(){
@@ -23,8 +23,8 @@ class Catalog {
     constructor(
         idCatalog: Int?,
         nameCatalog: String?,
-        catalogDescription: Int?,
-        classification: String?,
+        catalogDescription: String?,
+        classification: Int?,
         instructionsTime: String?
     ) {
         this.idCatalog = idCatalog
@@ -51,8 +51,8 @@ class Catalog {
             val catalog = Catalog()
             catalog.idCatalog          = if (!jsonObject.isNull("id_catalog"          )) jsonObject.getInt   ("id_catalog"          )else null
             catalog.nameCatalog        = if (!jsonObject.isNull("name_catalog"        )) jsonObject.getString("name_catalog"        )else null
-            catalog.catalogDescription = if (!jsonObject.isNull("catalog_description" )) jsonObject.getInt   ("catalog_description" )else null
-            catalog.classification     = if (!jsonObject.isNull("classification"      )) jsonObject.getString("classification"      )else null
+            catalog.catalogDescription = if (!jsonObject.isNull("catalog_description" )) jsonObject.getString   ("catalog_description" )else null
+            catalog.classification     = if (!jsonObject.isNull("classification"      )) jsonObject.getInt("classification"      )else null
             catalog.instructionsTime   = if (!jsonObject.isNull("instructions_time"   )) jsonObject.getString("instructions_time"   )else null
 
             return catalog

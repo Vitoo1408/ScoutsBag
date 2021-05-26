@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/navigation_catalog"
-        android:name="pt.ipca.scoutsbag.ui.FragmentCatalog"
+        android:name="pt.ipca.scoutsbag.catalogManagment.FragmentCatalog"
         android:label="Catalogo"
         tools:layout="@layout/fragment_catalog" />
 
