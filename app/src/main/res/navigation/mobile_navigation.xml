@@ -9,24 +9,7 @@
         android:id="@+id/navigation_activity"
         android:name="pt.ipca.scoutsbag.activityManagement.FragmentActivity"
         android:label="Atividades"
-        tools:layout="@layout/fragment_activity" >
-        <action
-            android:id="@+id/action_navigation_activity_to_navigation_activity_details"
-            app:destination="@id/navigation_activity_details" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_activity_details"
-        android:name="pt.ipca.scoutsbag.activityManagement.FragmentActivityDetails"
-        android:label="Atividade"
-        tools:layout="@layout/fragment_activity_details" >
-        <argument
-            android:name="activity"
-            app:argType="string" />
-    </fragment>
-
-
-
+        tools:layout="@layout/fragment_activity" />
 
     <fragment
         android:id="@+id/navigation_invites"

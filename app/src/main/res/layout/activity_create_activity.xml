@@ -284,7 +284,7 @@
             android:id="@+id/imageViewExploradores"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
@@ -303,10 +303,8 @@
             android:id="@+id/imageViewPioneiros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewCaminheiros"
             app:layout_constraintStart_toEndOf="@+id/imageViewExploradores"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_pioneiros" />
@@ -315,7 +313,7 @@
             android:id="@+id/textViewPioneiros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
+            android:layout_marginStart="25dp"
             android:layout_marginEnd="32dp"
             android:text="Pioneiros"
             app:layout_constraintEnd_toStartOf="@+id/textViewCaminheiros"
@@ -326,8 +324,9 @@
             android:id="@+id/imageViewCaminheiros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_caminheiros" />
 
@@ -335,6 +334,7 @@
             android:id="@+id/textViewCaminheiros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
             android:text="Caminheiros"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewCaminheiros" />
@@ -352,24 +352,43 @@
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <TextView
-          android:id="@+id/textViewTeams"
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/constraintLayoutTeams"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_marginStart="20dp"
           android:layout_marginTop="16dp"
-          android:text="Equipas"
-          android:textColor="#707070"
-          android:textSize="12sp"
-          android:textStyle="normal"
+          android:layout_marginEnd="20dp"
+          app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSections" />
+          app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSections">
+
+        <TextView
+            android:id="@+id/textViewTeams"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Equipas"
+            android:textColor="#707070"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ListView
+            android:id="@+id/listViewTeams"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewTeams" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
       <Button
           android:id="@+id/buttonAddActivity"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="32dp"
+          android:layout_marginTop="16dp"
           android:layout_marginBottom="32dp"
           android:background="@drawable/custom_button_orange"
           android:text="Criar Atividade"
@@ -377,9 +396,9 @@
           app:backgroundTint="@null"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintHorizontal_bias="0.498"
+          app:layout_constraintHorizontal_bias="0.497"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/textViewTeams" />
+          app:layout_constraintTop_toBottomOf="@+id/constraintLayoutTeams" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

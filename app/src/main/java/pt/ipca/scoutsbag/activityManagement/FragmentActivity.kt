@@ -125,8 +125,11 @@ class FragmentActivity : Fragment() {
 
             // Show activity details button event
             rowView.setOnClickListener {
-                val action = FragmentActivityDirections.actionNavigationActivityToNavigationActivityDetails(activity.toJson().toString())
-                this@FragmentActivity.findNavController().navigate(action)
+
+                val intent = Intent(context, ActivityDetailsActivity::class.java)
+                intent.putExtra("activity", activity.toJson().toString())
+                startActivity(intent)
+
             }
 
             return rowView
