@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,34 +32,42 @@ class CreateActivityActivity : AppCompatActivity() {
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
     private lateinit var listViewTeams: ListView
+    private var activityId: Int? = null
 
-    //
-    var onClickSection: (view: View)->Unit = {
+
+    // This function is for select an section by clicking on the section image
+    private var onClickSection: (view: View)->Unit = {
+        // Variables
         val imageView = it as ImageView
+        val sectionId: Int = getSectionID(imageView.id)
 
         imageView.isHovered = !imageView.isHovered
 
+        // Remove border and teams
         if (!imageView.isHovered) {
-            removeSectionTeams(1)
+            removeSectionTeams(sectionId)
             imageView.setBackgroundResource(0)
         }
+        // Add border and teams
         else {
-            getSectionTeams(1)
+            getSectionTeams(sectionId)
             imageView.setBackgroundResource(R.drawable.border)
         }
-
     }
 
-    //
+
+    // This function is for select an team by clicking on the team button
     var onClickTeam: (view: View)->Unit = {
         val button = it as Button
 
         button.isHovered = !button.isHovered
 
+        // Set button as white
         if (!button.isHovered) {
             button.setBackgroundResource(R.drawable.custom_button_white)
             button.setTextColor(Color.BLACK)
         }
+        // Set button as orange
         else {
             button.setBackgroundResource(R.drawable.custom_button_orange)
             button.setTextColor(Color.WHITE)
@@ -71,6 +80,8 @@ class CreateActivityActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
+        activityId = intent.getIntExtra("idActivity", 0)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // Pass the view objects to variables
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
@@ -99,17 +110,16 @@ class CreateActivityActivity : AppCompatActivity() {
 
         addButton.setOnClickListener {
             addActivity(this)
+            for (team in teams)
+                addInvite(this, team.idTeam!!)
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        listViewTeams.adapter = TeamsAdapter()
-
 
     }
 
 
     /*
-
+        This function add the activity in the data base
+        @context = context of the activity
      */
     private fun addActivity(context: Context) {
 
@@ -118,7 +128,7 @@ class CreateActivityActivity : AppCompatActivity() {
 
             // Build the activity
             val scoutActivity = ScoutActivity(
-                intent.getIntExtra("idActivity", 0),
+                activityId,
                 findViewById<TextView>(R.id.editTextActivityName).text.toString(),
                 1,
                 findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
@@ -160,7 +170,53 @@ class CreateActivityActivity : AppCompatActivity() {
 
 
     /*
+        This function add the invite in the data base
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    private fun addInvite(context: Context, idTeam: Int) {
 
+        // Start coroutine
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the activity
+            val invite = Invite(
+                activityId,
+                idTeam,
+                1
+            )
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                invite.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites")
+                .post(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main){
+
+                    if (response.message == "OK"){
+                        val returnIntent = Intent(context, MainActivity::class.java)
+                        startActivity(returnIntent)
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    /*
+        This function add all the teams of an selected section into the list
+        @idSection = selected section
      */
     private fun getSectionTeams(idSection: Int) {
 
@@ -185,6 +241,7 @@ class CreateActivityActivity : AppCompatActivity() {
                         teams.add(team)
                 }
 
+                // Refresh the list
                 GlobalScope.launch(Dispatchers.Main) {
                     listViewTeams.adapter = TeamsAdapter()
                 }
@@ -194,17 +251,33 @@ class CreateActivityActivity : AppCompatActivity() {
 
 
     /*
-
+        This function all the teams of an selected section from the list
+        @idSection = selected section
      */
     private fun removeSectionTeams(idSection: Int) {
 
         // Find the teams of the selected section
-        for (team in teams) {
-            if (team.idSection == idSection)
-                teams.remove(team)
+        for (i in teams.size-1 downTo 0) {
+            if (teams[i].idSection == idSection)
+                teams.removeAt(i)
         }
 
         listViewTeams.adapter = TeamsAdapter()
+    }
+
+
+    /*
+        This function return the section id on the data base depending on the imageView id
+        @imageViewId = selected imageView id
+     */
+    private fun getSectionID(imageViewId: Int): Int {
+
+        return when(imageViewId) {
+            R.id.imageViewLobitos -> 1
+            R.id.imageViewExploradores -> 2
+            R.id.imageViewPioneiros -> 3
+            else -> 4
+        }
 
     }
 
