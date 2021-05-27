@@ -22,9 +22,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.ActivityType
 import pt.ipca.scoutsbag.models.Team
-import java.util.*
 
 
 class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {

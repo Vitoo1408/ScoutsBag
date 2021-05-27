@@ -1,40 +1,26 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.findNavController
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONArray
 import org.json.JSONObject
-import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.userManagement.ColonyDbHelper
+import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 
-class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbHelper {
+class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private lateinit var textViewTeams: TextView
     private var teams: MutableList<Team> = arrayListOf()
-
-    // This function is for return to the previous activity after a operation
-    var changeActivity: ()->Unit = {
-        val returnIntent = Intent(this, MainActivity::class.java)
-        startActivity(returnIntent)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -92,20 +78,6 @@ class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesD
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         return true
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when (item.itemId){
-            R.id.itemDelete -> {
-                removeActivity(activity.idActivity!!, changeActivity)
-                return true
-            }
-        }
-
-        return false
     }
 
 

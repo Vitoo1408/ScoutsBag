@@ -1,12 +1,13 @@
-package pt.ipca.scoutsbag.userManagement
+package pt.ipca.scoutsbag.colonyManagement
 
 import com.example.scoutsteste1.Invite
-import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
@@ -85,6 +86,42 @@ interface ColonyDbHelper {
         }
 
         return team!!
+    }
+
+
+    /*
+        This adds a team into the database
+        @id = selected team id
+    */
+    fun addTeam(team: Team, changeActitivty: ()->Unit) {
+
+
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                team.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams")
+                .post(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main){
+
+                    if (response.message == "OK"){
+                        changeActitivty()
+                    }
+
+                }
+            }
+
+
     }
 
 

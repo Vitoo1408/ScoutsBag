@@ -1,14 +1,14 @@
-package pt.ipca.scoutsbag.userManagement
+package pt.ipca.scoutsbag.colonyManagement
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
-import com.example.scoutsteste1.ScoutActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,8 +18,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.ActivityType
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
@@ -29,6 +27,7 @@ class ColonyActivity : AppCompatActivity() {
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : UsersAdapter
+    lateinit var buttonAddTeam : FloatingActionButton
     var users : MutableList<User> = arrayListOf()
     var sections : MutableList<Section> = arrayListOf()
     var teams : MutableList<Team> = arrayListOf()
@@ -51,7 +50,15 @@ class ColonyActivity : AppCompatActivity() {
         // Set data
         listView = findViewById(R.id.listview_colony)
         adapter = UsersAdapter()
+        buttonAddTeam = findViewById(R.id.buttonAddTeam)
         listView.adapter = adapter
+
+        // Button on click events
+        buttonAddTeam.setOnClickListener {
+            val intent = Intent(this, AddTeam::class.java)
+            intent.putExtra("idTeam", teams.size + 1)
+            startActivity(intent)
+        }
 
     }
 
@@ -85,7 +92,7 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            // textViewSection.text = getSectionById(user.idUser!!).sectionName
+            //textViewSection.text = getSectionName(user.idTeam!!)
             // textViewTeam.text = getTeamById(user.idUser!!).teamName
             textViewNin.text = user.nin.toString()
 
@@ -163,34 +170,16 @@ class ColonyActivity : AppCompatActivity() {
     /*
         This function returns all teams in the api to an list
      */
-    private fun getSectionsList(){
+    private fun getSectionName(id: Int): String{
 
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/sections").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val sectionJsonArrayStr : String = response.body!!.string()
-                val sectionJsonArray = JSONArray(sectionJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until sectionJsonArray.length()) {
-                    val jsonArticle = sectionJsonArray.get(index) as JSONObject
-                    val section = Section.fromJson(jsonArticle)
-                    sections.add(section)
-                }
-
-                // Update the list
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
+        // Get the position of the image in the view
+        return when (id) {
+            1 -> "Lobitos"
+            2 -> "Exploradores"
+            3 -> "Pioneiros"
+            else -> "Caminheiros"
         }
+
     }
 
 

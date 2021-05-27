@@ -1,6 +1,7 @@
 package pt.ipca.scoutsbag
 
 import android.os.Bundle
+import android.text.Html
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         //Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //getActionBar()?.setTitle(Html.fromHtml("<font color=\"red\">"))
 
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
