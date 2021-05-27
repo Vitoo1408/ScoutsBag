@@ -27,7 +27,7 @@ import pt.ipca.scoutsbag.models.Team
 import java.util.*
 
 
-class CreateActivityActivity : AppCompatActivity() {
+class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
@@ -74,7 +74,14 @@ class CreateActivityActivity : AppCompatActivity() {
         }
     }
 
-    
+
+    // This function is for return to the previous activity after a operation
+    var changeActivity: ()->Unit = {
+        val returnIntent = Intent(this, MainActivity::class.java)
+        startActivity(returnIntent)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
@@ -109,108 +116,43 @@ class CreateActivityActivity : AppCompatActivity() {
         }
 
         addButton.setOnClickListener {
-            addActivity(this)
-            for (team in teams)
-                addInvite(this, team.idTeam!!)
-        }
+            GlobalScope.launch(Dispatchers.IO) {
 
-    }
+                // Build the activity that will be added
+                val scoutActivity = ScoutActivity(
+                    activityId,
+                    findViewById<TextView>(R.id.editTextActivityName).text.toString(),
+                    1,
+                    findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
+                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
+                    Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
+                    "1234",
+                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
+                    10.5f,
+                )
 
+                // Add activity
+                addActivity(scoutActivity, changeActivity)
 
-    /*
-        This function add the activity in the data base
-        @context = context of the activity
-     */
-    private fun addActivity(context: Context) {
+                // Invite all teams selected to this activity
+                for (team in teams) {
 
-        // Start coroutine
-        GlobalScope.launch(Dispatchers.IO) {
+                    // Build the invite
+                    val invite = Invite(
+                        activityId,
+                        team.idTeam,
+                        1
+                    )
 
-            // Build the activity
-            val scoutActivity = ScoutActivity(
-                activityId,
-                findViewById<TextView>(R.id.editTextActivityName).text.toString(),
-                1,
-                findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
-                findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
-                Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
-                Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
-                "1234",
-                findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
-                findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
-                10.5f,
-            )
-
-            // Prepare the from body request
-            val requestBody = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                scoutActivity.toJson().toString()
-            )
-
-            // Build the request
-            val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities")
-                .post(requestBody)
-                .build()
-
-            // Send the request and verify the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                GlobalScope.launch (Dispatchers.Main){
-
-                    if (response.message == "OK"){
-                        val returnIntent = Intent(context, MainActivity::class.java)
-                        startActivity(returnIntent)
-                    }
-
+                    addInvite(invite, changeActivity)
                 }
-            }
-        }
-    }
 
-
-    /*
-        This function add the invite in the data base
-        @context = context of the activity
-        @idTeam = team invited id
-     */
-    private fun addInvite(context: Context, idTeam: Int) {
-
-        // Start coroutine
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Build the activity
-            val invite = Invite(
-                activityId,
-                idTeam,
-                1
-            )
-
-            // Prepare the from body request
-            val requestBody = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                invite.toJson().toString()
-            )
-
-            // Build the request
-            val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites")
-                .post(requestBody)
-                .build()
-
-            // Send the request and verify the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                GlobalScope.launch (Dispatchers.Main){
-
-                    if (response.message == "OK"){
-                        val returnIntent = Intent(context, MainActivity::class.java)
-                        startActivity(returnIntent)
-                    }
-                }
             }
 
         }
+
     }
 
 

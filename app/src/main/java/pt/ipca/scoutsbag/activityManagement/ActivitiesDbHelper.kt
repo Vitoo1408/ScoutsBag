@@ -1,16 +1,24 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.content.Context
+import android.content.Intent
+import android.widget.TextView
 import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
+import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.ActivityType
+import pt.ipca.scoutsbag.models.Team
 
 interface ActivitiesDbHelper {
 
@@ -74,6 +82,66 @@ interface ActivitiesDbHelper {
         }
 
         return activity!!
+    }
+
+
+    /*
+        This function add the activity to the data base
+        @scoutActivity = activity that will be added
+        @changeActivity = a function that return the user to the previous activity
+     */
+    fun addActivity(scoutActivity: ScoutActivity, changeActivity: ()->Unit) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            scoutActivity.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main) {
+
+                if (response.message == "OK") {
+                    changeActivity()
+                }
+            }
+        }
+
+    }
+
+
+    /*
+        This function remove the activity from the data base
+        @idActivity =
+        @changeActivity = a function that return the user to the previous activity
+     */
+    fun removeActivity(idActivity: Int, changeActivity: ()->Unit) {
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities/$idActivity")
+            .delete()
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main) {
+
+                if (response.message == "OK") {
+                    changeActivity()
+                }
+            }
+        }
+
     }
 
 
@@ -164,6 +232,38 @@ interface ActivitiesDbHelper {
         return invites
     }
 
+
+    /*
+        This function add the invite in the data base
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    fun addInvite(invite: Invite, changeActivity: () -> Unit) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            invite.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main){
+
+                if (response.message == "OK"){
+                    changeActivity()
+                }
+            }
+        }
+
+    }
 
 
 }
