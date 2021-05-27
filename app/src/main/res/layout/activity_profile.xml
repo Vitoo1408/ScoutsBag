@@ -3,30 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_color">
-
-    <Button
-        android:id="@+id/editProfile"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@color/green"
-        android:backgroundTint="@color/green"
-        android:backgroundTintMode="screen"
-        android:foreground="@color/material_on_background_disabled"
-        android:foregroundTint="@color/teal_200"
-        android:textColor="@color/teal_200"
-        app:icon="@android:drawable/ic_menu_edit"
-        app:iconPadding="64dp"
-        app:iconSize="64dp"
-        app:iconTint="@color/orange"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/background_color"
-        app:strokeColor="#009688" />
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/scrollViewProfile"
@@ -217,5 +194,27 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/editProfile"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/green"
+        android:backgroundTint="@color/green"
+        android:backgroundTintMode="screen"
+        android:foreground="@color/material_on_background_disabled"
+        android:foregroundTint="@color/teal_200"
+        android:textColor="@color/teal_200"
+        app:icon="@android:drawable/ic_menu_edit"
+        app:iconPadding="64dp"
+        app:iconSize="64dp"
+        app:iconTint="@color/orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/background_color"
+        app:strokeColor="#009688" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

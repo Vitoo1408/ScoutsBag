@@ -113,6 +113,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
             dateEndPickerDialog.show()
         }
 
+        //
         addButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
 
