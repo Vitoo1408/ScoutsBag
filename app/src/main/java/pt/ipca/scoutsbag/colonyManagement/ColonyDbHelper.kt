@@ -1,11 +1,6 @@
-package pt.ipca.scoutsbag.userManagement
+package pt.ipca.scoutsbag.colonyManagement
 
-import android.content.Context
-import android.content.Intent
-import android.view.View
-import android.widget.TextView
 import com.example.scoutsteste1.Invite
-import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,7 +11,6 @@ import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Team
 
 interface ColonyDbHelper {
