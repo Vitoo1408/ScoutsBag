@@ -1,14 +1,14 @@
 package pt.ipca.scoutsbag.userManagement
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
-import com.example.scoutsteste1.ScoutActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,8 +18,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.ActivityType
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
@@ -29,6 +27,7 @@ class ColonyActivity : AppCompatActivity() {
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : UsersAdapter
+    lateinit var buttonAddTeam : FloatingActionButton
     var users : MutableList<User> = arrayListOf()
     var sections : MutableList<Section> = arrayListOf()
     var teams : MutableList<Team> = arrayListOf()
@@ -51,7 +50,15 @@ class ColonyActivity : AppCompatActivity() {
         // Set data
         listView = findViewById(R.id.listview_colony)
         adapter = UsersAdapter()
+        buttonAddTeam = findViewById(R.id.buttonAddTeam)
         listView.adapter = adapter
+
+        // Button on click events
+        buttonAddTeam.setOnClickListener {
+            val intent = Intent(this, AddTeam::class.java)
+            intent.putExtra("idTeam", teams.size + 1)
+            startActivity(intent)
+        }
 
     }
 
