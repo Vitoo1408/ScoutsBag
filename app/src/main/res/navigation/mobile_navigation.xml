@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_invites"
-        android:name="pt.ipca.scoutsbag.ui.FragmentInvite"
+        android:name="pt.ipca.scoutsbag.activityManagement.FragmentInvite"
         android:label="Convites"
         tools:layout="@layout/fragment_invite" />
 

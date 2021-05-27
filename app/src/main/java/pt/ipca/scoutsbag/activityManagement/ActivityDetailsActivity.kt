@@ -1,12 +1,12 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -20,13 +20,13 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
+import pt.ipca.scoutsbag.userManagement.ColonyDbHelper
 
-class ActivityDetailsActivity : AppCompatActivity() {
+class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private lateinit var textViewTeams: TextView
-
     private var teams: MutableList<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
         // Get the selected activity
         val activityJsonStr = intent.getStringExtra("activity")
-        val activityJson = JSONObject(activityJsonStr)
+        val activityJson = JSONObject(activityJsonStr!!)
         activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
@@ -65,14 +65,33 @@ class ActivityDetailsActivity : AppCompatActivity() {
         getSectionImage(1, 1)
         getSectionImage(2, 2)
 
-        // Get lists from db
-        getInvitedTeamsList(activity.idActivity!!)
+        // Coroutine start
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Get all invited teams for this activity
+            teams = getAllInvitedTeams(activity.idActivity!!)
+        }
 
     }
 
 
     /*
+        This function create the action bar above the activity
+     */
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.delete_edit_menu, menu)
+        title = activity.nameActivity
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        return true
+    }
+
+
+    /*
+        Enable the images of the selected sections
+        @section = selected section
+        @position = slot in the view
      */
     private fun getSectionImage(section: Int, position: Int) {
 
@@ -97,76 +116,5 @@ class ActivityDetailsActivity : AppCompatActivity() {
         imageView.setImageResource(imageResource)
     }
 
-
-    /*
-
-     */
-    private fun getInvitedTeamsList(id: Int) {
-
-        // Invites list
-        val invites: MutableList<Invite> = arrayListOf()
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesInvites/$id").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val invite = Invite.fromJson(jsonArticle)
-                    invites.add(invite)
-                }
-            }
-
-            // Get the invited teams
-            for (i in 0 until invites.size) {
-                getTeam(invites[i].idTeam!!)
-            }
-
-        }
-
-    }
-
-    private fun getTeam(id: Int) {
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/teams/$id").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val team = Team.fromJson(jsonArticle)
-                    teams.add(team)
-
-                    // Show team
-                    GlobalScope.launch(Dispatchers.Main) {
-                        textViewTeams.text = "${textViewTeams.text} ${team.teamName}, "
-                    }
-                }
-
-            }
-
-        }
-
-    }
 
 }
