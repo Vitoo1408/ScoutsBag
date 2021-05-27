@@ -1,38 +1,38 @@
 package pt.ipca.scoutsbag.userManagement
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Team
 
-class AddTeam: AppCompatActivity() {
+class AddTeam: AppCompatActivity(), ColonyDbHelper {
 
-    /*
+    // Global Variables
+    var sectionImages: MutableList<ImageView> = arrayListOf()
+
     var onClickSection: (view: View)->Unit = {
         val imageView = it as ImageView
 
-        imageView.isHovered = !imageView.isHovered
+        for (i in 0 until sectionImages.size){
+            sectionImages[i].setBackgroundResource(0)
+            sectionImages[i].isHovered = false
+        }
 
-        if (!imageView.isHovered) {
-            imageView.setBackgroundResource(0)
-        }
-        else {
-            imageView.setBackgroundResource(R.drawable.border)
-        }
+        imageView.isHovered = true
+
+        imageView.setBackgroundResource(R.drawable.border)
 
     }
-     */
+
+    // This function is for return to the previous activity after a operation
+    var changeActivity: ()->Unit = {
+        val returnIntent = Intent(this, MainActivity::class.java)
+        startActivity(returnIntent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -41,60 +41,46 @@ class AddTeam: AppCompatActivity() {
         setContentView(R.layout.activity_add_team)
 
         // Pass the view objects to variables
-        val buttonSaveTeam = findViewById<TextView>(R.id.buttonSaveTeam)
+        val buttonSaveTeam = findViewById<Button>(R.id.buttonSaveTeam)
+        val button = findViewById<Button>(R.id.button)
+        sectionImages.add(findViewById(R.id.imageViewLobitos))
+        sectionImages.add(findViewById(R.id.imageViewExploradores))
+        sectionImages.add(findViewById(R.id.imageViewPioneiros))
+        sectionImages.add(findViewById(R.id.imageViewCaminheiros))
 
-        /* // On click section events
-        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
-        */
+        // On click section events
+        for (i in 0 until sectionImages.size){
+            sectionImages[i].setOnClickListener(onClickSection)
+        }
+
+        button.setOnClickListener{
+            println(getSection())
+        }
 
         buttonSaveTeam.setOnClickListener {
-            addTeam(this)
 
-        }
-    }
-
-    private fun addTeam(context: Context) {
-
-        // Start coroutine
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Build the activity
+            // Build the team
             val team = Team(
-                    intent.getIntExtra("idTeam", 0),
-                    findViewById<TextView>(R.id.editTextTeamName).text.toString(),
-                2
+                intent.getIntExtra("idTeam", 0),
+                findViewById<TextView>(R.id.editTextTeamName).text.toString(),
+                getSection()
             )
+            addTeam(team, changeActivity)
 
-            // Prepare the from body request
-            val requestBody = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                team.toJson().toString()
-            )
-
-            // Build the request
-            val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams")
-                .post(requestBody)
-                .build()
-
-            // Send the request and verify the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                GlobalScope.launch (Dispatchers.Main){
-
-                    if (response.message == "OK"){
-                        val returnIntent = Intent(context, ColonyActivity::class.java)
-                        startActivity(returnIntent)
-                    }
-
-                }
-            }
         }
 
     }
 
+    fun getSection(): Int {
+
+        var sectionId: Int = 0
+
+        for (i in 0 until sectionImages.size){
+            if(sectionImages[i].isHovered)
+                sectionId = i
+        }
+
+        return sectionId + 1
+    }
 
 }

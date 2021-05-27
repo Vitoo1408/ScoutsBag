@@ -92,7 +92,7 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            // textViewSection.text = getSectionById(user.idUser!!).sectionName
+            //textViewSection.text = getSectionName(user.idTeam!!)
             // textViewTeam.text = getTeamById(user.idUser!!).teamName
             textViewNin.text = user.nin.toString()
 
@@ -170,34 +170,16 @@ class ColonyActivity : AppCompatActivity() {
     /*
         This function returns all teams in the api to an list
      */
-    private fun getSectionsList(){
+    private fun getSectionName(id: Int): String{
 
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/sections").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val sectionJsonArrayStr : String = response.body!!.string()
-                val sectionJsonArray = JSONArray(sectionJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until sectionJsonArray.length()) {
-                    val jsonArticle = sectionJsonArray.get(index) as JSONObject
-                    val section = Section.fromJson(jsonArticle)
-                    sections.add(section)
-                }
-
-                // Update the list
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
+        // Get the position of the image in the view
+        return when (id) {
+            1 -> "Lobitos"
+            2 -> "Exploradores"
+            3 -> "Pioneiros"
+            else -> "Caminheiros"
         }
+
     }
 
 
