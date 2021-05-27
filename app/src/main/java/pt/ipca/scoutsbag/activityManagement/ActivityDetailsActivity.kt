@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,12 +23,18 @@ import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.userManagement.ColonyDbHelper
 
-class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
+class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbHelper {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private lateinit var textViewTeams: TextView
     private var teams: MutableList<Team> = arrayListOf()
+
+    // This function is for return to the previous activity after a operation
+    var changeActivity: ()->Unit = {
+        val returnIntent = Intent(this, MainActivity::class.java)
+        startActivity(returnIntent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -85,6 +92,20 @@ class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId){
+            R.id.itemDelete -> {
+                removeActivity(activity.idActivity!!, changeActivity)
+                return true
+            }
+        }
+
+        return false
     }
 
 
