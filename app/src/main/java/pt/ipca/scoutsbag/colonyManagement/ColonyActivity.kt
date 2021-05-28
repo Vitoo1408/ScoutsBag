@@ -40,10 +40,13 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_colony)
 
+        getTeamsList()
+
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
-            users = getAllUsers()
+            users = getAllAcceptedUsers()
+
 
             // Refresh the listView
             GlobalScope.launch(Dispatchers.Main) {
@@ -94,8 +97,8 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            //textViewSection.text = getSectionName(user.idTeam!!)
-            // textViewTeam.text = getTeamById(user.idUser!!).teamName
+            textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
+            textViewTeam.text = getTeamById(user.idTeam!!).teamName
             textViewNin.text = user.nin.toString()
 
             rowView.setOnClickListener {
@@ -148,7 +151,6 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
      */
     private fun getSectionName(id: Int): String{
 
-        //
         return when (id) {
             1 -> "Lobitos"
             2 -> "Exploradores"
@@ -170,9 +172,9 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
         var response: Team? = null
 
         // Find the activity type
-        for (element in teams) {
-            if (element.idTeam == id)
-                response = element
+        for (i in 0 until teams.size) {
+            if (teams[i].idTeam == id)
+                response = teams[i]
         }
 
         return response!!
