@@ -23,6 +23,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.ActivityType
 
 
@@ -34,6 +35,7 @@ class FragmentActivity : Fragment() {
     var activities : MutableList<ScoutActivity> = arrayListOf()
     var activitiesTypes : MutableList<ActivityType> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
+    var textViewName: TextView? = null
 
 
     /*
@@ -53,6 +55,9 @@ class FragmentActivity : Fragment() {
         listView = rootView.findViewById(R.id.listViewActivities)
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
+        textViewName = rootView.findViewById(R.id.TextViewNome)
+
+        textViewName?.text = "Olá, " + UserLoggedIn.userName
 
         return rootView
     }

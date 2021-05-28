@@ -10,5 +10,7 @@
     <color name="orange">#FF7900</color>
     <color name="green">#20B787</color>
     <color name="background_color">#EEFCF7</color>
+    <color name="text_gray_color">#4F5052</color>
+    <color name="red">#FF0000</color>
 
 </resources>

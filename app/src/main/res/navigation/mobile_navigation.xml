@@ -25,9 +25,6 @@
             app:argType="string" />
     </fragment>
 
-
-
-
     <fragment
         android:id="@+id/navigation_invites"
         android:name="pt.ipca.scoutsbag.ui.FragmentInvite"
