@@ -58,8 +58,8 @@ class ProfileActivity : AppCompatActivity(), ColonyDbHelper {
         textNIN.text = user.nin
         textPhone.text = user.contact
         textMail.text = user.email
-        textBirthDate.text = user.bithDate
-        textAddress.text = user.adress
+        textBirthDate.text = user.birthDate
+        textAddress.text = user.address
         textPostalCode.text = user.postalCode
 
 

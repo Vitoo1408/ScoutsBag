@@ -101,7 +101,7 @@ class Login : AppCompatActivity() {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                             }
-                            //ainda falta guardar os dados do user que fez login no objeto UserLoggedDetails
+
                         } else {
                             GlobalScope.launch(Dispatchers.Main) {
                                 Toast.makeText(this@Login, "Dados incorretos", Toast.LENGTH_LONG).show()

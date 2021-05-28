@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.catalogManagment
+package pt.ipca.scoutsbag.catalogManagement
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import com.example.scoutsteste1.Instruction

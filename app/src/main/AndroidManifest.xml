@@ -15,7 +15,15 @@
         <activity android:name=".loginAndRegister.ForgotPassword"></activity>
         <activity android:name=".loginAndRegister.Login" />
         <activity android:name=".loginAndRegister.Register" />
-        <activity android:name=".userManagement.ColonyActivity" />
+        <activity android:name=".catalogManagement.AddCatalog" />
+        <activity android:name=".catalogManagement.AddInstruction" />
+        <activity android:name=".catalogManagement.SeeInstructions" />
+        <activity android:name=".colonyManagement.ColonyActivity" />
+        <activity android:name=".colonyManagement.AddTeam" />
+        <activity android:name=".colonyManagement.ProfileActivity" />
+        <activity android:name=".colonyManagement.EditProfileActivity" />
+        <activity android:name=".activityManagement.ActivityDetailsActivity" />
+        <activity android:name=".activityManagement.EditActivityActivity" />
         <activity android:name=".activityManagement.CreateActivityActivity" />
         <activity
             android:name=".loginAndRegister.LogInOrRegisterActivity"
