@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONObject
+import org.json.JSONTokener
+import pt.ipca.scoutsbag.loginAndRegister.LogInOrRegisterActivity
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import java.util.*
 
 class SplashScreen: AppCompatActivity() {

@@ -12,19 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".colonyManagement.ActivityUserRequest"></activity>
-        <activity android:name=".catalogManagment.AddCatalog" />
-        <activity android:name=".catalogManagment.AddInstruction" />
-        <activity android:name=".catalogManagment.SeeInstructions" />
-        <activity android:name=".colonyManagement.ColonyActivity" />
-        <activity android:name=".colonyManagement.AddTeam" />
-        <activity android:name=".colonyManagement.ProfileActivity" />
-        <activity android:name=".colonyManagement.EditProfileActivity" />
-        <activity android:name=".activityManagement.ActivityDetailsActivity" />
-        <activity android:name=".activityManagement.EditActivityActivity" />
+        <activity android:name=".loginAndRegister.ForgotPassword"></activity>
+        <activity android:name=".loginAndRegister.Login" />
+        <activity android:name=".loginAndRegister.Register" />
+        <activity android:name=".userManagement.ColonyActivity" />
         <activity android:name=".activityManagement.CreateActivityActivity" />
         <activity
-            android:name=".LogInOrRegisterActivity"
+            android:name=".loginAndRegister.LogInOrRegisterActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".SplashScreen"
