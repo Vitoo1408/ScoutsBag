@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -10,12 +11,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 
-class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
+class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbHelper {
 
     // Global variables
     private lateinit var activity: ScoutActivity
@@ -78,6 +80,31 @@ class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         return true
+    }
+
+
+    /*
+        This function define the events of the action bar buttons
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId){
+            R.id.itemDelete -> {
+                removeActivity(activity.idActivity!!) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                return true
+            }
+            R.id.itemEdit -> {
+                val intent = Intent(this, EditActivityActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+
+        return false
     }
 
 

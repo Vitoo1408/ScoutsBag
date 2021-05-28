@@ -20,6 +20,7 @@
         <activity android:name=".colonyManagement.ProfileActivity" />
         <activity android:name=".colonyManagement.EditProfileActivity" />
         <activity android:name=".activityManagement.ActivityDetailsActivity" />
+        <activity android:name=".activityManagement.EditActivityActivity" />
         <activity android:name=".activityManagement.CreateActivityActivity" />
         <activity
             android:name=".LogInOrRegisterActivity"

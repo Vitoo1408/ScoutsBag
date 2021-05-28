@@ -17,19 +17,24 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.internal.notify
+import okhttp3.internal.notifyAll
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 import pt.ipca.scoutsbag.models.Team
 
 
-class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
+class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDbHelper {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
+    var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
+    lateinit var adapter: TeamsAdapter
     private var activityId: Int? = null
 
 
@@ -48,7 +53,17 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
         }
         // Add border and teams
         else {
-            getSectionTeams(sectionId)
+
+            // Add all teams of the selected section
+            GlobalScope.launch(Dispatchers.IO) {
+                teams.addAll(getAllSectionTeams(sectionId))
+
+                // Refresh the list
+                GlobalScope.launch(Dispatchers.Main) {
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
             imageView.setBackgroundResource(R.drawable.border)
         }
     }
@@ -73,6 +88,20 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
     }
 
 
+    // This function is for select an team by clicking on the team button
+    var onClickActivityType: (view: View)->Unit = {
+        val imageView = it as ImageView
+
+        for (i in 0 until activityTypesImages.size){
+            activityTypesImages[i].setBackgroundResource(0)
+            activityTypesImages[i].isHovered = false
+        }
+
+        imageView.isHovered = true
+        imageView.setBackgroundResource(R.drawable.border)
+    }
+
+
     // This function is for return to the previous activity after a operation
     var changeActivity: ()->Unit = {
         val returnIntent = Intent(this, MainActivity::class.java)
@@ -92,7 +121,9 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
         val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
         val addButton = findViewById<TextView>(R.id.buttonAddActivity)
-        listViewTeams = findViewById<ListView>(R.id.listViewTeams)
+        listViewTeams = findViewById(R.id.listViewTeams)
+        adapter = TeamsAdapter()
+        listViewTeams.adapter = adapter
 
         // Create the pop up window to select the date
         val dateStartPickerDialog = Utils.initDatePicker(dateStartTextView, this)
@@ -104,6 +135,18 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
         findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
         findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
 
+        // Add activity type images to the list
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType1))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType2))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType3))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
+
+        // On click activity type
+        for (image in activityTypesImages)
+            image.setOnClickListener(onClickActivityType)
+
         // On click button events
         dateStartTextView.setOnClickListener {
             dateStartPickerDialog.show()
@@ -113,7 +156,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
             dateEndPickerDialog.show()
         }
 
-        //
+        // Add activity and invite teams button event
         addButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
 
@@ -121,7 +164,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
                 val scoutActivity = ScoutActivity(
                     activityId,
                     findViewById<TextView>(R.id.editTextActivityName).text.toString(),
-                    1,
+                    getSelectedActivityType(),
                     findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
                     findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
                     Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
@@ -129,7 +172,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
                     "1234",
                     findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
                     findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
-                    10.5f,
+                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString().toFloat(),
                 )
 
                 // Add activity
@@ -156,42 +199,6 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
 
 
     /*
-        This function add all the teams of an selected section into the list
-        @idSection = selected section
-     */
-    private fun getSectionTeams(idSection: Int) {
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val team = Team.fromJson(jsonArticle)
-                    if (team.idSection == idSection)
-                        teams.add(team)
-                }
-
-                // Refresh the list
-                GlobalScope.launch(Dispatchers.Main) {
-                    listViewTeams.adapter = TeamsAdapter()
-                }
-            }
-        }
-    }
-
-
-    /*
         This function all the teams of an selected section from the list
         @idSection = selected section
      */
@@ -203,7 +210,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
                 teams.removeAt(i)
         }
 
-        listViewTeams.adapter = TeamsAdapter()
+        adapter.notifyDataSetChanged()
     }
 
 
@@ -220,6 +227,22 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
             else -> 4
         }
 
+    }
+
+
+    /*
+        This function return the Activity Type Id By looking which image is selected
+     */
+    private fun getSelectedActivityType(): Int {
+
+        var activityTypeId: Int = 0
+
+        for (i in 0 until activityTypesImages.size){
+            if(activityTypesImages[i].isHovered)
+                activityTypeId = i
+        }
+
+        return activityTypeId + 1
     }
 
 
@@ -251,6 +274,8 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper {
             params.height = 300 * (teams.size)
             listViewTeams.layoutParams = params
             listViewTeams.requestLayout()
+
+            println("team->" + teams[position].teamName)
 
             return rowView
         }

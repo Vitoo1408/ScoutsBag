@@ -1,7 +1,6 @@
 package pt.ipca.scoutsbag.colonyManagement
 
 import com.example.scoutsteste1.Invite
-import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -127,6 +126,37 @@ interface ColonyDbHelper {
 
 
     /*
+        This function add all the teams of an selected section into the list
+        @idSection = selected section
+     */
+    fun getAllSectionTeams(idSection: Int): MutableList<Team> {
+
+        val teams: MutableList<Team> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val teamJsonArrayStr : String = response.body!!.string()
+            val teamJsonArray = JSONArray(teamJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until teamJsonArray.length()) {
+                val jsonArticle = teamJsonArray.get(index) as JSONObject
+                val team = Team.fromJson(jsonArticle)
+                if (team.idSection == idSection)
+                    teams.add(team)
+            }
+        }
+
+        return teams
+    }
+
+
+    /*
         This function return a team by an id
         @id = selected team id
      */
@@ -159,35 +189,30 @@ interface ColonyDbHelper {
         This adds a team into the database
         @id = selected team id
     */
-    fun addTeam(team: Team, changeActitivty: ()->Unit) {
+    fun addTeam(team: Team, changeActivity: ()->Unit) {
 
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            team.toJson().toString()
+        )
 
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams")
+            .post(requestBody)
+            .build()
 
-            // Prepare the from body request
-            val requestBody = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                team.toJson().toString()
-            )
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
 
-            // Build the request
-            val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams")
-                .post(requestBody)
-                .build()
+            GlobalScope.launch (Dispatchers.Main){
 
-            // Send the request and verify the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                GlobalScope.launch (Dispatchers.Main){
-
-                    if (response.message == "OK"){
-                        changeActitivty()
-                    }
-
+                if (response.message == "OK"){
+                    changeActivity()
                 }
             }
-
-
+        }
     }
 
 
