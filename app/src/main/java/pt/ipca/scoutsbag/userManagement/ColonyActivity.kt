@@ -29,7 +29,6 @@ class ColonyActivity : AppCompatActivity() {
     lateinit var adapter : UsersAdapter
     lateinit var buttonAddTeam : FloatingActionButton
     var users : MutableList<User> = arrayListOf()
-    var sections : MutableList<Section> = arrayListOf()
     var teams : MutableList<Team> = arrayListOf()
 
 
@@ -44,7 +43,7 @@ class ColonyActivity : AppCompatActivity() {
 
         // Get the values to the list
         getUsersList()
-        //getTeamsList()
+        getTeamsList()
         //getSectionsList()
 
         // Set data
@@ -92,8 +91,8 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            //textViewSection.text = getSectionName(user.idTeam!!)
-            // textViewTeam.text = getTeamById(user.idUser!!).teamName
+            textViewSection.text = getSectionName(getTeamById(user.idUser!!).idSection!!)
+            textViewTeam.text = getTeamById(user.idUser!!).teamName
             textViewNin.text = user.nin.toString()
 
             return rowView
