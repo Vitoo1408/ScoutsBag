@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.userManagement
+package pt.ipca.scoutsbag.colonyManagement
 
 import android.content.Intent
 import android.os.Bundle

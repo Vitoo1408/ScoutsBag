@@ -12,12 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".userManagement.ActivityDetailsUser"></activity>
         <activity android:name=".catalogManagment.AddCatalog" />
         <activity android:name=".catalogManagment.AddInstruction" />
         <activity android:name=".catalogManagment.SeeInstructions" />
-        <activity android:name=".userManagement.ColonyActivity" />
-        <activity android:name=".userManagement.AddTeam" />
+        <activity android:name=".colonyManagement.ColonyActivity" />
+        <activity android:name=".colonyManagement.AddTeam" />
+        <activity android:name=".colonyManagement.ProfileActivity" />
+        <activity android:name=".colonyManagement.EditProfileActivity" />
         <activity android:name=".activityManagement.ActivityDetailsActivity" />
         <activity android:name=".activityManagement.CreateActivityActivity" />
         <activity
