@@ -138,7 +138,6 @@ class FragmentActivity : Fragment() {
         }
     }
 
-
     /*
         This function returns all activities in the api to an list
      */
