@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.userManagement
+package pt.ipca.scoutsbag.colonyManagement
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +18,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
-class ColonyActivity : AppCompatActivity() {
+class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
 
     // Global Variables
     lateinit var listView : ListView
@@ -41,10 +40,16 @@ class ColonyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_colony)
 
-        // Get the values to the list
-        getUsersList()
-        getTeamsList()
-        //getSectionsList()
+        // Get the values to the lists
+        GlobalScope.launch(Dispatchers.IO) {
+
+            users = getAllUsers()
+
+            // Refresh the listView
+            GlobalScope.launch(Dispatchers.Main) {
+                adapter.notifyDataSetChanged()
+            }
+        }
 
         // Set data
         listView = findViewById(R.id.listview_colony)
@@ -61,9 +66,7 @@ class ColonyActivity : AppCompatActivity() {
 
     }
 
-    /*
-        nao sei o que escrever aqui ainda
-     */
+
     inner class UsersAdapter : BaseAdapter() {
         override fun getCount(): Int {
             return users.size
@@ -91,47 +94,20 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = getSectionName(getTeamById(user.idUser!!).idSection!!)
-            textViewTeam.text = getTeamById(user.idUser!!).teamName
+            //textViewSection.text = getSectionName(user.idTeam!!)
+            // textViewTeam.text = getTeamById(user.idUser!!).teamName
             textViewNin.text = user.nin.toString()
+
+            rowView.setOnClickListener {
+                val intent = Intent(this@ColonyActivity, ProfileActivity::class.java)
+                intent.putExtra("user", user.toJson().toString())
+                startActivity(intent)
+            }
 
             return rowView
         }
     }
 
-
-    /*
-        This function returns all users in the api to an list
-     */
-    private fun getUsersList(){
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/users").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val userJsonArrayStr : String = response.body!!.string()
-                val userJsonArray = JSONArray(userJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until userJsonArray.length()) {
-                    val jsonArticle = userJsonArray.get(index) as JSONObject
-                    val user = User.fromJson(jsonArticle)
-                    users.add(user)
-                }
-
-                // Update the list
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        }
-    }
 
     /*
         This function returns all teams in the api to an list
@@ -166,12 +142,13 @@ class ColonyActivity : AppCompatActivity() {
         }
     }
 
+
     /*
-        This function returns all teams in the api to an list
+
      */
     private fun getSectionName(id: Int): String{
 
-        // Get the position of the image in the view
+        //
         return when (id) {
             1 -> "Lobitos"
             2 -> "Exploradores"
@@ -185,7 +162,7 @@ class ColonyActivity : AppCompatActivity() {
 
 
     /*
-        This function returns the team designation
+        This function returns the team
      */
     private fun getTeamById(id: Int): Team {
 
