@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
+        <activity android:name=".colonyManagement.ActivityUserRequest"></activity>
         <activity android:name=".catalogManagment.AddCatalog" />
         <activity android:name=".catalogManagment.AddInstruction" />
         <activity android:name=".catalogManagment.SeeInstructions" />

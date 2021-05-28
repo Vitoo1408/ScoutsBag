@@ -23,10 +23,9 @@ interface ColonyDbHelper {
 
 
     /*
-        This function returns all teams invited from a selected activity
-        @idActivity = activity that the teams are invited
+        This function returns all accepted users
      */
-    fun getAllUsers(): MutableList<User> {
+    fun getAllAcceptedUsers(): MutableList<User> {
 
         val users : MutableList<User> = arrayListOf()
 
@@ -44,7 +43,38 @@ interface ColonyDbHelper {
             for (index in 0 until activityJsonArray.length()) {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val user = User.fromJson(jsonArticle)
-                users.add(user)
+                if(user.idTeam != null)
+                    users.add(user)
+            }
+        }
+
+        return users
+    }
+
+
+    /*
+        This function returns all unaccepted users
+     */
+    fun getAllUnacceptedUsers(): MutableList<User> {
+
+        val users : MutableList<User> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val activityJsonArrayStr : String = response.body!!.string()
+            val activityJsonArray = JSONArray(activityJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until activityJsonArray.length()) {
+                val jsonArticle = activityJsonArray.get(index) as JSONObject
+                val user = User.fromJson(jsonArticle)
+                if(user.accepted == 0)
+                    users.add(user)
             }
         }
 
