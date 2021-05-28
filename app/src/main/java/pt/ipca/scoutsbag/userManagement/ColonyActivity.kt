@@ -18,6 +18,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.activityManagement.ActivityDetailsActivity
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
@@ -44,8 +45,8 @@ class ColonyActivity : AppCompatActivity() {
 
         // Get the values to the list
         getUsersList()
-        //getTeamsList()
-        //getSectionsList()
+        getTeamsList()
+        // getSectionsList()
 
         // Set data
         listView = findViewById(R.id.listview_colony)
@@ -92,8 +93,8 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            //textViewSection.text = getSectionName(user.idTeam!!)
-            // textViewTeam.text = getTeamById(user.idUser!!).teamName
+            textViewSection.text = getSectionName(getTeamById(user.idTeam!!)?.idSection!!)
+            textViewTeam.text = getTeamById(user.idTeam!!)?.teamName
             textViewNin.text = user.nin.toString()
 
             return rowView
@@ -168,11 +169,46 @@ class ColonyActivity : AppCompatActivity() {
     }
 
     /*
+        This function returns all sections in the api to an list
+     */
+    /*
+    private fun getSectionsList(){
+
+        // Coroutine start
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Create the http request
+            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/sections").build()
+
+            // Send the request and analyze the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                // Convert the response into string then into JsonArray
+                val sectionJsonArrayStr : String = response.body!!.string()
+                val sectionJsonArray = JSONArray(sectionJsonArrayStr)
+
+                // Add the elements in the list
+                for (index in 0 until sectionJsonArray.length()) {
+                    val jsonArticle = sectionJsonArray.get(index) as JSONObject
+                    val section = Section.fromJson(jsonArticle)
+                    sections.add(section)
+                }
+
+                // Update the list
+                GlobalScope.launch (Dispatchers.Main) {
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        }
+    }
+    */
+
+
+    /*
         This function returns all teams in the api to an list
      */
-    private fun getSectionName(id: Int): String{
+    private fun getSectionName(id: Int): String?{
 
-        // Get the position of the image in the view
         return when (id) {
             1 -> "Lobitos"
             2 -> "Exploradores"
@@ -186,20 +222,21 @@ class ColonyActivity : AppCompatActivity() {
 
 
     /*
-        This function returns the team designation
+        This function returns the team name
      */
-    private fun getTeamById(id: Int): Team {
+    private fun getTeamById(id: Int): Team? {
 
         // Variables
         var response: Team? = null
 
-        // Find the activity type
-        for (element in teams) {
-            if (element.idTeam == id)
-                response = element
+        // Find the team name
+        for (i in 0 until teams.size) {
+            if (teams[i].idTeam == id)
+                response = teams[i]
+
         }
 
-        return response!!
+        return response
     }
 
     /*

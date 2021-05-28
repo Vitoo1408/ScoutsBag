@@ -12,16 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".catalogManagment.AddCatalog"></activity>
-        <activity android:name=".catalogManagment.AddInstruction"></activity>
-        <activity android:name=".catalogManagment.SeeInstructions"></activity>
-        <activity android:name=".userManagement.ColonyActivity"></activity>
-        <activity android:name=".userManagement.AddTeam"></activity>
-        <activity android:name=".activityManagement.ActivityDetailsActivity"></activity>
-        <activity android:name=".activityManagement.CreateActivityActivity"></activity>
+        <activity android:name=".userManagement.ActivityDetailsUser"></activity>
+        <activity android:name=".catalogManagment.AddCatalog" />
+        <activity android:name=".catalogManagment.AddInstruction" />
+        <activity android:name=".catalogManagment.SeeInstructions" />
+        <activity android:name=".userManagement.ColonyActivity" />
+        <activity android:name=".userManagement.AddTeam" />
+        <activity android:name=".activityManagement.ActivityDetailsActivity" />
+        <activity android:name=".activityManagement.CreateActivityActivity" />
         <activity
             android:name=".LogInOrRegisterActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".SplashScreen"
             android:theme="@style/Theme.AppCompat.NoActionBar">
