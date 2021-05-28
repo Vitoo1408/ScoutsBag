@@ -131,7 +131,7 @@ interface ActivitiesDbHelper {
             .delete()
             .build()
 
-        println("!! -" + idActivity)
+        println("!! -" + request.method + "!!- " + request.url + "!!- " + request.body + "!!- " + request.headers)
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
