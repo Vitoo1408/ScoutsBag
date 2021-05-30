@@ -45,8 +45,6 @@ class Register : AppCompatActivity() {
     var palavraPasseConf: EditText? = null
     var buttonSave: Button? = null
     var textViewPassMatch: TextView? = null
-    var tvUpperCase: TextView? = null
-    var tvLowerCase: TextView? = null
     var tvPassLength: TextView? = null
     var tvEmailExists: TextView? = null
     var password: String? = null
@@ -80,8 +78,6 @@ class Register : AppCompatActivity() {
         var buttonFemChecked = false
         buttonSave = findViewById(R.id.buttonLogIn)
         textViewPassMatch = findViewById(R.id.textViewPassMatch)
-        tvLowerCase = findViewById(R.id.textViewLowerCase)
-        tvUpperCase = findViewById(R.id.textViewUpperCase)
         tvPassLength = findViewById(R.id.textViewCharacters)
         tvEmailExists = findViewById(R.id.textViewEmailExists)
         tvLoginFromRegister = findViewById(R.id.textViewLoginFromRegister)
@@ -220,6 +216,15 @@ class Register : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                secondPass = palavraPasseConf?.text.toString()
+                if(palavraPasse?.text.toString() == secondPass){
+                    textViewPassMatch?.text = "As palavras passe coincidem."
+                    textViewPassMatch?.setTextColor(resources.getColor(R.color.green))
+                } else {
+                    textViewPassMatch?.text = "As palavras passe não coincidem."
+                    textViewPassMatch?.setTextColor(resources.getColor(R.color.red))
+                }
+
                 password = palavraPasse?.text.toString()
                 validatePassword(password!!)
             }
@@ -258,7 +263,7 @@ class Register : AppCompatActivity() {
         } else if (editTextCalendar?.text.toString().isEmpty()){
             editTextCalendar?.error = "A data de nascimento deve estar preenchida!"
             return false
-        } else if (email?.text.toString().isEmpty()){
+        } else if (email?.text.toString().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email?.text.toString()).matches()){
             email?.error = "O email está incorreto!"
             return false
         } else if (morada?.text.toString().isEmpty()){
@@ -267,11 +272,11 @@ class Register : AppCompatActivity() {
         } else if (codPostal?.text.toString().isEmpty()){
             codPostal?.error = "O código postal deve estar preenchido!"
             return false
-        } else if (palavraPasse?.text.toString().isEmpty()){
-            palavraPasse?.error = "A palavra passe deve estar preenchida!"
+        } else if (palavraPasse?.text.toString().isEmpty() || palavraPasse?.text.toString().length < 8){
+            palavraPasse?.error = "A palavra passe é inválida!"
             return false
         } else if (palavraPasseConf?.text.toString().isEmpty()){
-            palavraPasseConf?.error = "A palavra passe deve estar preenchida!"
+            palavraPasseConf?.error = "A confirmação da palavra passe é inválida!"
             return false
         } else if (palavraPasseConf?.text.toString() != palavraPasse?.text.toString()){
             Toast.makeText(this, "As palavras passe não coincidem.", Toast.LENGTH_LONG).show()
@@ -282,21 +287,6 @@ class Register : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String) {
-        val upperCase = Pattern.compile("[A-Z]")
-        val lowerCase = Pattern.compile("[a-z]")
-
-        if(!upperCase.matcher(password).find()){
-            tvUpperCase?.setTextColor(resources.getColor(R.color.red))
-        } else {
-            tvUpperCase?.setTextColor(resources.getColor(R.color.green))
-        }
-
-        if(!lowerCase.matcher(password).find()){
-            tvLowerCase?.setTextColor(resources.getColor(R.color.red))
-        } else {
-            tvLowerCase?.setTextColor(resources.getColor(R.color.green))
-        }
-
         if(password.length < 8){
             tvPassLength?.setTextColor(resources.getColor(R.color.red))
         } else {
