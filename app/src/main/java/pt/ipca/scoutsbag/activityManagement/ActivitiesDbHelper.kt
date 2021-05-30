@@ -184,7 +184,7 @@ interface ActivitiesDbHelper {
     /*
         This function returns the activity type designation
         @id = selected activity type id
-        @activitiesTypes = activity types list
+        @activitiesTypes = all activity types list
      */
     fun getActivityTypeDesignation(id: Int, activitiesTypes: MutableList<ActivityType>): String {
 
@@ -202,14 +202,34 @@ interface ActivitiesDbHelper {
 
 
     /*
+        This function returns the activity type image
+        @id = activity type id
+     */
+    fun getActivityTypeImage(id: Int): Int {
+
+        return when (id) {
+
+            1 -> R.drawable.icon_empty
+            2 -> R.drawable.icon_empty
+            3 -> R.drawable.icon_empty
+            4 -> R.drawable.icon_empty
+            5 -> R.drawable.icon_empty
+            6 -> R.drawable.icon_empty
+            else -> R.drawable.icon_empty
+        }
+    }
+
+
+    /*
         ------------------------------------------------ Invites ------------------------------------------------
      */
 
 
     /*
-        This function returns all activities in the api to an list
+        This function returns all the invites from a specific user team in the api by an list
+        @idUserTeam = team id of the selected user
      */
-    fun getAllInvites(): MutableList<Invite> {
+    fun getAllTeamInvites(idUserTeam: Int): MutableList<Invite> {
 
         val invites : MutableList<Invite> = arrayListOf()
 
@@ -227,7 +247,8 @@ interface ActivitiesDbHelper {
             for (index in 0 until activityJsonArray.length()) {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val invite = Invite.fromJson(jsonArticle)
-                invites.add(invite)
+                if (invite.idTeam == idUserTeam)
+                    invites.add(invite)
             }
         }
 

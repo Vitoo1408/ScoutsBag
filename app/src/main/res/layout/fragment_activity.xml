@@ -29,10 +29,10 @@
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextBemVindo" />
+            app:layout_constraintTop_toBottomOf="@+id/TextViewWelcome" />
 
         <TextView
-            android:id="@+id/TextBemVindo"
+            android:id="@+id/TextViewWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -43,28 +43,13 @@
             android:textSize="17.3sp"
             android:textStyle="normal|bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewNome" />
-
-        <TextView
-            android:id="@+id/TextViewNome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="Olá, Nel"
-            android:textSize="17.3sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/listViewActivities"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
             android:id="@+id/listViewActivities"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="90dp"
             android:divider="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

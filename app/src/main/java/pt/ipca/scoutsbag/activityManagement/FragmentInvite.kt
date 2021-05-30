@@ -20,6 +20,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.ActivityType
 import pt.ipca.scoutsbag.models.Team
 
@@ -57,7 +58,7 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
-            invites = getAllInvites()
+            invites = getAllTeamInvites(UserLoggedIn.idTeam!!)
             activitiesTypes = getAllActivityTypes()
 
             // Refresh the listView
@@ -101,6 +102,7 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
                     val horaFim = Utils.mySqlTimeToString(activity.finishDate.toString())
 
                     // Variables in the row
+                    val imageViewActivity = rowView.findViewById<ImageView>(R.id.imageView_activity)
                     val textViewDay = rowView.findViewById<TextView>(R.id.textView_activity_day)
                     val textViewMonth = rowView.findViewById<TextView>(R.id.textView_activity_month)
                     val textViewActivityType = rowView.findViewById<TextView>(R.id.textView_activity_type)
@@ -110,6 +112,7 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
                     val textViewLocality = rowView.findViewById<TextView>(R.id.textView_activity_locality)
 
                     // Set values in the row
+                    imageViewActivity.setImageResource(getActivityTypeImage(activity.idType!!))
                     textViewDay.text = Utils.getDay(activity.startDate.toString())
                     textViewMonth.text = Utils.getMonth(activity.startDate.toString())
                     textViewActivityType.text = getActivityTypeDesignation(activity.idType!!, activitiesTypes)
