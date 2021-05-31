@@ -62,7 +62,7 @@ class FragmentActivity : Fragment(), ActivitiesDbHelper {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
-            activities = getAllActivities()
+            activities = getAllAcceptedActivities(UserLoggedIn.idUser!!)
             activitiesTypes = getAllActivityTypes()
 
             // Refresh the listView
@@ -127,7 +127,7 @@ class FragmentActivity : Fragment(), ActivitiesDbHelper {
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
             textViewTime.text = "Hora: $horaInicio - $horaFim"
-            textViewLocality.text = activity.startSite.toString()
+            textViewLocality.text = activity.activitySite.toString()
 
             // Show activity details button event
             rowView.setOnClickListener {

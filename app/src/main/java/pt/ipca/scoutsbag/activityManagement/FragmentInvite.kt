@@ -119,11 +119,11 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
                     textViewName.text = activity.nameActivity.toString()
                     textViewDate.text = "Data: $dataInicio - $dataFim"
                     textViewTime.text = "Hora: $horaInicio - $horaFim"
-                    textViewLocality.text = activity.startSite.toString()
+                    textViewLocality.text = activity.activitySite.toString()
 
                     // Show activity details button event
                     rowView.setOnClickListener {
-                        val intent = Intent(context, ActivityDetailsActivity::class.java)
+                        val intent = Intent(context, InviteDetailsActivity::class.java)
                         intent.putExtra("activity", activity.toJson().toString())
                         startActivity(intent)
                     }

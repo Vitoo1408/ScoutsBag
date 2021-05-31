@@ -18,6 +18,7 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.ActivityType
+import pt.ipca.scoutsbag.models.Participation
 import pt.ipca.scoutsbag.models.Team
 
 interface ActivitiesDbHelper {
@@ -25,30 +26,36 @@ interface ActivitiesDbHelper {
     /*
         ------------------------------------------------ Activities ------------------------------------------------
      */
-
+    
 
     /*
-        This function returns all activities in the api to an list
+        This function returns all activities accepted by the user in the api to an list
+        @idUser = id of the logged user
      */
-    fun getAllActivities(): MutableList<ScoutActivity> {
+    fun getAllAcceptedActivities(idUser: Int): MutableList<ScoutActivity> {
 
         val activities : MutableList<ScoutActivity> = arrayListOf()
 
         // Create the http request
-        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activities").build()
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/participations").build()
 
         // Send the request and analyze the response
         OkHttpClient().newCall(request).execute().use { response ->
 
             // Convert the response into string then into JsonArray
-            val activityJsonArrayStr : String = response.body!!.string()
-            val activityJsonArray = JSONArray(activityJsonArrayStr)
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
 
             // Add the elements in the list
-            for (index in 0 until activityJsonArray.length()) {
-                val jsonArticle = activityJsonArray.get(index) as JSONObject
-                val activity = ScoutActivity.fromJson(jsonArticle)
-                activities.add(activity)
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val participation = Participation.fromJson(jsonArticle)
+
+                // If the user participate in the activity add to the list
+                if (participation.idUser == idUser && participation.participated == 1) {
+                    val activity = getActivity(participation.idActivity!!)
+                    activities.add(activity)
+                }
             }
         }
 
@@ -71,12 +78,12 @@ interface ActivitiesDbHelper {
         OkHttpClient().newCall(request).execute().use { response ->
 
             // Convert the response into string then into JsonArray
-            val teamJsonArrayStr : String = response.body!!.string()
-            val teamJsonArray = JSONArray(teamJsonArrayStr)
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
 
             // Add the elements in the list
-            for (index in 0 until teamJsonArray.length()) {
-                val jsonArticle = teamJsonArray.get(index) as JSONObject
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
                 activity = ScoutActivity.fromJson(jsonArticle)
             }
         }

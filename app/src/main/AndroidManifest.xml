@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".loginAndRegister.ForgotPassword"></activity>
+        <activity android:name=".activityManagement.InviteDetailsActivity"></activity>
+        <activity android:name=".loginAndRegister.ForgotPassword" />
         <activity android:name=".loginAndRegister.Login" />
         <activity android:name=".loginAndRegister.Register" />
         <activity android:name=".catalogManagement.AddCatalog" />
