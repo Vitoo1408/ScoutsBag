@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Team
 
-class AddTeam: AppCompatActivity(), ColonyDbHelper {
+class AddTeam: AppCompatActivity() {
 
     // Global Variables
     var sectionImages: MutableList<ImageView> = arrayListOf()
@@ -65,7 +66,7 @@ class AddTeam: AppCompatActivity(), ColonyDbHelper {
                 findViewById<TextView>(R.id.editTextTeamName).text.toString(),
                 getSection()
             )
-            addTeam(team, changeActivity)
+            Backend.addTeam(team, changeActivity)
 
         }
 

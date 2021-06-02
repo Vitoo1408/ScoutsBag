@@ -1,6 +1,5 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -13,22 +12,14 @@ import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
-import org.json.JSONArray
-import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 import pt.ipca.scoutsbag.models.Team
 
 
-class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDbHelper {
+class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
@@ -56,7 +47,10 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
 
             // Add all teams of the selected section
             GlobalScope.launch(Dispatchers.IO) {
-                teams.addAll(getAllSectionTeams(sectionId))
+
+                Backend.getAllSectionTeams(sectionId) { list ->
+                    teams.addAll(list)
+                }
 
                 // Refresh the list
                 GlobalScope.launch(Dispatchers.Main) {
@@ -176,7 +170,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
                 )
 
                 // Add activity
-                addActivity(scoutActivity, changeActivity)
+                Backend.addActivity(scoutActivity, changeActivity)
 
                 // Invite all teams selected to this activity
                 for (team in teams) {
@@ -188,7 +182,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
                         1
                     )
 
-                    addInvite(invite, changeActivity)
+                    Backend.addInvite(invite, changeActivity)
                 }
 
             }

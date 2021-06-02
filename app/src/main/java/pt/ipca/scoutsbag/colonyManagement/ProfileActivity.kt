@@ -22,7 +22,7 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.User
 
-class ProfileActivity : AppCompatActivity(), ColonyDbHelper {
+class ProfileActivity : AppCompatActivity() {
 
     lateinit var user: User
     var id = ""

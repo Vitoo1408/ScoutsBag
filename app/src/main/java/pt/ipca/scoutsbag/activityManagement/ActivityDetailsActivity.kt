@@ -11,18 +11,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 
-class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbHelper {
+class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private lateinit var textViewTeams: TextView
-    private var teams: MutableList<Team> = arrayListOf()
+    private var teams: List<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -64,7 +64,9 @@ class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesD
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get all invited teams for this activity
-            teams = getAllInvitedTeams(activity.idActivity!!)
+            Backend.getAllInvitedTeams(activity.idActivity!!) {
+                teams = it
+            }
         }
 
     }
@@ -91,7 +93,8 @@ class ActivityDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesD
 
         when (item.itemId){
             R.id.itemDelete -> {
-                removeActivity(activity.idActivity!!) {
+                // falta corroutine
+                Backend.removeActivity(activity.idActivity!!) {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }

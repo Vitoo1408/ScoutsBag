@@ -12,19 +12,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.ActivityType
 
 
-class FragmentActivity : Fragment(), ActivitiesDbHelper {
+class FragmentActivity : Fragment() {
 
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : ActivitiesAdapter
-    var activities : MutableList<ScoutActivity> = arrayListOf()
-    var activitiesTypes : MutableList<ActivityType> = arrayListOf()
+    var activities : List<ScoutActivity> = arrayListOf()
+    var activitiesTypes : List<ActivityType> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
     lateinit var textViewWelcome : TextView
 
@@ -62,8 +63,12 @@ class FragmentActivity : Fragment(), ActivitiesDbHelper {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
-            activities = getAllAcceptedActivities(UserLoggedIn.idUser!!)
-            activitiesTypes = getAllActivityTypes()
+            Backend.getAllAcceptedActivities(UserLoggedIn.idUser!!) {
+                activities = it
+            }
+            Backend.getAllActivityTypes {
+                activitiesTypes = it
+            }
 
             // Refresh the listView
             GlobalScope.launch(Dispatchers.Main) {
@@ -120,10 +125,10 @@ class FragmentActivity : Fragment(), ActivitiesDbHelper {
             val textViewLocality = rowView.findViewById<TextView>(R.id.textView_activity_locality)
 
             // Set values in the row
-            imageViewActivity.setImageResource(getActivityTypeImage(activity.idType!!))
+            imageViewActivity.setImageResource(Backend.getActivityTypeImage(activity.idType!!))
             textViewDay.text = Utils.getDay(activity.startDate.toString())
             textViewMonth.text = Utils.getMonth(activity.startDate.toString())
-            textViewActivityType.text = getActivityTypeDesignation(activity.idType!!, activitiesTypes)
+            textViewActivityType.text = Backend.getActivityTypeDesignation(activity.idType!!, activitiesTypes)
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
             textViewTime.text = "Hora: $horaInicio - $horaFim"

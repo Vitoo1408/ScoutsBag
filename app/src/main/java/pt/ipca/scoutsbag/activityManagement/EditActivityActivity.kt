@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import pt.ipca.scoutsbag.R
 
-class EditActivityActivity : AppCompatActivity(), ActivitiesDbHelper{
+class EditActivityActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

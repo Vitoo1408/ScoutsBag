@@ -16,19 +16,20 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
-class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
+class ColonyActivity : AppCompatActivity() {
 
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : UsersAdapter
     lateinit var buttonAddTeam : FloatingActionButton
-    var users : MutableList<User> = arrayListOf()
-    var teams : MutableList<Team> = arrayListOf()
+    var users : List<User> = arrayListOf()
+    var teams : List<Team> = arrayListOf()
 
 
     /*
@@ -40,13 +41,16 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_colony)
 
-        getTeamsList()
-
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
-            users = getAllAcceptedUsers()
+            Backend.getAllTeams {
+                teams = it
+            }
 
+            Backend.getAllAcceptedUsers {
+                users = it
+            }
 
             // Refresh the listView
             GlobalScope.launch(Dispatchers.Main) {
@@ -113,40 +117,6 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
 
 
     /*
-        This function returns all teams in the api to an list
-     */
-    private fun getTeamsList(){
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val team = Team.fromJson(jsonArticle)
-                    teams.add(team)
-                }
-
-                // Update the list
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-        }
-    }
-
-
-    /*
 
      */
     private fun getSectionName(id: Int): String{
@@ -159,8 +129,6 @@ class ColonyActivity : AppCompatActivity(), ColonyDbHelper {
         }
 
     }
-
-
 
 
     /*

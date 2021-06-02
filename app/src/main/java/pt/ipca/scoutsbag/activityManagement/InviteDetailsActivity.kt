@@ -1,11 +1,7 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
@@ -13,18 +9,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import pt.ipca.scoutsbag.MainActivity
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
 import pt.ipca.scoutsbag.models.Team
 
-class InviteDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbHelper {
+class InviteDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private lateinit var textViewTeams: TextView
-    private var teams: MutableList<Team> = arrayListOf()
+    private var teams: List<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -66,7 +61,9 @@ class InviteDetailsActivity : AppCompatActivity(), ColonyDbHelper, ActivitiesDbH
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get all invited teams for this activity
-            teams = getAllInvitedTeams(activity.idActivity!!)
+            Backend.getAllInvitedTeams(activity.idActivity!!) {
+                teams = it
+            }
         }
 
     }

@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
@@ -25,13 +26,13 @@ import pt.ipca.scoutsbag.models.ActivityType
 import pt.ipca.scoutsbag.models.Team
 
 
-class FragmentInvite : Fragment(), ActivitiesDbHelper {
+class FragmentInvite : Fragment() {
 
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : InvitesAdapter
-    var invites : MutableList<Invite> = arrayListOf()
-    var activitiesTypes : MutableList<ActivityType> = arrayListOf()
+    var invites : List<Invite> = arrayListOf()
+    var activitiesTypes : List<ActivityType> = arrayListOf()
 
 
     override fun onCreateView(
@@ -58,8 +59,12 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
-            invites = getAllTeamInvites(UserLoggedIn.idTeam!!)
-            activitiesTypes = getAllActivityTypes()
+            Backend.getAllTeamInvites(UserLoggedIn.idTeam!!) {
+                invites = it
+            }
+            Backend.getAllActivityTypes {
+                activitiesTypes = it
+            }
 
             // Refresh the listView
             GlobalScope.launch(Dispatchers.Main) {
@@ -90,7 +95,7 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
             GlobalScope.launch(Dispatchers.IO) {
 
                 // Get the activity from the current invite
-                val activity = getActivity(invites[position].idActivity!!)
+                val activity = Backend.getActivity(invites[position].idActivity!!)
 
                 // Set data in the row
                 GlobalScope.launch(Dispatchers.Main) {
@@ -112,10 +117,10 @@ class FragmentInvite : Fragment(), ActivitiesDbHelper {
                     val textViewLocality = rowView.findViewById<TextView>(R.id.textView_activity_locality)
 
                     // Set values in the row
-                    imageViewActivity.setImageResource(getActivityTypeImage(activity.idType!!))
+                    imageViewActivity.setImageResource(Backend.getActivityTypeImage(activity.idType!!))
                     textViewDay.text = Utils.getDay(activity.startDate.toString())
                     textViewMonth.text = Utils.getMonth(activity.startDate.toString())
-                    textViewActivityType.text = getActivityTypeDesignation(activity.idType!!, activitiesTypes)
+                    textViewActivityType.text = Backend.getActivityTypeDesignation(activity.idType!!, activitiesTypes)
                     textViewName.text = activity.nameActivity.toString()
                     textViewDate.text = "Data: $dataInicio - $dataFim"
                     textViewTime.text = "Hora: $horaInicio - $horaFim"
