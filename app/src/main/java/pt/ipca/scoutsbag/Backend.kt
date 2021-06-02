@@ -91,7 +91,7 @@ object Backend {
 
 
     /*
-        This function return an activity by an id
+        This function return the last id in the activity table
         @id = selected activity id
      */
     fun getLastActivityId(): Int {

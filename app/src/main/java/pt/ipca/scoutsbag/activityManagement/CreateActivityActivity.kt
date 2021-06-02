@@ -221,7 +221,6 @@ class CreateActivityActivity : AppCompatActivity() {
 
                         // Create participation
                         Backend.addParticipation(participation)
-
                     }
 
                 }
