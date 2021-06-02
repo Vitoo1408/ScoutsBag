@@ -16,14 +16,17 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.models.Participation
 import pt.ipca.scoutsbag.models.Team
+import pt.ipca.scoutsbag.models.User
 
 
 class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
-    var activityTypesImages: MutableList<ImageView> = arrayListOf()
+    var selectedTeams: MutableList<Team> = arrayListOf()
+    private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: TeamsAdapter
     private var activityId: Int? = null
@@ -34,6 +37,7 @@ class CreateActivityActivity : AppCompatActivity() {
         // Variables
         val imageView = it as ImageView
         val sectionId: Int = getSectionID(imageView.id)
+        var buttonSpacing = 600
 
         imageView.isHovered = !imageView.isHovered
 
@@ -41,6 +45,7 @@ class CreateActivityActivity : AppCompatActivity() {
         if (!imageView.isHovered) {
             removeSectionTeams(sectionId)
             imageView.setBackgroundResource(0)
+            buttonSpacing *= -1
         }
         // Add border and teams
         else {
@@ -60,12 +65,19 @@ class CreateActivityActivity : AppCompatActivity() {
 
             imageView.setBackgroundResource(R.drawable.border)
         }
+
+        // Refresh the listView size
+        val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
+        params.height = params.height + buttonSpacing
+        listViewTeams.layoutParams = params
+        listViewTeams.requestLayout()
     }
 
 
     // This function is for select an team by clicking on the team button
     var onClickTeam: (view: View)->Unit = {
         val button = it as Button
+        val team = findTeamByItsButton(button)
 
         button.isHovered = !button.isHovered
 
@@ -73,11 +85,13 @@ class CreateActivityActivity : AppCompatActivity() {
         if (!button.isHovered) {
             button.setBackgroundResource(R.drawable.custom_button_white)
             button.setTextColor(Color.BLACK)
+            selectedTeams.remove(team)
         }
         // Set button as orange
         else {
             button.setBackgroundResource(R.drawable.custom_button_orange)
             button.setTextColor(Color.WHITE)
+            selectedTeams.add(team)
         }
     }
 
@@ -108,8 +122,12 @@ class CreateActivityActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
-        activityId = intent.getIntExtra("idActivity", 0)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Get the new activity ID
+        GlobalScope.launch(Dispatchers.IO) {
+            activityId = Backend.getLastActivityId() + 1
+        }
 
         // Pass the view objects to variables
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
@@ -157,23 +175,23 @@ class CreateActivityActivity : AppCompatActivity() {
                 // Build the activity that will be added
                 val scoutActivity = ScoutActivity(
                     activityId,
-                    findViewById<TextView>(R.id.editTextActivityName).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityName).text.toString(),
                     getSelectedActivityType(),
-                    findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityDescription).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
                     Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
                     Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
-                    "1234",
-                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString().toFloat(),
+                    findViewById<EditText>(R.id.editTextActivityLocalization).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationEnd).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityPrice).text.toString().toFloat()
                 )
 
                 // Add activity
                 Backend.addActivity(scoutActivity, changeActivity)
 
                 // Invite all teams selected to this activity
-                for (team in teams) {
+                for (team in selectedTeams) {
 
                     // Build the invite
                     val invite = Invite(
@@ -182,7 +200,30 @@ class CreateActivityActivity : AppCompatActivity() {
                         1
                     )
 
-                    Backend.addInvite(invite, changeActivity)
+                    // Invite the team
+                    Backend.addInvite(invite)
+
+                    // Get all users from the current team
+                    var teamUsers: List<User> = arrayListOf()
+                    Backend.getAllTeamUsers(team.idTeam!!) {
+                        teamUsers = it
+                    }
+
+                    // Create participations for all users in the team
+                    for (user in teamUsers) {
+
+                        // Build the participation
+                        val participation = Participation(
+                            activityId,
+                            user.idUser,
+                            null
+                        )
+
+                        // Create participation
+                        Backend.addParticipation(participation)
+
+                    }
+
                 }
 
             }
@@ -240,6 +281,23 @@ class CreateActivityActivity : AppCompatActivity() {
     }
 
 
+    /*
+        This function return a team depending on the selected team button
+        @button = Selected team button
+     */
+    private fun findTeamByItsButton(button: Button): Team {
+
+        var team: Team? = null
+
+        for (i in 0 until teams.size) {
+            if (teams[i].teamName == button.text)
+                team = teams[i]
+        }
+
+        return team!!
+    }
+
+
     inner class TeamsAdapter : BaseAdapter() {
 
         override fun getCount(): Int {
@@ -262,14 +320,6 @@ class CreateActivityActivity : AppCompatActivity() {
 
             teamButton.text = teams[position].teamName
             teamButton.setOnClickListener(onClickTeam)
-
-            // Refresh the listView size
-            val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
-            params.height = 300 * (teams.size)
-            listViewTeams.layoutParams = params
-            listViewTeams.requestLayout()
-
-            println("team->" + teams[position].teamName)
 
             return rowView
         }

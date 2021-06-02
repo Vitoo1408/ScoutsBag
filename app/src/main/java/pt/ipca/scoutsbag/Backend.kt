@@ -91,6 +91,34 @@ object Backend {
 
 
     /*
+        This function return an activity by an id
+        @id = selected activity id
+     */
+    fun getLastActivityId(): Int {
+
+        var activityCounter : Int = 0
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                activityCounter ++
+            }
+        }
+
+        return activityCounter
+    }
+
+
+    /*
         This function add the activity to the data base
         @scoutActivity = activity that will be added
         @changeActivity = a function that return the user to the previous activity
@@ -271,7 +299,7 @@ object Backend {
         @context = context of the activity
         @idTeam = team invited id
      */
-    fun addInvite(invite: Invite, changeActivity: ()->Unit) {
+    fun addInvite(invite: Invite) {
 
         // Prepare the from body request
         val requestBody = RequestBody.create(
@@ -286,17 +314,42 @@ object Backend {
             .build()
 
         // Send the request and verify the response
-        OkHttpClient().newCall(request).execute().use { response ->
-
-            GlobalScope.launch (Dispatchers.Main){
-
-                if (response.message == "OK"){
-                    changeActivity()
-                }
-            }
+        OkHttpClient().newCall(request).execute().use {
         }
 
     }
+
+
+    /*
+        ------------------------------------------------ Participation ------------------------------------------------
+     */
+
+
+    /*
+        This function add the invite in the data base
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    fun addParticipation(participation: Participation) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            participation.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/participations")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use {
+        }
+
+    }
+
 
     /*
         ------------------------------------------------ Users ------------------------------------------------
@@ -359,6 +412,38 @@ object Backend {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val user = User.fromJson(jsonArticle)
                 if(user.accepted == 0)
+                    users.add(user)
+            }
+
+            // Return list
+            callBack(users)
+        }
+    }
+
+
+    /*
+        This function returns all unaccepted users
+        @callBack = return the list
+     */
+    fun getAllTeamUsers(idTeam: Int, callBack: (List<User>)->Unit) {
+
+        val users : MutableList<User> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val activityJsonArrayStr : String = response.body!!.string()
+            val activityJsonArray = JSONArray(activityJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until activityJsonArray.length()) {
+                val jsonArticle = activityJsonArray.get(index) as JSONObject
+                val user = User.fromJson(jsonArticle)
+                if(user.idTeam == idTeam)
                     users.add(user)
             }
 

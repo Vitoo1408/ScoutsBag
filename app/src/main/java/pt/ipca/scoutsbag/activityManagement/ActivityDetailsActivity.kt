@@ -93,10 +93,11 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
         when (item.itemId){
             R.id.itemDelete -> {
-                // falta corroutine
-                Backend.removeActivity(activity.idActivity!!) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                GlobalScope.launch(Dispatchers.IO) {
+                    Backend.removeActivity(activity.idActivity!!) {
+                        val intent = Intent(this@ActivityDetailsActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 return true
             }

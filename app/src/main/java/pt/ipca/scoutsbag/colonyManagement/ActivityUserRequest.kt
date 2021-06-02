@@ -63,98 +63,98 @@ class ActivityUserRequest : AppCompatActivity() {
     }
 
 
-inner class UsersAdapter : BaseAdapter() {
-    override fun getCount(): Int {
-        return users.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return users[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = layoutInflater.inflate(R.layout.row_user_request, parent, false)
-
-        // Get current activity
-        val user = users[position]
-
-        // Variables in the row
-        val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
-        val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
-        val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
-        val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
-
-        // Set values in the row
-        textViewName.text = user.userName.toString()
-        textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
-        textViewTeam.text = getTeamById(user.idTeam!!).teamName
-        textViewNin.text = user.nin.toString()
-
-        rowView.setOnClickListener {
-            val intent = Intent(this@ActivityUserRequest, ProfileActivity::class.java)
-            intent.putExtra("user", user.toJson().toString())
-            startActivity(intent)
+    inner class UsersAdapter : BaseAdapter() {
+        override fun getCount(): Int {
+            return users.size
         }
 
-        return rowView
-    }
-}
+        override fun getItem(position: Int): Any {
+            return users[position]
+        }
 
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
 
-/*
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_user_request, parent, false)
 
- */
-private fun getSectionName(id: Int): String{
+            // Get current activity
+            val user = users[position]
 
-    return when (id) {
-        1 -> "Lobitos"
-        2 -> "Exploradores"
-        3 -> "Pioneiros"
-        else -> "Caminheiros"
-    }
+            // Variables in the row
+            val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
+            val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
+            val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
+            val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
 
-}
+            // Set values in the row
+            textViewName.text = user.userName.toString()
+            textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
+            textViewTeam.text = getTeamById(user.idTeam!!).teamName
+            textViewNin.text = user.nin.toString()
 
+            rowView.setOnClickListener {
+                val intent = Intent(this@ActivityUserRequest, ProfileActivity::class.java)
+                intent.putExtra("user", user.toJson().toString())
+                startActivity(intent)
+            }
 
-
-
-/*
-    This function returns the team
- */
-private fun getTeamById(id: Int): Team {
-
-    // Variables
-    var response: Team? = null
-
-    // Find the activity type
-    for (i in 0 until teams.size) {
-        if (teams[i].idTeam == id)
-            response = teams[i]
-    }
-
-    return response!!
-}
-
-/*
-    This function returns the section designation
-
-private fun getSectionById(id: Int): Section {
-
-    // Variables
-    var response: Section? = null
-
-    // Find the activity type
-    for (element in sections) {
-        if (element.idSection == id)
-            response = element
+            return rowView
+        }
     }
 
-    return response!!
-}
-*/
+
+    /*
+
+     */
+    private fun getSectionName(id: Int): String{
+
+        return when (id) {
+            1 -> "Lobitos"
+            2 -> "Exploradores"
+            3 -> "Pioneiros"
+            else -> "Caminheiros"
+        }
+
+    }
+
+
+
+
+    /*
+        This function returns the team
+     */
+    private fun getTeamById(id: Int): Team {
+
+        // Variables
+        var response: Team? = null
+
+        // Find the activity type
+        for (i in 0 until teams.size) {
+            if (teams[i].idTeam == id)
+                response = teams[i]
+        }
+
+        return response!!
+    }
+
+    /*
+        This function returns the section designation
+
+    private fun getSectionById(id: Int): Section {
+
+        // Variables
+        var response: Section? = null
+
+        // Find the activity type
+        for (element in sections) {
+            if (element.idSection == id)
+                response = element
+        }
+
+        return response!!
+    }
+    */
 
 }

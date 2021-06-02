@@ -79,11 +79,10 @@ class FragmentActivity : Fragment() {
         // Button on click events
         buttonAdd.setOnClickListener {
             val intent = Intent(activity, CreateActivityActivity::class.java)
-            intent.putExtra("idActivity", activities.size + 1)
             startActivity(intent)
         }
 
-        //
+        // Welcome Text
         textViewWelcome.text = "${textViewWelcome.text} ${UserLoggedIn.userName}"
 
     }
