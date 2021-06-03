@@ -58,6 +58,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionTitle" />
 
+            <TextView
+                android:id="@+id/textViewActivityPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_button_black"
+                android:ems="10"
+                android:gravity="start|top"
+                android:drawableStart="@drawable/icon_euro"
+                android:drawablePadding="10dp"
+                android:text="Preço"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textColor="#707070"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutDates"
                 android:layout_width="0dp"
@@ -67,13 +90,13 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDescription">
+                app:layout_constraintTop_toBottomOf="@+id/textViewActivityPrice">
 
                 <TextView
                     android:id="@+id/textViewDates"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Datas"
+                    android:text="Data Inicial / Data Final"
                     android:textColor="#707070"
                     android:textSize="12sp"
                     android:textStyle="normal"
@@ -90,7 +113,7 @@
                     android:drawableStart="@drawable/icon_calendar"
                     android:drawablePadding="10dp"
                     android:padding="10dp"
-                    android:text="01/01/2020"
+                    android:text="01/01/2020 - 0:00"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:backgroundTint="@null"
@@ -108,7 +131,7 @@
                     android:drawableStart="@drawable/icon_calendar"
                     android:drawablePadding="10dp"
                     android:padding="10dp"
-                    android:text="01/01/2020"
+                    android:text="01/01/2020 - 0:00"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:backgroundTint="@null"
@@ -142,6 +165,26 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textViewActivityLocalization"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_map_pin"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:text="Localização da Atividade"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewLocalization"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewLocalization" />
+
+                <TextView
                     android:id="@+id/textViewLocalizationStart"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -157,8 +200,8 @@
                     android:textSize="12sp"
                     android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/textViewLocalization"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewLocalization" />
+                    app:layout_constraintStart_toStartOf="@id/textViewActivityLocalization"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewActivityLocalization" />
 
                 <TextView
                     android:id="@+id/textViewLocalizationEnd"
@@ -239,27 +282,6 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/textViewInvitedTeams"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="100dp"
-                android:text="Equipas convidadas:"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSections" />
-
-            <ListView
-                android:id="@+id/listViewTeams"
-                android:layout_width="0dp"
-                android:layout_height="98dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewInvitedTeams" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

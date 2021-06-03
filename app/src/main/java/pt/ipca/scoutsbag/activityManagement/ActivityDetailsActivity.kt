@@ -15,14 +15,15 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 
 class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
-    private lateinit var textViewTeams: TextView
     private var teams: List<Team> = arrayListOf()
+    private var sections: MutableList<Section> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,6 +36,10 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val activityJson = JSONObject(activityJsonStr!!)
         activity = ScoutActivity.fromJson(activityJson)
 
+        // Get all sections
+        for (i in 0 until 4)
+            sections.add(Section(i, false))
+
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
         val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
@@ -46,7 +51,6 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
-        textViewTeams = findViewById<TextView>(R.id.textViewInvitedTeams)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
@@ -56,16 +60,24 @@ class ActivityDetailsActivity : AppCompatActivity() {
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
-        // Get section images
-        getSectionImage(1, 1)
-        getSectionImage(2, 2)
-
-        // Coroutine start
+        // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {
-
-            // Get all invited teams for this activity
             Backend.getAllInvitedTeams(activity.idActivity!!) {
                 teams = it
+            }
+
+            // Get all invited sections
+            GlobalScope.launch(Dispatchers.Main) {
+
+                // Verify if the section is already displayed
+                for (i in teams.indices) {
+                    val teamSection = sections[teams[i].idSection!!-1]
+
+                    if (!teamSection.active!!) {
+                        getSectionImage(teams[i].idSection!!, i + 1)
+                        teamSection.active = true
+                    }
+                }
             }
         }
 
