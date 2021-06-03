@@ -30,6 +30,7 @@ class FragmentCatalog : Fragment() {
     lateinit var adapter : CatalogAdapter
     var catalogs : MutableList<Catalog> = arrayListOf()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +53,7 @@ class FragmentCatalog : Fragment() {
 
         return rootView
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -95,6 +97,7 @@ class FragmentCatalog : Fragment() {
 
 
     }
+
 
     inner class CatalogAdapter : BaseAdapter() {
         override fun getCount(): Int {
