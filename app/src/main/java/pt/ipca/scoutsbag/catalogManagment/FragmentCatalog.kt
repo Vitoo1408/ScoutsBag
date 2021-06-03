@@ -117,6 +117,7 @@ class FragmentCatalog : Fragment() {
             val textViewDescriptionCatalog = rowView.findViewById<TextView>(R.id.textViewDescriptionCatalog)
             val textViewClassificationCatalog = rowView.findViewById<TextView>(R.id.textViewClassificationCatalog)
             val textViewTimeCatalog = rowView.findViewById<TextView>(R.id.textViewTimeCatalog)
+            val buttonEditCatalog = rowView.findViewById<Button>(R.id.buttonEditCatalog)
 
             // Set data
             textViewNameCatalog.text = catalogs[position].nameCatalog
@@ -132,6 +133,14 @@ class FragmentCatalog : Fragment() {
 
                 startActivity(intent)
 
+            }
+
+            buttonEditCatalog.setOnClickListener {
+                val intent = Intent(activity, ActivityEditCatalog::class.java)
+
+                intent.putExtra("id_catalog", catalogs[position].idCatalog.toString())
+
+                startActivity(intent)
             }
 
 

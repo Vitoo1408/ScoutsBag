@@ -18,6 +18,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import org.w3c.dom.Text
 import pt.ipca.scoutsbag.R
 
 class SeeInstructions : AppCompatActivity() {
@@ -34,6 +35,7 @@ class SeeInstructions : AppCompatActivity() {
 
         val buttonAddInstruction = findViewById<FloatingActionButton>(R.id.buttonAddInstruction)
         val bundle = intent.extras
+
 
         listViewInstructions = findViewById<ListView>(R.id.listViewInstructions)
         adapter = InstructionsAdapter()
@@ -77,6 +79,8 @@ class SeeInstructions : AppCompatActivity() {
 
         }
 
+
+
     }
 
     inner class InstructionsAdapter : BaseAdapter(){
@@ -101,15 +105,31 @@ class SeeInstructions : AppCompatActivity() {
             val textViewInstructionText = rowView.findViewById<TextView>(R.id.textViewInstructionText)
             val textViewImageUrl = rowView.findViewById<TextView>(R.id.textViewImageUrl)
             val textViewIdCatalogo = rowView.findViewById<TextView>(R.id.textViewIdCatalogo)
+            val buttonEditInstruction = rowView.findViewById<Button>(R.id.buttonEditInstruction)
 
            for (index in 0 until instructions.size){
                 if (instructions[index].idCatalog == id.toInt()){
+
                     textViewIdInstruction.text = instructions[position].idInstruction.toString()
                     textViewInstructionText.text = instructions[position].instructionText
                     textViewImageUrl.text = instructions[position].imageUrl
                     textViewIdCatalogo.text = instructions[position].idCatalog.toString()
+
+
                 }
+           }
+
+            buttonEditInstruction.setOnClickListener {
+
+                val intent = Intent(this@SeeInstructions, EditInstruction::class.java)
+
+                intent.putExtra("idInstruction", instructions[position].idInstruction.toString())
+                intent.putExtra("idCatalog", id)
+
+                startActivity(intent)
             }
+
+
 
             return rowView
         }
