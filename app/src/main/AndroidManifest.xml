@@ -2,20 +2,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pt.ipca.scoutsbag">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ScoutsBag">
-        <activity android:name=".MainActivity">
+        android:theme="@style/Theme.ScoutsBag"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activityManagement.InviteDetailsActivity"></activity>
+        <activity android:name=".loginAndRegister.ForgotPassword" />
+        <activity android:name=".loginAndRegister.Login" />
+        <activity android:name=".loginAndRegister.Register" />
+        <activity android:name=".catalogManagement.AddCatalog" />
+        <activity android:name=".catalogManagement.AddInstruction" />
+        <activity android:name=".catalogManagement.SeeInstructions" />
+        <activity android:name=".colonyManagement.ColonyActivity" />
+        <activity android:name=".colonyManagement.AddTeam" />
+        <activity android:name=".colonyManagement.ProfileActivity" />
+        <activity android:name=".colonyManagement.EditProfileActivity" />
+        <activity android:name=".activityManagement.ActivityDetailsActivity" />
+        <activity android:name=".activityManagement.EditActivityActivity" />
+        <activity android:name=".activityManagement.CreateActivityActivity" />
+        <activity
+            android:name=".loginAndRegister.LogInOrRegisterActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

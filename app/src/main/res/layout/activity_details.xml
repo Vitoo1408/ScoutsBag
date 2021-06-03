@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/ScrollViewActivityDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="Titulo"
+                android:textSize="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewDescriptionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="32dp"
+                android:text="Descrição:"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="0dp"
+                android:layout_height="128dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/custom_button_black"
+                android:padding="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewDescriptionTitle" />
+
+            <TextView
+                android:id="@+id/textViewActivityPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_button_black"
+                android:ems="10"
+                android:gravity="start|top"
+                android:drawableStart="@drawable/icon_euro"
+                android:drawablePadding="10dp"
+                android:text="Preço"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textColor="#707070"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutDates"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewActivityPrice">
+
+                <TextView
+                    android:id="@+id/textViewDates"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Data Inicial / Data Final"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewStartDate"
+                    style="?android:spinnerStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_calendar"
+                    android:drawablePadding="10dp"
+                    android:padding="10dp"
+                    android:text="01/01/2020 - 0:00"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDates" />
+
+                <TextView
+                    android:id="@+id/textViewEndDate"
+                    style="?android:spinnerStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_calendar"
+                    android:drawablePadding="10dp"
+                    android:padding="10dp"
+                    android:text="01/01/2020 - 0:00"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewStartDate" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutLocalization"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutDates">
+
+                <TextView
+                    android:id="@+id/textViewLocalization"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Localização"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewActivityLocalization"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_map_pin"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:text="Localização da Atividade"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewLocalization"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewLocalization" />
+
+                <TextView
+                    android:id="@+id/textViewLocalizationStart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_map_pin"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:padding="10dp"
+                    android:text="Localização Inicial"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewActivityLocalization"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewActivityLocalization" />
+
+                <TextView
+                    android:id="@+id/textViewLocalizationEnd"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/custom_button_black"
+                    android:drawableStart="@drawable/icon_map_pin"
+                    android:drawablePadding="10dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:padding="10dp"
+                    android:text="Localização Final"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/textViewLocalizationStart"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewLocalizationStart" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutSections"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutLocalization">
+
+                <ImageView
+                    android:id="@+id/imageViewSlot1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSections" />
+
+                <ImageView
+                    android:id="@+id/imageViewSlot2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewSlot1"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSections" />
+
+                <ImageView
+                    android:id="@+id/imageViewSlot3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewSlot2"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSections" />
+
+                <ImageView
+                    android:id="@+id/imageViewSlot4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewSlot3"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewSections" />
+
+                <TextView
+                    android:id="@+id/textViewSections"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Secções Convidadas"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
