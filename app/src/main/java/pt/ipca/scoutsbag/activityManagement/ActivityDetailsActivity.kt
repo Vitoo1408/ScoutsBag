@@ -1,33 +1,29 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONArray
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 
 class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
-    private lateinit var textViewTeams: TextView
-
-    private var teams: MutableList<Team> = arrayListOf()
+    private var teams: List<Team> = arrayListOf()
+    private var sections: MutableList<Section> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,8 +33,12 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
         // Get the selected activity
         val activityJsonStr = intent.getStringExtra("activity")
-        val activityJson = JSONObject(activityJsonStr)
+        val activityJson = JSONObject(activityJsonStr!!)
         activity = ScoutActivity.fromJson(activityJson)
+
+        // Get all sections
+        for (i in 0 until 4)
+            sections.add(Section(i, false))
 
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
@@ -51,7 +51,6 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
-        textViewTeams = findViewById<TextView>(R.id.textViewInvitedTeams)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
@@ -61,18 +60,74 @@ class ActivityDetailsActivity : AppCompatActivity() {
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
-        // Get section images
-        getSectionImage(1, 1)
-        getSectionImage(2, 2)
+        // Get all invited teams for this activity
+        GlobalScope.launch(Dispatchers.IO) {
+            Backend.getAllInvitedTeams(activity.idActivity!!) {
+                teams = it
+            }
 
-        // Get lists from db
-        getInvitedTeamsList(activity.idActivity!!)
+            // Get all invited sections
+            GlobalScope.launch(Dispatchers.Main) {
+
+                // Verify if the section is already displayed
+                for (i in teams.indices) {
+                    val teamSection = sections[teams[i].idSection!!-1]
+
+                    if (!teamSection.active!!) {
+                        getSectionImage(teams[i].idSection!!, i + 1)
+                        teamSection.active = true
+                    }
+                }
+            }
+        }
 
     }
 
 
     /*
+        This function create the action bar above the activity
+     */
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.delete_edit_menu, menu)
+        title = activity.nameActivity
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        return true
+    }
+
+
+    /*
+        This function define the events of the action bar buttons
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when (item.itemId){
+            R.id.itemDelete -> {
+                GlobalScope.launch(Dispatchers.IO) {
+                    Backend.removeActivity(activity.idActivity!!) {
+                        val intent = Intent(this@ActivityDetailsActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+                return true
+            }
+            R.id.itemEdit -> {
+                val intent = Intent(this, EditActivityActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+
+        return false
+    }
+
+
+    /*
+        Enable the images of the selected sections
+        @section = selected section
+        @position = slot in the view
      */
     private fun getSectionImage(section: Int, position: Int) {
 
@@ -97,76 +152,5 @@ class ActivityDetailsActivity : AppCompatActivity() {
         imageView.setImageResource(imageResource)
     }
 
-
-    /*
-
-     */
-    private fun getInvitedTeamsList(id: Int) {
-
-        // Invites list
-        val invites: MutableList<Invite> = arrayListOf()
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesInvites/$id").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val invite = Invite.fromJson(jsonArticle)
-                    invites.add(invite)
-                }
-            }
-
-            // Get the invited teams
-            for (i in 0 until invites.size) {
-                getTeam(invites[i].idTeam!!)
-            }
-
-        }
-
-    }
-
-    private fun getTeam(id: Int) {
-
-        // Coroutine start
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Create the http request
-            val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/teams/$id").build()
-
-            // Send the request and analyze the response
-            OkHttpClient().newCall(request).execute().use { response ->
-
-                // Convert the response into string then into JsonArray
-                val teamJsonArrayStr : String = response.body!!.string()
-                val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-                // Add the elements in the list
-                for (index in 0 until teamJsonArray.length()) {
-                    val jsonArticle = teamJsonArray.get(index) as JSONObject
-                    val team = Team.fromJson(jsonArticle)
-                    teams.add(team)
-
-                    // Show team
-                    GlobalScope.launch(Dispatchers.Main) {
-                        textViewTeams.text = "${textViewTeams.text} ${team.teamName}, "
-                    }
-                }
-
-            }
-
-        }
-
-    }
 
 }

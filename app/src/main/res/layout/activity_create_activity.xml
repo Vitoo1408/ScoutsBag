@@ -28,6 +28,8 @@
           android:layout_marginEnd="20dp"
           android:ems="10"
           android:hint="Nome da Atividade"
+          android:padding="10dp"
+          android:background="@drawable/custom_button_black"
           android:inputType="textPersonName"
           android:textColor="#707070"
           android:textSize="12sp"
@@ -47,6 +49,8 @@
           android:ems="10"
           android:gravity="start|top"
           android:hint="Descrição"
+          android:padding="10dp"
+          android:background="@drawable/custom_button_black"
           android:inputType="textMultiLine"
           android:textColor="#707070"
           android:textSize="12sp"
@@ -55,6 +59,29 @@
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/editTextActivityName" />
+
+      <EditText
+          android:id="@+id/editTextActivityPrice"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="20dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginEnd="20dp"
+          android:background="@drawable/custom_button_black"
+          android:ems="10"
+          android:gravity="start|top"
+          android:drawableStart="@drawable/icon_euro"
+          android:drawablePadding="10dp"
+          android:hint="Preço"
+          android:inputType="numberDecimal"
+          android:padding="10dp"
+          android:textColor="#707070"
+          android:textSize="12sp"
+          android:textStyle="normal"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.0"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/editTextActivityDescription" />
 
       <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/constraintLayoutActivityTypes"
@@ -65,7 +92,7 @@
           android:layout_marginEnd="20dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/editTextActivityDescription">
+          app:layout_constraintTop_toBottomOf="@+id/editTextActivityPrice">
 
         <TextView
             android:id="@+id/textViewActivityTypes"
@@ -81,26 +108,81 @@
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
           <androidx.constraintlayout.widget.ConstraintLayout
               android:id="@+id/constraintLayoutActivityTypesScroll"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
-              android:layout_marginStart="20dp"
               android:layout_marginTop="16dp"
-              android:layout_marginEnd="20dp"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toBottomOf="@+id/editTextActivityDescription">
 
             <ImageView
-                android:id="@+id/textViewActivityType1"
+                android:id="@+id/imageViewActivityType1"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:scaleX="1"
                 android:scaleY="1"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_empty" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType2"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_empty" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType3"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_empty" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType4"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_empty" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType5"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_empty" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType6"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/icon_empty" />
 
@@ -129,7 +211,7 @@
             android:id="@+id/textViewDates"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Datas"
+            android:text="Data Inicial / Data Final"
             android:textColor="#707070"
             android:textSize="12sp"
             android:textStyle="normal"
@@ -146,7 +228,7 @@
             android:drawableStart="@drawable/icon_calendar"
             android:drawablePadding="10dp"
             android:padding="10dp"
-            android:text="01/01/2020"
+            android:text="01/01/2020 - 0:00"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:backgroundTint="@null"
@@ -164,7 +246,7 @@
             android:drawableStart="@drawable/icon_calendar"
             android:drawablePadding="10dp"
             android:padding="10dp"
-            android:text="01/01/2020"
+            android:text="01/01/2020 - 0:00"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:backgroundTint="@null"
@@ -197,6 +279,26 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
+            android:id="@+id/editTextActivityLocalization"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/custom_button_black"
+            android:drawableStart="@drawable/icon_map_pin"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Localização da Atividade"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:textColor="#707070"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/textViewLocalization"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLocalization" />
+
+        <EditText
             android:id="@+id/editTextActivityLocalizationStart"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -213,8 +315,8 @@
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/textViewLocalization"
-            app:layout_constraintTop_toBottomOf="@+id/textViewLocalization" />
+            app:layout_constraintStart_toStartOf="@id/editTextActivityLocalization"
+            app:layout_constraintTop_toBottomOf="@+id/editTextActivityLocalization" />
 
         <EditText
             android:id="@+id/editTextActivityLocalizationEnd"
@@ -238,19 +340,6 @@
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <TextView
-          android:id="@+id/textViewImage"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="20dp"
-          android:layout_marginTop="16dp"
-          android:text="Imagem"
-          android:textColor="#707070"
-          android:textSize="12sp"
-          android:textStyle="normal"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/constraintLayoutLocalization" />
-
       <androidx.constraintlayout.widget.ConstraintLayout
           android:id="@+id/constraintLayoutSections"
           android:layout_width="0dp"
@@ -260,7 +349,7 @@
           android:layout_marginEnd="20dp"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/textViewImage">
+          app:layout_constraintTop_toBottomOf="@+id/constraintLayoutLocalization">
 
         <ImageView
             android:id="@+id/imageViewLobitos"
@@ -270,15 +359,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_lobitos" />
-
-        <TextView
-            android:id="@+id/textViewLobitos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:text="Lobitos"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewLobitos" />
 
         <ImageView
             android:id="@+id/imageViewExploradores"
@@ -290,15 +370,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_exploradores" />
 
-        <TextView
-            android:id="@+id/textViewExploradores"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="Exploradores"
-            app:layout_constraintStart_toEndOf="@+id/textViewLobitos"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewExploradores" />
-
         <ImageView
             android:id="@+id/imageViewPioneiros"
             android:layout_width="wrap_content"
@@ -309,17 +380,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_pioneiros" />
 
-        <TextView
-            android:id="@+id/textViewPioneiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="32dp"
-            android:text="Pioneiros"
-            app:layout_constraintEnd_toStartOf="@+id/textViewCaminheiros"
-            app:layout_constraintStart_toEndOf="@+id/textViewExploradores"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewPioneiros" />
-
         <ImageView
             android:id="@+id/imageViewCaminheiros"
             android:layout_width="wrap_content"
@@ -329,15 +389,6 @@
             app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_caminheiros" />
-
-        <TextView
-            android:id="@+id/textViewCaminheiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:text="Caminheiros"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewCaminheiros" />
 
         <TextView
             android:id="@+id/textViewSections"

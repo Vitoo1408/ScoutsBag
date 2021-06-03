@@ -18,65 +18,44 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/textProximas"
+            android:id="@+id/textInvites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-medium"
             android:text="Próximas Atividades"
             android:textColor="#707070"
             android:textSize="12sp"
             android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/listViewActivities"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.123"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextBemVindo"
-            app:layout_constraintVertical_bias="0.206" />
+            app:layout_constraintTop_toBottomOf="@+id/TextViewWelcome" />
 
         <TextView
-            android:id="@+id/TextBemVindo"
+            android:id="@+id/TextViewWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="sans-serif-light"
+            android:text="Bem-vindo"
             android:textColor="#707070"
             android:textSize="17.3sp"
             android:textStyle="normal|bold"
-            app:layout_constraintBottom_toTopOf="@+id/listViewActivities"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.116"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewNome"
-            app:layout_constraintVertical_bias="0.1"
-            android:text="Bem-vindo" />
-
-        <TextView
-            android:id="@+id/TextViewNome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="sans-serif-light"
-            android:text="Olá, Nel"
-            android:textSize="17.3sp"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/listViewActivities"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.106"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
             android:id="@+id/listViewActivities"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="90dp"
+            android:divider="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.855"
-            android:divider="@null">
+            app:layout_constraintVertical_bias="0.855">
 
         </ListView>
 

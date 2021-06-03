@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.catalogManagment
+package pt.ipca.scoutsbag.catalogManagement
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

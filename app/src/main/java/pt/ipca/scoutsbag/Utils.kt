@@ -10,7 +10,6 @@ import java.util.regex.Pattern
 
 object Utils {
 
-
     /*
         This function create a Date picker
         @dateTextView = the textView responsible for select the date
