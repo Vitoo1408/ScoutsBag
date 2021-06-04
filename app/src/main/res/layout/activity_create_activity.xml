@@ -129,7 +129,7 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_walk" />
 
             <ImageView
                 android:id="@+id/imageViewActivityType2"
@@ -140,7 +140,7 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toEndOf="@+id/imageViewActivityType1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_camping" />
 
             <ImageView
                 android:id="@+id/imageViewActivityType3"
@@ -151,7 +151,7 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toEndOf="@+id/imageViewActivityType2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_charity" />
 
             <ImageView
                 android:id="@+id/imageViewActivityType4"
@@ -162,7 +162,7 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toEndOf="@+id/imageViewActivityType3"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_peddy_paper" />
 
             <ImageView
                 android:id="@+id/imageViewActivityType5"
@@ -173,7 +173,7 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toEndOf="@+id/imageViewActivityType4"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_cantonment" />
 
             <ImageView
                 android:id="@+id/imageViewActivityType6"
@@ -184,7 +184,18 @@
                 android:scaleY="1"
                 app:layout_constraintStart_toEndOf="@+id/imageViewActivityType5"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_empty" />
+                app:srcCompat="@drawable/ic_mass" />
+
+            <ImageView
+                android:id="@+id/imageViewActivityType7"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1"
+                android:scaleY="1"
+                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_meeting" />
 
           </androidx.constraintlayout.widget.ConstraintLayout>
 

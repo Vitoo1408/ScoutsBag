@@ -17,13 +17,13 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
+import pt.ipca.scoutsbag.models.User
 
 class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
-    private var teams: List<Team> = arrayListOf()
-    private var sections: MutableList<Section> = arrayListOf()
+    private var users: List<User> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,10 +35,6 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val activityJsonStr = intent.getStringExtra("activity")
         val activityJson = JSONObject(activityJsonStr!!)
         activity = ScoutActivity.fromJson(activityJson)
-
-        // Get all sections
-        for (i in 0 until 4)
-            sections.add(Section(i, false))
 
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
@@ -62,19 +58,26 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
         // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {
-            Backend.getAllInvitedTeams(activity.idActivity!!) {
-                teams = it
+            Backend.getAllInvitedUsers(activity.idActivity!!) {
+                users = it
             }
 
-            // Get all invited sections
-            GlobalScope.launch(Dispatchers.Main) {
+            // Get all sections
+            val sections: MutableList<Section> = arrayListOf()
+            for (i in 0 until 4)
+                sections.add(Section(i, false))
 
-                // Verify if the section is already displayed
-                for (i in teams.indices) {
-                    val teamSection = sections[teams[i].idSection!!-1]
+            // Verify if the section is already displayed
+            for (i in users.indices) {
 
+                // Get the user section
+                val team = Backend.getTeam(users[i].idTeam!!)
+                val teamSection = sections[team.idSection!!-1]
+
+                // Display the image
+                GlobalScope.launch(Dispatchers.Main) {
                     if (!teamSection.active!!) {
-                        getSectionImage(teams[i].idSection!!, i + 1)
+                        getSectionImage(teamSection.idSection!!, i + 1)
                         teamSection.active = true
                     }
                 }

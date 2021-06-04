@@ -135,11 +135,9 @@ class FragmentActivity : Fragment() {
 
             // Show activity details button event
             rowView.setOnClickListener {
-
                 val intent = Intent(context, ActivityDetailsActivity::class.java)
                 intent.putExtra("activity", activity.toJson().toString())
                 startActivity(intent)
-
             }
 
             return rowView

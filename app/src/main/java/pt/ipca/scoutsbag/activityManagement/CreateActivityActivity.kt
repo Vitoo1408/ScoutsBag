@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,7 +15,7 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.Participation
+import pt.ipca.scoutsbag.models.Invite
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
@@ -154,6 +153,7 @@ class CreateActivityActivity : AppCompatActivity() {
         activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType7))
 
         // On click activity type
         for (image in activityTypesImages)
@@ -190,18 +190,8 @@ class CreateActivityActivity : AppCompatActivity() {
                 // Add activity
                 Backend.addActivity(scoutActivity, changeActivity)
 
-                // Invite all teams selected to this activity
+                // Invite all users selected to this activity
                 for (team in selectedTeams) {
-
-                    // Build the invite
-                    val invite = Invite(
-                        activityId,
-                        team.idTeam,
-                        1
-                    )
-
-                    // Invite the team
-                    Backend.addInvite(invite)
 
                     // Get all users from the current team
                     var teamUsers: List<User> = arrayListOf()
@@ -209,18 +199,18 @@ class CreateActivityActivity : AppCompatActivity() {
                         teamUsers = it
                     }
 
-                    // Create participations for all users in the team
+                    // Create invites for all users in the team
                     for (user in teamUsers) {
 
-                        // Build the participation
-                        val participation = Participation(
+                        // Build the invite
+                        val invite = Invite(
                             activityId,
                             user.idUser,
                             null
                         )
 
-                        // Create participation
-                        Backend.addParticipation(participation)
+                        // Create invite
+                        Backend.addInvite(invite)
                     }
 
                 }
