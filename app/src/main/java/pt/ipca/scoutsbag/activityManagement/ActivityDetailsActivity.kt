@@ -68,18 +68,23 @@ class ActivityDetailsActivity : AppCompatActivity() {
                 sections.add(Section(i, false))
 
             // Verify if the section is already displayed
+            var position = 1
             for (i in users.indices) {
+                if (users[i].idTeam != null) {
 
-                // Get the user section
-                val team = Backend.getTeam(users[i].idTeam!!)
-                val teamSection = sections[team.idSection!!-1]
+                    // Get the user section
+                    val team = Backend.getTeam(users[i].idTeam!!)
+                    val teamSection = sections[team.idSection!!-1]
 
-                // Display the image
-                GlobalScope.launch(Dispatchers.Main) {
+                    // Display the image
                     if (!teamSection.active!!) {
-                        getSectionImage(teamSection.idSection!!, i + 1)
                         teamSection.active = true
+                        GlobalScope.launch(Dispatchers.Main) {
+                            getSectionImage(teamSection.idSection!!, position)
+                            position++
+                        }
                     }
+
                 }
             }
         }

@@ -464,7 +464,7 @@ object Backend {
         var user : User? = null
 
         // Create the http request
-        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/teams/$id").build()
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/$id").build()
 
         // Send the request and analyze the response
         OkHttpClient().newCall(request).execute().use { response ->
@@ -540,20 +540,17 @@ object Backend {
         OkHttpClient().newCall(request).execute().use { response ->
 
             // Convert the response into string then into JsonArray
-            val teamJsonArrayStr : String = response.body!!.string()
-            val teamJsonArray = JSONArray(teamJsonArrayStr)
+            val inviteJsonArrayStr : String = response.body!!.string()
+            val inviteJsonArray = JSONArray(inviteJsonArrayStr)
 
             // Add the elements in the list
-            for (index in 0 until teamJsonArray.length()) {
-                val jsonArticle = teamJsonArray.get(index) as JSONObject
-                val user = User.fromJson(jsonArticle)
-                users.add(user)
+            for (index in 0 until inviteJsonArray.length()) {
+                val jsonArticle = inviteJsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+                println("userId ->" + invite.idUser)
+                println("userName ->" + getUser(invite.idUser!!).userName)
+                users.add(getUser(invite.idUser!!))
             }
-        }
-
-        // Get the invited teams
-        for (i in 0 until users.size) {
-            users.add(getUser(users[i].idUser!!))
         }
 
         callBack(users)
