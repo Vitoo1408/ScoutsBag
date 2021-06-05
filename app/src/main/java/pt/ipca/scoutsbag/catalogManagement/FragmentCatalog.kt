@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import com.example.scoutsteste1.Catalog
@@ -27,6 +28,7 @@ class FragmentCatalog : Fragment() {
     lateinit var listViewCatalog : ListView
     lateinit var adapter : CatalogAdapter
     var catalogs : MutableList<Catalog> = arrayListOf()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +52,7 @@ class FragmentCatalog : Fragment() {
 
         return rootView
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -94,6 +97,7 @@ class FragmentCatalog : Fragment() {
 
     }
 
+
     inner class CatalogAdapter : BaseAdapter() {
         override fun getCount(): Int {
             return catalogs.size
@@ -115,6 +119,7 @@ class FragmentCatalog : Fragment() {
             val textViewDescriptionCatalog = rowView.findViewById<TextView>(R.id.textViewDescriptionCatalog)
             val textViewClassificationCatalog = rowView.findViewById<TextView>(R.id.textViewClassificationCatalog)
             val textViewTimeCatalog = rowView.findViewById<TextView>(R.id.textViewTimeCatalog)
+            val buttonEditCatalog = rowView.findViewById<Button>(R.id.buttonEditCatalog)
 
             // Set data
             textViewNameCatalog.text = catalogs[position].nameCatalog
@@ -130,6 +135,14 @@ class FragmentCatalog : Fragment() {
 
                 startActivity(intent)
 
+            }
+
+            buttonEditCatalog.setOnClickListener {
+                val intent = Intent(activity, ActivityEditCatalog::class.java)
+
+                intent.putExtra("id_catalog", catalogs[position].idCatalog.toString())
+
+                startActivity(intent)
             }
 
 
