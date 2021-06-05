@@ -1,6 +1,5 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,31 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
-import org.json.JSONArray
-import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.colonyManagement.ColonyDbHelper
+import pt.ipca.scoutsbag.models.Invite
 import pt.ipca.scoutsbag.models.Team
+import pt.ipca.scoutsbag.models.User
 
 
-class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDbHelper {
+class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
-    var activityTypesImages: MutableList<ImageView> = arrayListOf()
+    var selectedTeams: MutableList<Team> = arrayListOf()
+    private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: TeamsAdapter
     private var activityId: Int? = null
@@ -43,6 +36,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
         // Variables
         val imageView = it as ImageView
         val sectionId: Int = getSectionID(imageView.id)
+        var buttonSpacing = 600
 
         imageView.isHovered = !imageView.isHovered
 
@@ -50,13 +44,17 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
         if (!imageView.isHovered) {
             removeSectionTeams(sectionId)
             imageView.setBackgroundResource(0)
+            buttonSpacing *= -1
         }
         // Add border and teams
         else {
 
             // Add all teams of the selected section
             GlobalScope.launch(Dispatchers.IO) {
-                teams.addAll(getAllSectionTeams(sectionId))
+
+                Backend.getAllSectionTeams(sectionId) { list ->
+                    teams.addAll(list)
+                }
 
                 // Refresh the list
                 GlobalScope.launch(Dispatchers.Main) {
@@ -66,12 +64,19 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
 
             imageView.setBackgroundResource(R.drawable.border)
         }
+
+        // Refresh the listView size
+        val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
+        params.height = params.height + buttonSpacing
+        listViewTeams.layoutParams = params
+        listViewTeams.requestLayout()
     }
 
 
     // This function is for select an team by clicking on the team button
     var onClickTeam: (view: View)->Unit = {
         val button = it as Button
+        val team = findTeamByItsButton(button)
 
         button.isHovered = !button.isHovered
 
@@ -79,11 +84,13 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
         if (!button.isHovered) {
             button.setBackgroundResource(R.drawable.custom_button_white)
             button.setTextColor(Color.BLACK)
+            selectedTeams.remove(team)
         }
         // Set button as orange
         else {
             button.setBackgroundResource(R.drawable.custom_button_orange)
             button.setTextColor(Color.WHITE)
+            selectedTeams.add(team)
         }
     }
 
@@ -114,8 +121,12 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
-        activityId = intent.getIntExtra("idActivity", 0)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Get the new activity ID
+        GlobalScope.launch(Dispatchers.IO) {
+            activityId = Backend.getLastActivityId() + 1
+        }
 
         // Pass the view objects to variables
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
@@ -142,6 +153,7 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
         activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType7))
 
         // On click activity type
         for (image in activityTypesImages)
@@ -163,32 +175,44 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
                 // Build the activity that will be added
                 val scoutActivity = ScoutActivity(
                     activityId,
-                    findViewById<TextView>(R.id.editTextActivityName).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityName).text.toString(),
                     getSelectedActivityType(),
-                    findViewById<TextView>(R.id.editTextActivityDescription).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityDescription).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
                     Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
                     Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
-                    "1234",
-                    findViewById<TextView>(R.id.editTextActivityLocalizationStart).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString(),
-                    findViewById<TextView>(R.id.editTextActivityLocalizationEnd).text.toString().toFloat(),
+                    findViewById<EditText>(R.id.editTextActivityLocalization).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityLocalizationEnd).text.toString(),
+                    findViewById<EditText>(R.id.editTextActivityPrice).text.toString().toFloat()
                 )
 
                 // Add activity
-                addActivity(scoutActivity, changeActivity)
+                Backend.addActivity(scoutActivity, changeActivity)
 
-                // Invite all teams selected to this activity
-                for (team in teams) {
+                // Invite all users selected to this activity
+                for (team in selectedTeams) {
 
-                    // Build the invite
-                    val invite = Invite(
-                        activityId,
-                        team.idTeam,
-                        1
-                    )
+                    // Get all users from the current team
+                    var teamUsers: List<User> = arrayListOf()
+                    Backend.getAllTeamUsers(team.idTeam!!) {
+                        teamUsers = it
+                    }
 
-                    addInvite(invite, changeActivity)
+                    // Create invites for all users in the team
+                    for (user in teamUsers) {
+
+                        // Build the invite
+                        val invite = Invite(
+                            activityId,
+                            user.idUser,
+                            null
+                        )
+
+                        // Create invite
+                        Backend.addInvite(invite)
+                    }
+
                 }
 
             }
@@ -246,6 +270,23 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
     }
 
 
+    /*
+        This function return a team depending on the selected team button
+        @button = Selected team button
+     */
+    private fun findTeamByItsButton(button: Button): Team {
+
+        var team: Team? = null
+
+        for (i in 0 until teams.size) {
+            if (teams[i].teamName == button.text)
+                team = teams[i]
+        }
+
+        return team!!
+    }
+
+
     inner class TeamsAdapter : BaseAdapter() {
 
         override fun getCount(): Int {
@@ -268,14 +309,6 @@ class CreateActivityActivity : AppCompatActivity(), ActivitiesDbHelper, ColonyDb
 
             teamButton.text = teams[position].teamName
             teamButton.setOnClickListener(onClickTeam)
-
-            // Refresh the listView size
-            val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
-            params.height = 300 * (teams.size)
-            listViewTeams.layoutParams = params
-            listViewTeams.requestLayout()
-
-            println("team->" + teams[position].teamName)
 
             return rowView
         }

@@ -1,10 +1,9 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.*
+import android.text.BoringLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
@@ -16,21 +15,27 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.Section
-import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.models.User
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
+import pt.ipca.scoutsbag.models.*
+import java.util.ArrayList
 
-class ActivityDetailsActivity : AppCompatActivity() {
+class InviteDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
     private var users: List<User> = arrayListOf()
 
+    // This function is for return to the previous activity after a operation
+    var changeActivity: ()->Unit = {
+        val returnIntent = Intent(this, MainActivity::class.java)
+        startActivity(returnIntent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+        setContentView(R.layout.activity_invite_details)
 
         // Get the selected activity
         val activityJsonStr = intent.getStringExtra("activity")
@@ -38,8 +43,8 @@ class ActivityDetailsActivity : AppCompatActivity() {
         activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
-        val startDate = Utils.mySqlDateTimeToString(activity.startDate!!)
-        val endDate = Utils.mySqlDateTimeToString(activity.finishDate!!)
+        val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
+        val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
@@ -50,16 +55,18 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
+        val buttonRefuse = findViewById<TextView>(R.id.button_refuse)
+        val buttonConfirm = findViewById<TextView>(R.id.button_confirm)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
         textViewDescription.text = activity.activityDescription
-        textViewPrice.text = activity.price.toString()
         textViewStartDate.text = startDate
         textViewEndDate.text = endDate
-        textViewLocal.text = activity.activitySite
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
+        textViewPrice.text = activity.price.toString()
+        textViewLocal.text = activity.activitySite
 
         // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {
@@ -94,47 +101,24 @@ class ActivityDetailsActivity : AppCompatActivity() {
             }
         }
 
-    }
+        // Get the user participation for this invite
+        val invite = Invite(
+            activity.idActivity,
+            UserLoggedIn.idUser,
+            null
+        )
 
-
-    /*
-        This function create the action bar above the activity
-     */
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.delete_edit_menu, menu)
-        title = activity.nameActivity
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        return true
-    }
-
-
-    /*
-        This function define the events of the action bar buttons
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when (item.itemId){
-            R.id.itemDelete -> {
-                GlobalScope.launch(Dispatchers.IO) {
-                    Backend.removeActivity(activity.idActivity!!) {
-                        val intent = Intent(this@ActivityDetailsActivity, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-                return true
-            }
-            R.id.itemEdit -> {
-                val intent = Intent(this, EditActivityActivity::class.java)
-                intent.putExtra("activity", activity.toJson().toString())
-                startActivity(intent)
-                return true
-            }
+        // Accept ou refuse the invite
+        buttonRefuse.setOnClickListener {
+            invite.acceptedInvite = 0
+            Backend.editInvite(invite, changeActivity)
         }
 
-        return false
+        buttonConfirm.setOnClickListener {
+            invite.acceptedInvite = 1
+            Backend.editInvite(invite, changeActivity)
+        }
+
     }
 
 
@@ -165,6 +149,5 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(imageSlot)
         imageView.setImageResource(imageResource)
     }
-
 
 }

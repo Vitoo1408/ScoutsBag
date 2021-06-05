@@ -1,37 +1,32 @@
 package pt.ipca.scoutsbag.colonyManagement
 
-import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import org.json.JSONObject
-import pt.ipca.scoutsbag.MainActivity
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
-class ProfileActivity : AppCompatActivity() {
+class ActivityReplyRequest : AppCompatActivity() {
 
+    // Global Variables
     lateinit var user: User
     var id = ""
+    var teams : List<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_reply_request)
+
+        // Get the values to the list
+        Backend.getAllTeams {
+            teams = it
+        }
 
         // Get the user from the last activity
         val userJsonStr = intent.getStringExtra("user")!!
@@ -47,27 +42,19 @@ class ProfileActivity : AppCompatActivity() {
         val textBirthDate = findViewById<TextView>(R.id.textBirthDate)
         val textAddress = findViewById<TextView>(R.id.textAddress)
         val textPostalCode = findViewById<TextView>(R.id.textPostalCode)
-        val butEdit = findViewById<Button>(R.id.editProfile)
+        val buttonAcceptUser = findViewById<Button>(R.id.buttonAcceptUser)
+        val buttonRefuseUser = findViewById<Button>(R.id.buttonRefuseUser)
 
-        //println("->>" + textName.text.toString())
 
         // Set data
         textName.text = user.userName
-        //textSection.text = user.sec
-        //textTeam.text = user.idTeam
+        textSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+        textTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
         textNIN.text = user.nin
         textPhone.text = user.contact
         textMail.text = user.email
         textBirthDate.text = user.birthDate
         textAddress.text = user.address
         textPostalCode.text = user.postalCode
-
-
-        butEdit.setOnClickListener() {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
-        }
-
     }
-
 }

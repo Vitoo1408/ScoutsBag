@@ -63,4 +63,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageCatalog"
         app:layout_constraintTop_toBottomOf="@+id/textViewClassificationCatalog" />
+
+    <Button
+        android:id="@+id/buttonEditCatalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:backgroundTint="@null"
+        android:background="@drawable/custom_button_orange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageCatalog"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTimeCatalog" />
 </androidx.constraintlayout.widget.ConstraintLayout>

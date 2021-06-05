@@ -16,18 +16,19 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
-class ActivityUserRequest : AppCompatActivity(), ColonyDbHelper {
+class ActivityUserRequest : AppCompatActivity() {
 
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : UsersAdapter
-    var users : MutableList<User> = arrayListOf()
-    var teams : MutableList<Team> = arrayListOf()
+    var users : List<User> = arrayListOf()
+    var teams : List<Team> = arrayListOf()
 
     /*
         This function create the view
@@ -38,13 +39,16 @@ class ActivityUserRequest : AppCompatActivity(), ColonyDbHelper {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_request)
 
-        getTeamsList()
-
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
-            users = getAllUnacceptedUsers()
+            Backend.getAllTeams {
+                teams = it
+            }
 
+            Backend.getAllUnacceptedUsers {
+                users = it
+            }
 
             // Refresh the listView
             GlobalScope.launch(Dispatchers.Main) {
@@ -53,138 +57,69 @@ class ActivityUserRequest : AppCompatActivity(), ColonyDbHelper {
         }
 
         // Set data
-        listView = findViewById(R.id.listview_colony)
+        listView = findViewById(R.id.listViewUserRequest)
         adapter = UsersAdapter()
         listView.adapter = adapter
     }
 
 
-inner class UsersAdapter : BaseAdapter() {
-    override fun getCount(): Int {
-        return users.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return users[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = layoutInflater.inflate(R.layout.row_user_request, parent, false)
-
-        // Get current activity
-        val user = users[position]
-
-        // Variables in the row
-        val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
-        val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
-        val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
-        val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
-
-        // Set values in the row
-        textViewName.text = user.userName.toString()
-        textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
-        textViewTeam.text = getTeamById(user.idTeam!!).teamName
-        textViewNin.text = user.nin.toString()
-
-        rowView.setOnClickListener {
-            val intent = Intent(this@ActivityUserRequest, ProfileActivity::class.java)
-            intent.putExtra("user", user.toJson().toString())
-            startActivity(intent)
+    inner class UsersAdapter : BaseAdapter() {
+        override fun getCount(): Int {
+            return users.size
         }
 
-        return rowView
-    }
-}
+        override fun getItem(position: Int): Any {
+            return users[position]
+        }
 
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
 
-/*
-    This function returns all teams in the api to an list
- */
-private fun getTeamsList(){
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_user_request, parent, false)
 
-    // Coroutine start
-    GlobalScope.launch(Dispatchers.IO) {
+            // Get current activity
+            val user = users[position]
 
-        // Create the http request
-        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/teams").build()
+            // Variables in the row
+            val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
+            val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
+            val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
+            val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
 
-        // Send the request and analyze the response
-        OkHttpClient().newCall(request).execute().use { response ->
+            // Set values in the row
+            textViewName.text = user.userName.toString()
+            //textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+            //textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
+            textViewNin.text = user.nin.toString()
 
-            // Convert the response into string then into JsonArray
-            val teamJsonArrayStr : String = response.body!!.string()
-            val teamJsonArray = JSONArray(teamJsonArrayStr)
-
-            // Add the elements in the list
-            for (index in 0 until teamJsonArray.length()) {
-                val jsonArticle = teamJsonArray.get(index) as JSONObject
-                val team = Team.fromJson(jsonArticle)
-                teams.add(team)
+            rowView.setOnClickListener {
+                val intent = Intent(this@ActivityUserRequest, ActivityReplyRequest::class.java)
+                intent.putExtra("user", user.toJson().toString())
+                startActivity(intent)
             }
 
-            // Update the list
-            GlobalScope.launch (Dispatchers.Main) {
-                adapter.notifyDataSetChanged()
-            }
+            return rowView
         }
     }
-}
 
+    /*
+        This function returns the section designation
 
-/*
+    private fun getSectionById(id: Int): Section {
 
- */
-private fun getSectionName(id: Int): String{
+        // Variables
+        var response: Section? = null
 
-    return when (id) {
-        1 -> "Lobitos"
-        2 -> "Exploradores"
-        3 -> "Pioneiros"
-        else -> "Caminheiros"
+        // Find the activity type
+        for (element in sections) {
+            if (element.idSection == id)
+                response = element
+        }
+
+        return response!!
     }
-
-}
-
-
-
-
-/*
-    This function returns the team
- */
-private fun getTeamById(id: Int): Team {
-
-    // Variables
-    var response: Team? = null
-
-    // Find the activity type
-    for (i in 0 until teams.size) {
-        if (teams[i].idTeam == id)
-            response = teams[i]
-    }
-
-    return response!!
-}
-
-/*
-    This function returns the section designation
-
-private fun getSectionById(id: Int): Section {
-
-    // Variables
-    var response: Section? = null
-
-    // Find the activity type
-    for (element in sections) {
-        if (element.idSection == id)
-            response = element
-    }
-
-    return response!!
-}
-*/
+    */
 
 }

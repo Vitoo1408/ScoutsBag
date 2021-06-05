@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".colonyManagement.ActivityReplyRequest">
+
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="560dp">
+
+            <ImageView
+                android:id="@+id/imageProfile"
+                android:layout_width="match_parent"
+                android:layout_height="132dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user" />
+
+            <TextView
+                android:id="@+id/scoutName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Nome"
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
+
+            <TextView
+                android:id="@+id/scoutSection"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Secção"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/scoutName" />
+
+            <TextView
+                android:id="@+id/scoutTeam"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Equipa"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/scoutSection" />
+
+            <TextView
+                android:id="@+id/textTitleNIN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="NIN"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scoutTeam" />
+
+            <TextView
+                android:id="@+id/textNIN"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitleNIN" />
+
+            <TextView
+                android:id="@+id/textTitlePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Telefone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textNIN" />
+
+            <TextView
+                android:id="@+id/textTitleMail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="E-mail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textPhone" />
+
+            <TextView
+                android:id="@+id/textTitleAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Endereço"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textBirthDate" />
+
+            <TextView
+                android:id="@+id/textTitleBirthDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Data Nascimento"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textMail" />
+
+            <TextView
+                android:id="@+id/textPhone"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitlePhone" />
+
+            <TextView
+                android:id="@+id/textMail"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitleMail" />
+
+            <TextView
+                android:id="@+id/textPostalCode"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitlePostalCode" />
+
+            <TextView
+                android:id="@+id/textBirthDate"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitleBirthDate" />
+
+            <TextView
+                android:id="@+id/textTitlePostalCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Código Postal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textAddress"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textAddress"
+                android:layout_width="379dp"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textTitleAddress" />
+
+            <ImageView
+                android:id="@+id/imageViewLobitos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSections"
+                app:srcCompat="@drawable/icon_lobitos" />
+
+            <ImageView
+                android:id="@+id/imageViewExploradores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSections"
+                app:srcCompat="@drawable/icon_exploradores" />
+
+            <ImageView
+                android:id="@+id/imageViewPioneiros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toEndOf="@+id/imageViewExploradores"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSections"
+                app:srcCompat="@drawable/icon_pioneiros" />
+
+            <ImageView
+                android:id="@+id/imageViewCaminheiros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
+                app:layout_constraintTop_toBottomOf="@+id/textViewSections"
+                app:srcCompat="@drawable/icon_caminheiros" />
+
+            <TextView
+                android:id="@+id/textViewSections"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Secção"
+                android:textColor="#707070"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textPostalCode" />
+
+            <TextView
+                android:id="@+id/textViewTeams"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Equipas"
+                android:textColor="#707070"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLobitos" />
+
+            <ListView
+                android:id="@+id/listViewTeams"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTeams" />
+
+            <Button
+                android:id="@+id/buttonRefuseUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/custom_button_orange"
+                android:text="Recusar"
+                android:textStyle="normal"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listViewTeams"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/buttonAcceptUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/custom_button_orange"
+                android:text="Aceitar"
+                android:textStyle="normal"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.865"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listViewTeams"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
