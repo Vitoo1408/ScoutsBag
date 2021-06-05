@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.catalogManagment
+package pt.ipca.scoutsbag.catalogManagement
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
 import com.example.scoutsteste1.Instruction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,8 +15,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import org.json.JSONObject
-import org.w3c.dom.Text
 import pt.ipca.scoutsbag.R
 
 class EditInstruction : AppCompatActivity() {
