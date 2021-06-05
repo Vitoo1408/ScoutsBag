@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import com.example.scoutsteste1.Instruction
@@ -17,7 +18,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
-import org.w3c.dom.Text
 import pt.ipca.scoutsbag.R
 
 class SeeInstructions : AppCompatActivity() {

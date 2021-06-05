@@ -22,6 +22,8 @@
         <activity android:name=".catalogManagement.AddCatalog" />
         <activity android:name=".catalogManagement.AddInstruction" />
         <activity android:name=".catalogManagement.SeeInstructions" />
+        <activity android:name=".catalogManagement.ActivityEditCatalog" />
+        <activity android:name=".catalogManagement.EditInstruction" />
         <activity android:name=".colonyManagement.ColonyActivity" />
         <activity android:name=".colonyManagement.AddTeam" />
         <activity android:name=".colonyManagement.ProfileActivity" />

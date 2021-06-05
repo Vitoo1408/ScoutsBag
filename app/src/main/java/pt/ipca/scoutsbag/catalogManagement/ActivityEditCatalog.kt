@@ -1,4 +1,4 @@
-package pt.ipca.scoutsbag.catalogManagment
+package pt.ipca.scoutsbag.catalogManagement
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.example.scoutsteste1.Catalog
-import com.example.scoutsteste1.Instruction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,7 +63,7 @@ class ActivityEditCatalog : AppCompatActivity() {
                     GlobalScope.launch (Dispatchers.Main){
 
                         if (response.message == "OK"){
-                            val returnIntent = Intent(this@ActivityEditCatalog, FragmentCatalog::class.java)
+                            val returnIntent = Intent(this@ActivityEditCatalog, MainActivity::class.java)
                             startActivity(returnIntent)
                         }
 
