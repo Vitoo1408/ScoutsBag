@@ -155,8 +155,7 @@ class EditActivityActivity : AppCompatActivity() {
         editTextActivityLocalizationEnd.text = activity.finishSite
         buttonEdit.text = "Editar Atividade"
 
-        // Select the activity type already selected
-        onClickActivityType(activityTypesImages[activity.idType!!-1])
+
 
         // Select the sections already selected
         /*
@@ -183,6 +182,8 @@ class EditActivityActivity : AppCompatActivity() {
         for (image in activityTypesImages)
             image.setOnClickListener(onClickActivityType)
 
+        // Select the activity type already selected
+        onClickActivityType(activityTypesImages[activity.idType!!-1])
 
         // On click button events
         dateStartButton.setOnClickListener {

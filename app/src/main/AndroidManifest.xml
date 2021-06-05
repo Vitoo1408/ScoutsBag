@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".colonyManagement.ActivityReplyRequest"></activity>
+        <activity android:name=".colonyManagement.ActivityReplyRequest" />
+        <activity android:name=".colonyManagement.ActivityUserRequest" />
+        <activity android:name=".activityManagement.ActivityHistoryActivity" />
         <activity android:name=".activityManagement.InviteDetailsActivity" />
         <activity android:name=".loginAndRegister.ForgotPassword" />
         <activity android:name=".loginAndRegister.Login" />

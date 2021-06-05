@@ -57,7 +57,7 @@ class ActivityUserRequest : AppCompatActivity() {
         }
 
         // Set data
-        listView = findViewById(R.id.listview_colony)
+        listView = findViewById(R.id.listViewUserRequest)
         adapter = UsersAdapter()
         listView.adapter = adapter
     }
@@ -90,8 +90,8 @@ class ActivityUserRequest : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
-            textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
+            //textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+            //textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
             textViewNin.text = user.nin.toString()
 
             rowView.setOnClickListener {
