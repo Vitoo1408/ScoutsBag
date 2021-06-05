@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,8 +38,8 @@ class ActivityDetailsActivity : AppCompatActivity() {
         activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
-        val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
-        val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
+        val startDate = Utils.mySqlDateTimeToString(activity.startDate!!)
+        val endDate = Utils.mySqlDateTimeToString(activity.finishDate!!)
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
@@ -127,6 +128,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
             }
             R.id.itemEdit -> {
                 val intent = Intent(this, EditActivityActivity::class.java)
+                intent.putExtra("activity", activity.toJson().toString())
                 startActivity(intent)
                 return true
             }
