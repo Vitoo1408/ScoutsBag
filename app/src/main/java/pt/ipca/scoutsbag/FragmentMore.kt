@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
 import pt.ipca.scoutsbag.colonyManagement.ColonyActivity
 import pt.ipca.scoutsbag.loginAndRegister.LogInOrRegisterActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
@@ -17,6 +18,7 @@ class FragmentMore: Fragment() {
 
     // Global Variables
     lateinit var row_colony: ConstraintLayout
+    lateinit var row_request: ConstraintLayout
     var buttonLogOut: Button? = null
 
     /*
@@ -35,6 +37,7 @@ class FragmentMore: Fragment() {
 
         // Set data
         row_colony = rootView.findViewById(R.id.row_colony)
+        row_request = rootView.findViewById(R.id.row_request)
 
         buttonLogOut?.setOnClickListener {
             val preferences = this.activity?.getSharedPreferences("userLogin", AppCompatActivity.MODE_PRIVATE)
@@ -79,5 +82,10 @@ class FragmentMore: Fragment() {
             val intent = Intent(activity, ColonyActivity::class.java)
             startActivity(intent)
         }
+
+         row_request.setOnClickListener {
+             val intent = Intent(activity, ActivityUserRequest::class.java)
+             startActivity(intent)
+         }
     }
 }

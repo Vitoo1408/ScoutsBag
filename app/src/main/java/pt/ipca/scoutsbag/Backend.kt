@@ -481,6 +481,37 @@ object Backend {
         return user!!
     }
 
+    /*
+        This function returns the name of the section by the given id
+     */
+    fun getSectionName(id: Int): String{
+
+        return when (id) {
+            1 -> "Lobitos"
+            2 -> "Exploradores"
+            3 -> "Pioneiros"
+            else -> "Caminheiros"
+        }
+
+    }
+
+    /*
+        This function returns the team by the given id
+     */
+    fun getTeamById(id: Int, teams: List<Team>): Team {
+
+        // Variables
+        var response: Team? = null
+
+        // Find the activity type
+        for (i in 0 until teams.size) {
+            if (teams[i].idTeam == id)
+                response = teams[i]
+        }
+
+        return response!!
+    }
+
 
     /*
         ------------------------------------------------ Teams ------------------------------------------------

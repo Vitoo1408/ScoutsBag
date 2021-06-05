@@ -90,53 +90,18 @@ class ActivityUserRequest : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
-            textViewTeam.text = getTeamById(user.idTeam!!).teamName
+            textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+            textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
             textViewNin.text = user.nin.toString()
 
             rowView.setOnClickListener {
-                val intent = Intent(this@ActivityUserRequest, ProfileActivity::class.java)
+                val intent = Intent(this@ActivityUserRequest, ActivityReplyRequest::class.java)
                 intent.putExtra("user", user.toJson().toString())
                 startActivity(intent)
             }
 
             return rowView
         }
-    }
-
-
-    /*
-
-     */
-    private fun getSectionName(id: Int): String{
-
-        return when (id) {
-            1 -> "Lobitos"
-            2 -> "Exploradores"
-            3 -> "Pioneiros"
-            else -> "Caminheiros"
-        }
-
-    }
-
-
-
-
-    /*
-        This function returns the team
-     */
-    private fun getTeamById(id: Int): Team {
-
-        // Variables
-        var response: Team? = null
-
-        // Find the activity type
-        for (i in 0 until teams.size) {
-            if (teams[i].idTeam == id)
-                response = teams[i]
-        }
-
-        return response!!
     }
 
     /*
