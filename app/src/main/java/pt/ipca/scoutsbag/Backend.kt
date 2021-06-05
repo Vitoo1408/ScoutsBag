@@ -358,8 +358,6 @@ object Backend {
             .post(requestBody)
             .build()
 
-
-
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use {
         }
@@ -724,5 +722,75 @@ object Backend {
             }
         }
     }
+
+
+    /*
+        ------------------------------------------------ Inventory ------------------------------------------------
+     */
+
+
+    /*
+        This function return by callback all materials in the data base
+        @callBack = return the list
+     */
+    fun getAllMaterials(callBack: (List<Material>)->Unit) {
+
+        val materials: MutableList<Material> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val materialJsonArrayStr : String = response.body!!.string()
+            val materialJsonArray = JSONArray(materialJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until materialJsonArray.length()) {
+                val jsonArticle = materialJsonArray.get(index) as JSONObject
+                val material = Material.fromJson(jsonArticle)
+
+                materials.add(material)
+            }
+        }
+
+        callBack(materials)
+    }
+
+
+    /*
+        This function adds a material into the database
+        @id = selected team id
+    */
+    fun addMaterial(material: Material, changeActivity: ()->Unit) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            material.toJson().toString()
+        )
+
+        println(material.toJson().toString())
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main){
+
+                if (response.message == "OK"){
+                    changeActivity()
+                }
+            }
+        }
+    }
+
 
 }
