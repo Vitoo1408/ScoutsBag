@@ -42,29 +42,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
 
             <TextView
-                android:id="@+id/scoutSection"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Secção"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/scoutName" />
-
-            <TextView
-                android:id="@+id/scoutTeam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Equipa"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/scoutSection" />
-
-            <TextView
                 android:id="@+id/textTitleNIN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="NIN"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scoutTeam" />
+                app:layout_constraintTop_toBottomOf="@+id/scoutName" />
 
             <TextView
                 android:id="@+id/textNIN"
@@ -173,6 +157,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textTitleAddress" />
 
+
             <ImageView
                 android:id="@+id/imageViewLobitos"
                 android:layout_width="wrap_content"
@@ -242,6 +227,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewTeams" />
+
 
             <Button
                 android:id="@+id/buttonRefuseUser"

@@ -115,24 +115,4 @@ class ColonyActivity : AppCompatActivity() {
         }
     }
 
-
-    /*
-        This function returns the section designation
-
-    private fun getSectionById(id: Int): Section {
-
-        // Variables
-        var response: Section? = null
-
-        // Find the activity type
-        for (element in sections) {
-            if (element.idSection == id)
-                response = element
-        }
-
-        return response!!
-    }
-    */
-
-
 }
