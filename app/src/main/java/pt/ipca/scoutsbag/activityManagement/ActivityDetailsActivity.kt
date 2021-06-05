@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,14 +16,15 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
+import pt.ipca.scoutsbag.models.User
 
 class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
-    private lateinit var textViewTeams: TextView
-    private var teams: List<Team> = arrayListOf()
+    private var users: List<User> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,36 +38,59 @@ class ActivityDetailsActivity : AppCompatActivity() {
         activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
-        val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
-        val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
+        val startDate = Utils.mySqlDateTimeToString(activity.startDate!!)
+        val endDate = Utils.mySqlDateTimeToString(activity.finishDate!!)
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
         val textViewDescription = findViewById<TextView>(R.id.textViewDescription)
+        val textViewPrice = findViewById<TextView>(R.id.textViewActivityPrice)
         val textViewStartDate = findViewById<TextView>(R.id.textViewStartDate)
         val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
+        val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
-        textViewTeams = findViewById<TextView>(R.id.textViewInvitedTeams)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
         textViewDescription.text = activity.activityDescription
+        textViewPrice.text = activity.price.toString()
         textViewStartDate.text = startDate
         textViewEndDate.text = endDate
+        textViewLocal.text = activity.activitySite
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
-        // Get section images
-        getSectionImage(1, 1)
-        getSectionImage(2, 2)
-
-        // Coroutine start
+        // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {
+            Backend.getAllInvitedUsers(activity.idActivity!!) {
+                users = it
+            }
 
-            // Get all invited teams for this activity
-            Backend.getAllInvitedTeams(activity.idActivity!!) {
-                teams = it
+            // Get all sections
+            val sections: MutableList<Section> = arrayListOf()
+            for (i in 0 until 4)
+                sections.add(Section(i, false))
+
+            // Verify if the section is already displayed
+            var position = 1
+            for (i in users.indices) {
+                if (users[i].idTeam != null) {
+
+                    // Get the user section
+                    val team = Backend.getTeam(users[i].idTeam!!)
+                    val teamSection = sections[team.idSection!!-1]
+
+                    // Display the image
+                    if (!teamSection.active!!) {
+                        teamSection.active = true
+                        GlobalScope.launch(Dispatchers.Main) {
+                            getSectionImage(teamSection.idSection!!, position)
+                            position++
+                        }
+                    }
+
+                }
             }
         }
 
@@ -103,6 +128,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
             }
             R.id.itemEdit -> {
                 val intent = Intent(this, EditActivityActivity::class.java)
+                intent.putExtra("activity", activity.toJson().toString())
                 startActivity(intent)
                 return true
             }

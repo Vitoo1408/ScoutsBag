@@ -126,7 +126,7 @@ class FragmentActivity : Fragment() {
             // Set values in the row
             imageViewActivity.setImageResource(Backend.getActivityTypeImage(activity.idType!!))
             textViewDay.text = Utils.getDay(activity.startDate.toString())
-            textViewMonth.text = Utils.getMonth(activity.startDate.toString())
+            textViewMonth.text = Utils.getMonthFormat(Utils.getMonth(activity.startDate.toString()).toInt())
             textViewActivityType.text = Backend.getActivityTypeDesignation(activity.idType!!, activitiesTypes)
             textViewName.text = activity.nameActivity.toString()
             textViewDate.text = "Data: $dataInicio - $dataFim"
@@ -135,11 +135,9 @@ class FragmentActivity : Fragment() {
 
             // Show activity details button event
             rowView.setOnClickListener {
-
                 val intent = Intent(context, ActivityDetailsActivity::class.java)
                 intent.putExtra("activity", activity.toJson().toString())
                 startActivity(intent)
-
             }
 
             return rowView

@@ -9,7 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
+import pt.ipca.scoutsbag.activityManagement.ActivityHistoryActivity
 import pt.ipca.scoutsbag.colonyManagement.ColonyActivity
 import pt.ipca.scoutsbag.loginAndRegister.LogInOrRegisterActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
@@ -17,8 +17,8 @@ import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 class FragmentMore: Fragment() {
 
     // Global Variables
-    lateinit var row_colony: ConstraintLayout
-    lateinit var row_request: ConstraintLayout
+    private lateinit var rowHistory: ConstraintLayout
+    private lateinit var rowColony: ConstraintLayout
     var buttonLogOut: Button? = null
 
     /*
@@ -36,8 +36,8 @@ class FragmentMore: Fragment() {
         buttonLogOut = rootView.findViewById(R.id.buttonLogOut)
 
         // Set data
-        row_colony = rootView.findViewById(R.id.row_colony)
-        row_request = rootView.findViewById(R.id.row_request)
+        rowColony = rootView.findViewById(R.id.row_colony)
+        rowHistory = rootView.findViewById(R.id.row_activity_historic)
 
         buttonLogOut?.setOnClickListener {
             val preferences = this.activity?.getSharedPreferences("userLogin", AppCompatActivity.MODE_PRIVATE)
@@ -71,21 +71,22 @@ class FragmentMore: Fragment() {
         return rootView
     }
 
-     /*
+    /*
         This function configures the fragment after its creation
-     */
+    */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    super.onViewCreated(view, savedInstanceState)
 
         // Button on click events
-        row_colony.setOnClickListener {
+        rowColony.setOnClickListener {
             val intent = Intent(activity, ColonyActivity::class.java)
             startActivity(intent)
         }
 
-         row_request.setOnClickListener {
-             val intent = Intent(activity, ActivityUserRequest::class.java)
-             startActivity(intent)
-         }
+        rowHistory.setOnClickListener {
+            val intent = Intent(activity, ActivityHistoryActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
