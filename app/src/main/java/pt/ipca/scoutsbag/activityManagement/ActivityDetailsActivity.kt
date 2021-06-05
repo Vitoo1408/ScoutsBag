@@ -43,16 +43,20 @@ class ActivityDetailsActivity : AppCompatActivity() {
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
         val textViewDescription = findViewById<TextView>(R.id.textViewDescription)
+        val textViewPrice = findViewById<TextView>(R.id.textViewActivityPrice)
         val textViewStartDate = findViewById<TextView>(R.id.textViewStartDate)
         val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
+        val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
         textViewDescription.text = activity.activityDescription
+        textViewPrice.text = activity.price.toString()
         textViewStartDate.text = startDate
         textViewEndDate.text = endDate
+        textViewLocal.text = activity.activitySite
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 

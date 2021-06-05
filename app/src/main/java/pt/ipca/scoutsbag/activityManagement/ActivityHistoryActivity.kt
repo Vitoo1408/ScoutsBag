@@ -1,12 +1,14 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.ListView
+import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -17,44 +19,30 @@ import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.ActivityType
 
-
-class FragmentInvite : Fragment() {
+class ActivityHistoryActivity : AppCompatActivity() {
 
     // Global Variables
-    lateinit var listView : ListView
+    var activities: List<ScoutActivity> = arrayListOf()
+    var activitiesTypes: List<ActivityType> = arrayListOf()
     lateinit var adapter : ActivitiesAdapter
-    var activities : List<ScoutActivity> = arrayListOf()
-    var activitiesTypes : List<ActivityType> = arrayListOf()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_invite, container, false)
+        // Initial Settings
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_history)
 
-        // Set data
-        listView = rootView.findViewById(R.id.listViewInvites)
+        // Set listView Adapter
+        val listView = findViewById<ListView>(R.id.listViewActivities)
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
 
-        return rootView
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Coroutine start
+        // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
-            // Get the values to the lists
-            Backend.getAllUserPendingActivities(UserLoggedIn.idUser!!) {
+            Backend.getAllUserPastActivities(UserLoggedIn.idUser!!) {
                 activities = it
             }
-
             Backend.getAllActivityTypes {
                 activitiesTypes = it
             }
@@ -115,7 +103,7 @@ class FragmentInvite : Fragment() {
 
             // Show activity details button event
             rowView.setOnClickListener {
-                val intent = Intent(context, InviteDetailsActivity::class.java)
+                val intent = Intent(this@ActivityHistoryActivity, ActivityDetailsActivity::class.java)
                 intent.putExtra("activity", activity.toJson().toString())
                 startActivity(intent)
             }
@@ -123,5 +111,4 @@ class FragmentInvite : Fragment() {
             return rowView
         }
     }
-
 }

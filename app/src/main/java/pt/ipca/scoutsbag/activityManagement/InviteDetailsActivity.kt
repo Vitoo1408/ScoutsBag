@@ -49,8 +49,10 @@ class InviteDetailsActivity : AppCompatActivity() {
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
         val textViewDescription = findViewById<TextView>(R.id.textViewDescription)
+        val textViewPrice = findViewById<TextView>(R.id.textViewActivityPrice)
         val textViewStartDate = findViewById<TextView>(R.id.textViewStartDate)
         val textViewEndDate = findViewById<TextView>(R.id.textViewEndDate)
+        val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
         val buttonRefuse = findViewById<TextView>(R.id.button_refuse)
@@ -63,6 +65,8 @@ class InviteDetailsActivity : AppCompatActivity() {
         textViewEndDate.text = endDate
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
+        textViewPrice.text = activity.price.toString()
+        textViewLocal.text = activity.activitySite
 
         // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {

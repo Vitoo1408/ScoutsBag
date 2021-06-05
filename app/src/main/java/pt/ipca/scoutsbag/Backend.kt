@@ -245,7 +245,11 @@ object Backend {
                 // If the user participate in the activity add to the list
                 if (invite.idUser == idUser && invite.acceptedInvite == 1) {
                     val activity = getActivity(invite.idActivity!!)
-                    activities.add(activity)
+
+                    // Check if the date is not outdated
+                    if (!Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
                 }
             }
 
@@ -281,7 +285,51 @@ object Backend {
 
                 if (invite.idUser == idUser && invite.acceptedInvite == null) {
                     val activity = getActivity(invite.idActivity!!)
-                    activities.add(activity)
+
+                    // Check if the date is not outdated
+                    if (!Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
+                }
+            }
+
+            // Return list
+            callBack(activities)
+        }
+    }
+
+
+    /*
+        This function returns all the invites from a specific user team in the api by an list
+        @idUserTeam = team id of the selected user
+        @callBack = return the list
+     */
+    fun getAllUserPastActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
+
+        val activities : MutableList<ScoutActivity> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val activityJsonArrayStr : String = response.body!!.string()
+            val activityJsonArray = JSONArray(activityJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until activityJsonArray.length()) {
+                val jsonArticle = activityJsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+
+                if (invite.idUser == idUser && invite.acceptedInvite == 1) {
+                    val activity = getActivity(invite.idActivity!!)
+
+                    // Check if the date is outdated
+                    if (Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
                 }
             }
 
@@ -547,8 +595,6 @@ object Backend {
             for (index in 0 until inviteJsonArray.length()) {
                 val jsonArticle = inviteJsonArray.get(index) as JSONObject
                 val invite = Invite.fromJson(jsonArticle)
-                println("userId ->" + invite.idUser)
-                println("userName ->" + getUser(invite.idUser!!).userName)
                 users.add(getUser(invite.idUser!!))
             }
         }
