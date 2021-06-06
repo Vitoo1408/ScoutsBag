@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Invite
+import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
@@ -24,6 +26,8 @@ class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
+    var materials: List<Material> = arrayListOf()
+    var selectedMaterials: Int = 0
     var selectedTeams: MutableList<Team> = arrayListOf()
     private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
@@ -123,15 +127,23 @@ class CreateActivityActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Get the new activity ID
+        // Interact with the data base
         GlobalScope.launch(Dispatchers.IO) {
+
+            // Get the new activity ID
             activityId = Backend.getLastActivityId() + 1
+
+            // Get all materials
+            Backend.getAllMaterials {
+                materials = it
+            }
         }
 
         // Pass the view objects to variables
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
         val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
-        val addButton = findViewById<TextView>(R.id.buttonAddActivity)
+        val addButton = findViewById<Button>(R.id.buttonAddActivity)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
         listViewTeams = findViewById(R.id.listViewTeams)
         adapter = TeamsAdapter()
         listViewTeams.adapter = adapter
@@ -166,6 +178,13 @@ class CreateActivityActivity : AppCompatActivity() {
 
         dateEndTextView.setOnClickListener {
             dateEndPickerDialog.show()
+        }
+
+        // Add material to the activity
+        buttonMaterial.setOnClickListener {
+            //val materialJsonString = material.toJson().toString()
+            openDialog()
+            //SelectMaterialDialog.newInstance("materialJsonString").show(this.supportFragmentManager, SelectMaterialDialog.TAG)
         }
 
         // Add activity and invite teams button event
@@ -220,6 +239,30 @@ class CreateActivityActivity : AppCompatActivity() {
         }
 
     }
+
+
+    private fun openDialog() {
+
+        // Variables
+        val alertDialog = AlertDialog.Builder(this)
+        val row = layoutInflater.inflate(R.layout.dialog_material_selected, null)
+        val listView = row.findViewById<ListView>(R.id.listViewMaterials)
+        val mAdapter = MaterialsAdapter()
+
+        // Set data
+        listView.adapter = mAdapter
+        mAdapter.notifyDataSetChanged()
+
+        alertDialog.setOnCancelListener {
+            findViewById<TextView>(R.id.buttonMaterial).text = "Itens selecionados: ${selectedMaterials}"
+        }
+
+        // Create dialog
+        alertDialog.setAdapter(mAdapter) { _, _ -> }
+        alertDialog.setView(row)
+        alertDialog.create().show()
+    }
+
 
 
     /*
@@ -309,6 +352,39 @@ class CreateActivityActivity : AppCompatActivity() {
 
             teamButton.text = teams[position].teamName
             teamButton.setOnClickListener(onClickTeam)
+
+            return rowView
+        }
+    }
+
+    inner class MaterialsAdapter : BaseAdapter() {
+
+        override fun getCount(): Int {
+            return materials.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return materials[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_selected_material, parent, false)
+
+            val material = materials[position]
+
+            rowView.findViewById<TextView>(R.id.textViewMaterialName).text = material.nameMaterial
+            rowView.findViewById<TextView>(R.id.textViewMaterialType).text = material.materialType
+            rowView.findViewById<TextView>(R.id.textViewMaterialQuantity).text = material.qntStock.toString()
+
+            val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
+
+            checkBoxMaterial.setOnClickListener {
+                selectedMaterials += if(checkBoxMaterial.isChecked) 1 else -1
+            }
 
             return rowView
         }

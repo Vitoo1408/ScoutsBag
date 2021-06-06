@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
         android:usesCleartextTraffic="true">
-        <activity android:name=".inventoryManagement.MaterialDetailsDialog"></activity>
         <activity android:name=".inventoryManagement.CreateMaterialActivity" />
         <activity android:name=".inventoryManagement.InventoryActivity" />
         <activity android:name=".colonyManagement.ActivityReplyRequest" />
