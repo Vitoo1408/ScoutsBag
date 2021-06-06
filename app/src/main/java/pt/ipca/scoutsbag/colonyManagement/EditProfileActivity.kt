@@ -1,98 +1,158 @@
 package pt.ipca.scoutsbag.colonyManagement
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User as User
 
 
 class EditProfileActivity : AppCompatActivity() {
 
-    private var userProfileJsonStr: String? = null
+    companion object {
+        const val IMAGE_REQUEST_CODE = 100
+        const val STORAGE_RQ = 101
+    }
+
+    private var editImage: ImageView? = null
+    private var editName: EditText? = null
+    private var editNIN: EditText? = null
+    private var editPhone: EditText? = null
+    private var editMail: EditText? = null
+    private var editBirthDate: TextView? = null
+    private var editAddress: EditText? = null
+    private var editPostalCode: EditText? = null
+    private var butSave: Button? = null
+    private var imageUri: Uri? = null
+    private var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        // fazer o get intent
-/*        val profileTemp = User.fromJson(JSONObject(userProfileJsonStr))
+        editImage = findViewById(R.id.profileImage)
+        editName = findViewById(R.id.editTextName)
+        editNIN = findViewById(R.id.editTextNIN)
+        editPhone = findViewById(R.id.EditTextPhone)
+        editMail = findViewById(R.id.EditTextMail)
+        editBirthDate = findViewById(R.id.EditBirthDate)
+        editAddress = findViewById(R.id.EditTextAddress)
+        editPostalCode = findViewById(R.id.EditTextPostalCode)
+        butSave = findViewById(R.id.butSaveChangesProfile)
 
+        //load profile image
+        if(UserLoggedIn.imageUrl != ""){
+            Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
+        }
 
-        val editName = findViewById<EditText>(R.id.editTextName)
-        val editNIN = findViewById<EditText>(R.id.editTextNIN)
-        val editPhone = findViewById<EditText>(R.id.EditTextPhone)
-        val editMail = findViewById<EditText>(R.id.EditTextMail)
-        val editBirthDate = findViewById<TextView>(R.id.EditBirthDate)
-        val editAddress = findViewById<EditText>(R.id.EditTextAddress)
-        val editPostalCode = findViewById<EditText>(R.id.EditTextPostalCode)
-        val editImage = findViewById<ImageButton>(R.id.butChangeImage)
-        val butSave = findViewById<Button>(R.id.butSaveChangesProfile)
+        //load all user data into text views
+        editName?.setText(UserLoggedIn.userName)
+        editNIN?.setText(UserLoggedIn.nin)
+        editPhone?.setText(UserLoggedIn.contact)
+        editMail?.setText(UserLoggedIn.email)
+        editBirthDate?.text = UserLoggedIn.birthDate
+        editAddress?.setText(UserLoggedIn.address)
+        editPostalCode?.setText(UserLoggedIn.postalCode)
 
-        editName.hint = profileTemp.userName
-        editNIN.hint = profileTemp.nin
-        editPhone.hint = profileTemp.contact
-        editMail.hint = profileTemp.email
-        editBirthDate.hint = profileTemp.bithDate
-        editAddress.hint = profileTemp.adress
-        editPostalCode.hint = profileTemp.postalCode
-*/
-/*
-         butSave.setOnClickListener {
+        //when user clicks on his profile image to change it
+        editImage?.setOnClickListener {
+            pickImageGallery()
+        }
 
-            GlobalScope.launch(Dispatchers.IO) {
-                val client = OkHttpClient()
+        butSave?.setOnClickListener {
+            if(imageUri != null) {
+                var fileName = Utils.getFileName(this, imageUri!!)
+                var filePath = Utils.getUriFilePath(this, imageUri!!)
 
-                val user = User(
-                    profileTemp.idUser,
-                    editName.text.toString(),
-                    editNIN.text.toString(),
-                    editPhone.text.toString(),
-                    editMail.text.toString(),
-                    editBirthDate.text.toString(),
-                    editAddress.text.toString(),
-                    editPostalCode.text.toString())
-
-
-                val requestBody = RequestBody.create(
-                    "application/json".toMediaTypeOrNull(),
-                    user.toJson().toString()
-                )
-                Log.d("users", user.toJson().toString())
-
-                val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/${profileTemp.idUser}")
-                    .put(requestBody)
-                    .build()
-
-                client.newCall(request).execute().use { response ->
-                    Log.d("users", response.message)
-                    GlobalScope.launch(Dispatchers.Main) {
-                        if (response.message == "OK") {
-                            findNavController().popBackStack()
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        Utils.uploadImage(filePath!!, fileName) {
+                            imageUrl = it
                         }
+                        //save the user data with a new image url
+                        saveUserData(imageUrl)
                     }
                 }
+            } else {
+                //save the user data without a new image url
+                saveUserData(null)
+            }
 
+            Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
+
+            finish()
         }
-*/
     }
 
+    //Open phone's gallery to pick photo
+    private fun pickImageGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE)
+    }
 
+    //after picking photo
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+            editImage?.setImageURI(data?.data)
+            imageUri = data?.data
+        }
+    }
+
+    private fun saveUserData(imageUrl: String?) {
+        //shared preferences initialization
+        val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
+        val editor = preferences.edit()
+        val userDetails = preferences.getString("userDetails", "")
+
+        //convert user details json object of type string to a json object
+        val userDetailsJsonObject = JSONObject(userDetails)
+
+        //create temporary profile to update the values from the editProfile activity
+        val profileTemp = User.fromJson(userDetailsJsonObject)
+
+        profileTemp.userName = editName?.text.toString()
+        profileTemp.nin = editNIN?.text.toString()
+        profileTemp.contact = editPhone?.text.toString()
+        profileTemp.email = editMail?.text.toString()
+        profileTemp.birthDate = "1990-02-10"
+        profileTemp.address = editAddress?.text.toString()
+        profileTemp.postalCode = editPostalCode?.text.toString()
+        if(imageUrl != null) profileTemp.imageUrl = imageUrl
+
+        //save new user details to UserLoggedIn object
+        UserLoggedIn.userName = profileTemp.userName
+        UserLoggedIn.nin = profileTemp.nin
+        UserLoggedIn.contact = profileTemp.contact
+        UserLoggedIn.email = profileTemp.email
+        UserLoggedIn.birthDate = profileTemp.birthDate
+        UserLoggedIn.address = profileTemp.address
+        UserLoggedIn.postalCode = profileTemp.postalCode
+        UserLoggedIn.imageUrl = profileTemp.imageUrl
+
+        //save new user details as json string to sharedPrefs
+        editor.putString("userDetails", profileTemp.toJson().toString())
+        editor.apply()
+
+        Log.d("profileTemp", profileTemp.toJson().toString())
+
+        //update user to db
+        Backend.editUser(profileTemp)
+    }
 }

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import pt.ipca.scoutsbag.activityManagement.ActivityHistoryActivity
 import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
 import pt.ipca.scoutsbag.colonyManagement.ColonyActivity
+import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 import pt.ipca.scoutsbag.loginAndRegister.LogInOrRegisterActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
@@ -20,6 +21,7 @@ class FragmentMore: Fragment() {
     // Global Variables
     private lateinit var rowHistory: ConstraintLayout
     private lateinit var rowColony: ConstraintLayout
+    private lateinit var rowProfile: ConstraintLayout
     lateinit var rowRequest: ConstraintLayout
     var buttonLogOut: Button? = null
 
@@ -41,6 +43,7 @@ class FragmentMore: Fragment() {
         rowColony = rootView.findViewById(R.id.row_colony)
         rowHistory = rootView.findViewById(R.id.row_activity_historic)
         rowRequest = rootView.findViewById(R.id.row_request)
+        rowProfile = rootView.findViewById(R.id.row_profile)
 
 
         buttonLogOut?.setOnClickListener {
@@ -97,5 +100,9 @@ class FragmentMore: Fragment() {
             startActivity(intent)
         }
 
+        rowProfile.setOnClickListener {
+            val intent = Intent(activity, EditProfileActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
