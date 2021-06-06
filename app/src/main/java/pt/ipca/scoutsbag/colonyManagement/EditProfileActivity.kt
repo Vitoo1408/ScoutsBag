@@ -1,11 +1,14 @@
 package pt.ipca.scoutsbag.colonyManagement
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -18,14 +21,15 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
+import java.util.jar.Manifest
 import pt.ipca.scoutsbag.models.User as User
 
 
 class EditProfileActivity : AppCompatActivity() {
 
     companion object {
-        const val IMAGE_REQUEST_CODE = 100
-        const val STORAGE_RQ = 101
+        private const val IMAGE_REQUEST_CODE = 100
+        private const val STORAGE_PERMISSION_CODE = 101
     }
 
     private var editImage: ImageView? = null
@@ -39,6 +43,7 @@ class EditProfileActivity : AppCompatActivity() {
     private var butSave: Button? = null
     private var imageUri: Uri? = null
     private var imageUrl: String? = null
+    private var storagePermission = false
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -71,13 +76,13 @@ class EditProfileActivity : AppCompatActivity() {
 
         //when user clicks on his profile image to change it
         editImage?.setOnClickListener {
-            pickImageGallery()
+            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
         }
 
         butSave?.setOnClickListener {
             if(imageUri != null) {
-                var fileName = Utils.getFileName(this, imageUri!!)
-                var filePath = Utils.getUriFilePath(this, imageUri!!)
+                val fileName = Utils.getFileName(this, imageUri!!)
+                val filePath = Utils.getUriFilePath(this, imageUri!!)
 
                 GlobalScope.launch(Dispatchers.Main) {
                     GlobalScope.launch(Dispatchers.IO) {
@@ -112,6 +117,31 @@ class EditProfileActivity : AppCompatActivity() {
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
             editImage?.setImageURI(data?.data)
             imageUri = data?.data
+        }
+    }
+
+    // Function to check and request permission.
+    private fun checkPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@EditProfileActivity, permission) == PackageManager.PERMISSION_DENIED) {
+
+            // Requesting the permission
+            ActivityCompat.requestPermissions(this@EditProfileActivity, arrayOf(permission), requestCode)
+        } else {
+            pickImageGallery()
+        }
+    }
+
+    // This function is called when the user accepts or decline the permission.
+    // Request Code is used to check which permission called this function.
+    // This request code is provided when the user is prompt for permission.
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pickImageGallery()
+            } else {
+                Toast.makeText(this@EditProfileActivity, "Acesso ao armazenamento interno negado", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
