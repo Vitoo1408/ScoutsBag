@@ -12,11 +12,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.models.Material
 
 
-class InventoryActivity : AppCompatActivity() {
+class InventoryActivity : AppCompatActivity(){
 
     // Global Variables
     var materials: List<Material> = arrayListOf()
@@ -79,8 +78,8 @@ class InventoryActivity : AppCompatActivity() {
                 rowView.findViewById<Button>(R.id.materialQuantity).setBackgroundResource(R.drawable.circle_shape_orange)
 
             rowView.setOnClickListener {
-                val dialog = MaterialDetailsDialog()
-                dialog.show(supportFragmentManager, "customDialog")
+                val materialJsonString = material.toJson().toString()
+                MaterialDetailsDialog.newInstance(materialJsonString).show(this@InventoryActivity.supportFragmentManager, MaterialDetailsDialog.TAG)
             }
 
             return rowView

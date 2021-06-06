@@ -111,7 +111,7 @@ object Backend {
 
     /*
         This function remove the activity from the data base
-        @idActivity =
+        @idActivity = selected activity id
         @changeActivity = a function that return the user to the previous activity
      */
     fun removeActivity(idActivity: Int, changeActivity: ()->Unit) {
@@ -121,8 +121,6 @@ object Backend {
             .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities/$idActivity")
             .delete()
             .build()
-
-        println("!! -" + request.method + "!!- " + request.url + "!!- " + request.body + "!!- " + request.headers)
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
@@ -792,5 +790,62 @@ object Backend {
         }
     }
 
+
+    /*
+        This function edit the material in the data base
+        @material = selected material
+        @changeActivity = this change to the previous activity
+     */
+    fun editMaterial(material: Material) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                material.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials/${material.idMaterial}")
+                .put(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+            }
+
+        }
+    }
+
+
+    /*
+        This function remove the activity from the data base
+        @idMaterial = material id selected
+        @changeActivity = a function that return the user to the previous activity
+     */
+    fun removeMaterial(idMaterial: Int, changeActivity: ()->Unit) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials/$idMaterial")
+                .delete()
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main) {
+
+                    if (response.message == "OK") {
+                        changeActivity()
+                    }
+                }
+            }
+        }
+    }
 
 }
