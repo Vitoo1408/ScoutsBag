@@ -91,14 +91,10 @@ class ActivityUserRequest : AppCompatActivity() {
 
             // Variables in the row
             val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
-            val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
-            val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
             val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            //textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
-            //textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
             textViewNin.text = user.nin.toString()
 
             rowView.setOnClickListener {
@@ -116,23 +112,5 @@ class ActivityUserRequest : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-    /*
-        This function returns the section designation
-
-    private fun getSectionById(id: Int): Section {
-
-        // Variables
-        var response: Section? = null
-
-        // Find the activity type
-        for (element in sections) {
-            if (element.idSection == id)
-                response = element
-        }
-
-        return response!!
-    }
-    */
 
 }
