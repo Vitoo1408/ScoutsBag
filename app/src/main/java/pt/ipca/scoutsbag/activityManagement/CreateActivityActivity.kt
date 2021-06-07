@@ -16,23 +16,20 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.Invite
-import pt.ipca.scoutsbag.models.Material
-import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.models.User
+import pt.ipca.scoutsbag.models.*
 
 
 class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
-    var materials: List<Material> = arrayListOf()
-    var selectedMaterials: Int = 0
     var selectedTeams: MutableList<Team> = arrayListOf()
+    var materials: List<Material> = arrayListOf()
+    var selectedMaterials: MutableList<ActivityMaterial> = arrayListOf()
     private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: TeamsAdapter
-    private var activityId: Int? = null
+    var activityId: Int? = null
 
 
     // This function is for select an section by clicking on the section image
@@ -182,9 +179,8 @@ class CreateActivityActivity : AppCompatActivity() {
 
         // Add material to the activity
         buttonMaterial.setOnClickListener {
-            //val materialJsonString = material.toJson().toString()
-            openDialog()
-            //SelectMaterialDialog.newInstance("materialJsonString").show(this.supportFragmentManager, SelectMaterialDialog.TAG)
+            selectedMaterials.removeAll(selectedMaterials)
+            openSelectMaterialDialog()
         }
 
         // Add activity and invite teams button event
@@ -241,7 +237,7 @@ class CreateActivityActivity : AppCompatActivity() {
     }
 
 
-    private fun openDialog() {
+    private fun openSelectMaterialDialog() {
 
         // Variables
         val alertDialog = AlertDialog.Builder(this)
@@ -254,7 +250,7 @@ class CreateActivityActivity : AppCompatActivity() {
         mAdapter.notifyDataSetChanged()
 
         alertDialog.setOnCancelListener {
-            findViewById<TextView>(R.id.buttonMaterial).text = "Itens selecionados: ${selectedMaterials}"
+            findViewById<TextView>(R.id.buttonMaterial).text = "Itens selecionados: ${selectedMaterials.size}"
         }
 
         // Create dialog
@@ -374,16 +370,26 @@ class CreateActivityActivity : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = layoutInflater.inflate(R.layout.row_selected_material, parent, false)
 
+            // Variables
             val material = materials[position]
-
-            rowView.findViewById<TextView>(R.id.textViewMaterialName).text = material.nameMaterial
-            rowView.findViewById<TextView>(R.id.textViewMaterialType).text = material.materialType
-            rowView.findViewById<TextView>(R.id.textViewMaterialQuantity).text = material.qntStock.toString()
-
+            val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
+            val textViewType     = rowView.findViewById<TextView>(R.id.textViewMaterialType)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
             val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
 
+            // Set data
+            textViewName.text = material.nameMaterial
+            textViewType.text = material.materialType
+            textViewQuantity.text = material.qntStock.toString()
+
             checkBoxMaterial.setOnClickListener {
-                selectedMaterials += if(checkBoxMaterial.isChecked) 1 else -1
+                selectedMaterials.add(
+                    ActivityMaterial(
+                        activityId,
+                        material.idMaterial,
+                        textViewQuantity.text.toString().toInt()
+                    )
+                )
             }
 
             return rowView
