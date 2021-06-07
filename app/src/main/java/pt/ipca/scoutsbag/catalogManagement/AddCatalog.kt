@@ -37,7 +37,7 @@ class AddCatalog : AppCompatActivity() {
                     editTextNameCatalog.text.toString(),
                     editTextDescriptionCatalog.text.toString(),
                     editTextClassificationCatalog.text.toString().toInt(),
-                    editTextTimeCatalog.text.toString()
+                    null
                 )
 
                 val requestBody = RequestBody.create(

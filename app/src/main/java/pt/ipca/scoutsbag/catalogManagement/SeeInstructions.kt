@@ -85,6 +85,18 @@ class SeeInstructions : AppCompatActivity() {
     inner class InstructionsAdapter : BaseAdapter(){
 
         override fun getCount(): Int {
+            /*
+            var cont = 0
+
+            for (index in 0 until instructions.size){
+                if (instructions[index].idCatalog == id.toInt()){
+                    cont ++
+                }
+            }
+
+            return cont
+             */
+
             return instructions.size
         }
 
@@ -99,24 +111,22 @@ class SeeInstructions : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = layoutInflater.inflate(R.layout.row_instruction, parent, false)
 
-
-            val textViewIdInstruction = rowView.findViewById<TextView>(R.id.textViewIdInstruction)
             val textViewInstructionText = rowView.findViewById<TextView>(R.id.textViewInstructionText)
-            val textViewImageUrl = rowView.findViewById<TextView>(R.id.textViewImageUrl)
-            val textViewIdCatalogo = rowView.findViewById<TextView>(R.id.textViewIdCatalogo)
+            val textViewInstructionImageUrl = rowView.findViewById<TextView>(R.id.textViewInstructionImageUrl)
             val buttonEditInstruction = rowView.findViewById<Button>(R.id.buttonEditInstruction)
+            val textViewSteps = rowView.findViewById<TextView>(R.id.textViewSteps)
 
-           for (index in 0 until instructions.size){
-                if (instructions[index].idCatalog == id.toInt()){
 
-                    textViewIdInstruction.text = instructions[position].idInstruction.toString()
+            textViewSteps.text = "Passo ${position + 1}"
+
+            //for (index in 0 until instructions.size){
+                //if(instructions[index].idCatalog == id.toInt()){
                     textViewInstructionText.text = instructions[position].instructionText
-                    textViewImageUrl.text = instructions[position].imageUrl
-                    textViewIdCatalogo.text = instructions[position].idCatalog.toString()
+                    textViewInstructionImageUrl.text = instructions[position].imageUrl
+                //}
+            //}
 
 
-                }
-           }
 
             buttonEditInstruction.setOnClickListener {
 
