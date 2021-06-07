@@ -32,6 +32,13 @@ class ActivityHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Histórico de atividades"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+
         // Set listView Adapter
         val listView = findViewById<ListView>(R.id.listViewActivities)
         adapter = ActivitiesAdapter()
@@ -110,5 +117,11 @@ class ActivityHistoryActivity : AppCompatActivity() {
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

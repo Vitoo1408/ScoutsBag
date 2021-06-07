@@ -171,5 +171,10 @@ class ActivityDetailsActivity : AppCompatActivity() {
         imageView.setImageResource(imageResource)
     }
 
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 
 }

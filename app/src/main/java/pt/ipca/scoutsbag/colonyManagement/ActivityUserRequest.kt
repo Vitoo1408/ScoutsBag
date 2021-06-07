@@ -39,6 +39,13 @@ class ActivityUserRequest : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_request)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Pedidos adesão"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -102,6 +109,12 @@ class ActivityUserRequest : AppCompatActivity() {
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     /*

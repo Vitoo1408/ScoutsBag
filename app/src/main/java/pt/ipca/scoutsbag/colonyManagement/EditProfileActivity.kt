@@ -53,7 +53,15 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
+        //check the phones internet conectivity
         checkConnectivity()
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Editar perfil"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
 
         editImage = findViewById(R.id.profileImage)
         editName = findViewById(R.id.editTextName)
@@ -218,5 +226,11 @@ class EditProfileActivity : AppCompatActivity() {
 
         //update user to db
         Backend.editUser(profileTemp)
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
