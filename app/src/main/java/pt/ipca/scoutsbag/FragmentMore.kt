@@ -26,7 +26,6 @@ class FragmentMore: Fragment() {
     private lateinit var rowRequest: ConstraintLayout
     private lateinit var rowInventory: ConstraintLayout
     private lateinit var rowLogout: ConstraintLayout
-    var buttonLogOut: Button? = null
 
     /*
        This function create the view
