@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,6 +17,7 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
@@ -89,7 +91,6 @@ class ActivityDetailsActivity : AppCompatActivity() {
                             position++
                         }
                     }
-
                 }
             }
         }
@@ -106,6 +107,10 @@ class ActivityDetailsActivity : AppCompatActivity() {
         title = activity.nameActivity
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        //hide delete and edit icon from activity details
+        if(UserLoggedIn.codType == "Esc"){
+            return false
+        }
         return true
     }
 

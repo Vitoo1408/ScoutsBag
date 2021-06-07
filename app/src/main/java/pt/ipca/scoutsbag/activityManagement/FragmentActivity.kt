@@ -49,6 +49,11 @@ class FragmentActivity : Fragment() {
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
 
+        //hide add button if a scout logs in
+        if(UserLoggedIn.codType == "Esc"){
+            rootView.findViewById<FloatingActionButton>(R.id.buttonAddActivity).visibility = View.GONE
+        }
+
         return rootView
     }
 

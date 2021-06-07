@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pt.ipca.scoutsbag.activityManagement.ActivityHistoryActivity
 import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
 import pt.ipca.scoutsbag.colonyManagement.ColonyActivity
@@ -44,6 +45,13 @@ class FragmentMore: Fragment() {
         rowHistory = rootView.findViewById(R.id.row_activity_historic)
         rowRequest = rootView.findViewById(R.id.row_request)
         rowProfile = rootView.findViewById(R.id.row_profile)
+
+        //hide user request row, inventory row and colony row from fragment more if user logged in is a scout
+        if(UserLoggedIn.codType == "Esc"){
+            rootView.findViewById<ConstraintLayout>(R.id.row_request).visibility = View.GONE
+            rootView.findViewById<ConstraintLayout>(R.id.row_inventory).visibility = View.GONE
+            rootView.findViewById<ConstraintLayout>(R.id.row_colony).visibility = View.GONE
+        }
 
 
         buttonLogOut?.setOnClickListener {

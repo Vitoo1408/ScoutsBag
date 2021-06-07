@@ -21,6 +21,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class FragmentCatalog : Fragment() {
 
@@ -42,6 +43,11 @@ class FragmentCatalog : Fragment() {
         listViewCatalog = rootView.findViewById<ListView>(R.id.listViewCatalog)
         adapter = CatalogAdapter()
         listViewCatalog?.adapter = adapter
+
+        //hide button catalog if user logged in is a scout
+        if(UserLoggedIn.codType == "Esc"){
+            rootView.findViewById<FloatingActionButton>(R.id.buttonAddCatalog).visibility = View.GONE
+        }
 
         val buttonAddCatalog = rootView.findViewById<FloatingActionButton>(R.id.buttonAddCatalog)
 

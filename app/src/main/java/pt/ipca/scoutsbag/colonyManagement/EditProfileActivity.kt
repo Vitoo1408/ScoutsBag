@@ -1,7 +1,11 @@
 package pt.ipca.scoutsbag.colonyManagement
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -43,12 +47,13 @@ class EditProfileActivity : AppCompatActivity() {
     private var butSave: Button? = null
     private var imageUri: Uri? = null
     private var imageUrl: String? = null
-    private var storagePermission = false
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+
+        checkConnectivity()
 
         editImage = findViewById(R.id.profileImage)
         editName = findViewById(R.id.editTextName)
@@ -142,6 +147,35 @@ class EditProfileActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this@EditProfileActivity, "Acesso ao armazenamento interno negado", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun checkConnectivity() {
+        val manager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = manager.activeNetworkInfo
+
+        if (null == activeNetwork) {
+            val dialogBuilder = AlertDialog.Builder(this)
+            // set message of alert dialog
+            dialogBuilder.setMessage("Tenha a certeza que o WI-FI ou os dados móveis estão ligados.")
+                // if the dialog is cancelable
+                .setCancelable(false)
+                // positive button text and action
+                .setPositiveButton("Tentar novamente", DialogInterface.OnClickListener { dialog, id ->
+                    recreate()
+                })
+                // negative button text and action
+                .setNegativeButton("Cancelar", DialogInterface.OnClickListener { dialog, id ->
+                    finish()
+                })
+
+            // create dialog box
+            val alert = dialogBuilder.create()
+            // set title for alert dialog box
+            alert.setTitle("Sem conexão à internet")
+            alert.setIcon(R.mipmap.ic_launcher)
+            // show alert dialog
+            alert.show()
         }
     }
 
