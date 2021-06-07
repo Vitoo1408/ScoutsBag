@@ -14,6 +14,7 @@ import pt.ipca.scoutsbag.activityManagement.ActivityHistoryActivity
 import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
 import pt.ipca.scoutsbag.colonyManagement.ColonyActivity
 import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
+import pt.ipca.scoutsbag.inventoryManagement.InventoryActivity
 import pt.ipca.scoutsbag.loginAndRegister.LogInOrRegisterActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
@@ -84,11 +85,11 @@ class FragmentMore: Fragment() {
             startActivity(intent)
         }
 
-        /*
+
         rowInventory.setOnClickListener {
             val intent = Intent(activity, InventoryActivity::class.java)
             startActivity(intent)
-        }*/
+        }
 
         rowLogout.setOnClickListener {
             val preferences = this.activity?.getSharedPreferences("userLogin", AppCompatActivity.MODE_PRIVATE)
