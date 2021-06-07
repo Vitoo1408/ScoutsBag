@@ -26,16 +26,15 @@ class ActivityEditCatalog : AppCompatActivity() {
         var editNameCatalog = findViewById<EditText>(R.id.editNameCatalog)
         var editCatalogDescription = findViewById<EditText>(R.id.editCatalogDescription)
         var editCatalogClassification = findViewById<EditText>(R.id.editCatalogClassification)
+        var editCatalogTime = findViewById<EditText>(R.id.editCatalogTime)
         val saveEditCatalog = findViewById<Button>(R.id.saveEditCatalog)
-        var teste = findViewById<TextView>(R.id.teste)
+
         val bundle = intent.extras
         var id_catalog = ""
 
         bundle?.let{
             id_catalog = it.getString("id_catalog").toString()
         }
-
-        teste.text = id_catalog
 
         saveEditCatalog.setOnClickListener {
 
@@ -44,9 +43,9 @@ class ActivityEditCatalog : AppCompatActivity() {
                 val catalog = Catalog(
                     id_catalog.toInt(),
                     editNameCatalog.text.toString(),
-                    editCatalogDescription.text.toString()
-                    ,editCatalogClassification.text.toString().toInt()
-                    ,null
+                    editCatalogDescription.text.toString(),
+                    editCatalogClassification.text.toString().toInt(),
+                    null
 
 
                 )
