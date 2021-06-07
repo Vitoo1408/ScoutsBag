@@ -28,8 +28,6 @@ class EditInstruction : AppCompatActivity() {
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         var editTextEditImageUrl = findViewById<EditText>(R.id.editTextEditImageUrl)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)
-        var textView1 = findViewById<TextView>(R.id.teste1)
-        var textView2 = findViewById<TextView>(R.id.teste2)
         var idC = ""
         var idI = ""
         val bundle = intent.extras
@@ -38,9 +36,6 @@ class EditInstruction : AppCompatActivity() {
             idC = it.getString("idCatalog").toString()
             idI = it.getString("idInstruction").toString()
         }
-
-        textView1.text = idI
-        textView2.text = idC
 
         buttonSaveEditInstruction.setOnClickListener {
 
