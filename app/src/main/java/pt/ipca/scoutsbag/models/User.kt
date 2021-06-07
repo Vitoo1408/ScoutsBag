@@ -3,23 +3,6 @@ package pt.ipca.scoutsbag.models
 import org.json.JSONObject
 
 class User {
-
-    // "id_user"
-    // "user_name"
-    // "bith_date"
-    // "email"
-    // "pass"
-    // "cod_type"
-    // "contact"
-    // "gender"
-    // "adress"
-    // "nin"
-    // "postal_code"
-    // "image_url"
-    // "user_active"
-    // "accepted"
-    // "id_team"
-
     var idUser     : Int?     = null
     var userName   : String?  = null
     var birthDate   : String?  = null
@@ -81,15 +64,15 @@ class User {
         jsonObject.put("id_user"     , idUser     )
         jsonObject.put("user_name"   , userName   )
         jsonObject.put("birth_date"   , birthDate   )
-        jsonObject.put("email"       , email      )
         jsonObject.put("pass"        , pass       )
         jsonObject.put("cod_type"    , codType    )
+        jsonObject.put("email"       , email      )
         jsonObject.put("contact"     , contact    )
         jsonObject.put("gender"      , gender     )
         jsonObject.put("address"      , address     )
         jsonObject.put("nin"         , nin        )
-        jsonObject.put("postal_code" , postalCode )
         jsonObject.put("image_url"   , imageUrl   )
+        jsonObject.put("postal_code" , postalCode )
         jsonObject.put("user_active" , userActive )
         jsonObject.put("accepted"    , accepted   )
         jsonObject.put("id_team"    , idTeam   )

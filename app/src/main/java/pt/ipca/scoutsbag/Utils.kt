@@ -4,8 +4,17 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
+import java.io.File
 import java.util.*
 import java.util.regex.Pattern
 
@@ -249,6 +258,67 @@ object Utils {
         }
     }
 
+    /*
+        This function returns the path of the selected file
+        @filePath = file path
+     */
+    fun getUriFilePath(context: Context, data: Uri): String? {
+        var filePath: String? = null
+        val uriPathHelper = URIPathHelper()
+        filePath = uriPathHelper.getPath(context, data)
+        return filePath
+    }
+
+    /*
+        This function returns the select file name
+        @fileName = file name
+     */
+    fun getFileName(context: Context, data: Uri): String? {
+        var fileName: String? = null
+        data?.let { returnUri ->
+            context.contentResolver.query(returnUri, null, null, null, null)
+        }?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            fileName = cursor.getString(nameIndex)
+        }
+
+        return fileName
+    }
+
+    /*
+        This function returns the uploaded image URL to S3
+        @imageUrl = image URL
+     */
+    fun uploadImage(filePath: String, imageName: String?, callBack: (String)->Unit) {
+        val MEDIA_TYPE_IMAGE = "image/*".toMediaType()
+        var imageUrl: String? = null
+
+
+        // Prepare the from body request
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("image", imageName, File(filePath)
+                .asRequestBody(MEDIA_TYPE_IMAGE))
+            .build()
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/upload")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+            if (response.message == "OK") {
+                val messageBodyJsonStr = response.body?.string().toString()
+                val messageJsonObject = JSONObject(messageBodyJsonStr)
+                imageUrl = messageJsonObject.getString("Location")
+            }
+        }
+
+        callBack(imageUrl!!)
+    }
 }
 
 

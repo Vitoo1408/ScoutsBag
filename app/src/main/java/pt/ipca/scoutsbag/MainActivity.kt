@@ -3,6 +3,7 @@ package pt.ipca.scoutsbag
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -43,33 +44,35 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         //load all user details if not loaded yet
-        if(UserLoggedIn.idUser == null)
-        {
-            //shared preferences initialization
-            val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
-            val userDetails = preferences.getString("userDetails", "")
 
-            //convert user details json object of type string to a json object
-            val userDetailsJsonObject = JSONTokener(userDetails).nextValue() as JSONObject
+        //shared preferences initialization
+        val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
+        val userDetails = preferences.getString("userDetails", "")
 
-            //save all user details to the object UserLoggedIn
-            UserLoggedIn.idUser = userDetailsJsonObject.getString("id_user").toInt()
-            UserLoggedIn.userName = userDetailsJsonObject.getString("user_name")
-            UserLoggedIn.birthDate = userDetailsJsonObject.getString("birth_date")
-            UserLoggedIn.email = userDetailsJsonObject.getString("email")
-            UserLoggedIn.pass = userDetailsJsonObject.getString("pass")
-            UserLoggedIn.codType = userDetailsJsonObject.getString("cod_type")
-            UserLoggedIn.contact = userDetailsJsonObject.getString("contact")
-            UserLoggedIn.gender = userDetailsJsonObject.getString("gender")
-            UserLoggedIn.address = userDetailsJsonObject.getString("address")
-            UserLoggedIn.nin = userDetailsJsonObject.getString("nin")
-            UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
-            UserLoggedIn.postalCode = userDetailsJsonObject.getString("postal_code")
-            UserLoggedIn.userActive = userDetailsJsonObject.getString("user_active").toInt()
-            UserLoggedIn.accepted = userDetailsJsonObject.getString("accepted").toInt()
-            if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
-            UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
-        }
+        //convert user details json object of type string to a json object
+        val userDetailsJsonObject = JSONObject(userDetails)
+
+        Log.d("UserDetails", userDetailsJsonObject.toString())
+
+
+        //save all user details to the object UserLoggedIn
+        UserLoggedIn.idUser = userDetailsJsonObject.getString("id_user").toInt()
+        UserLoggedIn.userName = userDetailsJsonObject.getString("user_name")
+        UserLoggedIn.birthDate = userDetailsJsonObject.getString("birth_date")
+        UserLoggedIn.email = userDetailsJsonObject.getString("email")
+        UserLoggedIn.pass = userDetailsJsonObject.getString("pass")
+        UserLoggedIn.codType = userDetailsJsonObject.getString("cod_type")
+        UserLoggedIn.contact = userDetailsJsonObject.getString("contact")
+        UserLoggedIn.gender = userDetailsJsonObject.getString("gender")
+        UserLoggedIn.address = userDetailsJsonObject.getString("address")
+        if(userDetailsJsonObject.getString("nin") != "") UserLoggedIn.nin = userDetailsJsonObject.getString("nin")
+        UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
+        UserLoggedIn.postalCode = userDetailsJsonObject.getString("postal_code")
+        UserLoggedIn.userActive = userDetailsJsonObject.getString("user_active").toInt()
+        UserLoggedIn.accepted = userDetailsJsonObject.getString("accepted").toInt()
+        if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
+        UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
+
     }
 
 }
