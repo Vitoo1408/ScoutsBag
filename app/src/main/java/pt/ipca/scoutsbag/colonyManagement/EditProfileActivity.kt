@@ -62,6 +62,8 @@ class EditProfileActivity : AppCompatActivity() {
         actionbar!!.title = "Editar perfil"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         editImage = findViewById(R.id.profileImage)
         editName = findViewById(R.id.editTextName)

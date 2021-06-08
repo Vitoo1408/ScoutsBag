@@ -122,7 +122,12 @@ class CreateActivityActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+        //set actionbar title
+        supportActionBar?.title = "Criar atividade"
 
         // Interact with the data base
         GlobalScope.launch(Dispatchers.IO) {
@@ -394,5 +399,11 @@ class CreateActivityActivity : AppCompatActivity() {
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

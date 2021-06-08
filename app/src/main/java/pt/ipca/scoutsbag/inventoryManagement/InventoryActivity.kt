@@ -27,6 +27,12 @@ class InventoryActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inventory)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+        //set actionbar title
+        supportActionBar?.title = "Inventário"
+
         // Create the list view
         val listViewMaterial1 = findViewById<ListView>(R.id.listViewMaterials)
         adapter = MaterialAdapter()
@@ -84,5 +90,11 @@ class InventoryActivity : AppCompatActivity(){
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

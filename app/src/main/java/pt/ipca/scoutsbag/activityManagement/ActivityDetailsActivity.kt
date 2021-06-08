@@ -106,6 +106,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
         inflater.inflate(R.menu.delete_edit_menu, menu)
         title = activity.nameActivity
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         //hide delete and edit icon from activity details
         if(UserLoggedIn.codType == "Esc"){

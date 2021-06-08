@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.BoringLayout
+import android.view.Menu
+import android.view.MenuInflater
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
@@ -148,6 +150,21 @@ class InviteDetailsActivity : AppCompatActivity() {
         // Add section image in the selected position
         val imageView = findViewById<ImageView>(imageSlot)
         imageView.setImageResource(imageResource)
+    }
+
+    //set action bar title and back button
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        title = activity.nameActivity
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
+        return true
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }
