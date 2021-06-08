@@ -227,7 +227,11 @@ class CreateActivityActivity : AppCompatActivity() {
                         // Create invite
                         Backend.addInvite(invite)
                     }
+                }
 
+                // Create the material request for the activity
+                for (activityMaterial in selectedMaterials) {
+                    Backend.addActivityMaterial(activityMaterial)
                 }
 
             }
@@ -237,6 +241,10 @@ class CreateActivityActivity : AppCompatActivity() {
     }
 
 
+    /*
+        This function display a dialog window with a list with
+        material that can be selected to this activity
+     */
     private fun openSelectMaterialDialog() {
 
         // Variables
@@ -258,7 +266,6 @@ class CreateActivityActivity : AppCompatActivity() {
         alertDialog.setView(row)
         alertDialog.create().show()
     }
-
 
 
     /*
@@ -353,6 +360,7 @@ class CreateActivityActivity : AppCompatActivity() {
         }
     }
 
+
     inner class MaterialsAdapter : BaseAdapter() {
 
         override fun getCount(): Int {
@@ -373,23 +381,39 @@ class CreateActivityActivity : AppCompatActivity() {
             // Variables
             val material = materials[position]
             val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
-            val textViewType     = rowView.findViewById<TextView>(R.id.textViewMaterialType)
-            val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.editViewMaterialQuantity)
             val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
 
             // Set data
             textViewName.text = material.nameMaterial
-            textViewType.text = material.materialType
             textViewQuantity.text = material.qntStock.toString()
 
             checkBoxMaterial.setOnClickListener {
-                selectedMaterials.add(
-                    ActivityMaterial(
+
+                if (!checkBoxMaterial.isChecked) {
+
+                    var materialFound = false
+                    for (i in 0 until selectedMaterials.size) {
+                        if (!materialFound) {
+                            if (selectedMaterials[i].idActivity == activityId && selectedMaterials[i].idMaterial == material.idMaterial) {
+                                selectedMaterials.removeAt(i)
+                                materialFound = true
+                            }
+                        }
+                    }
+
+                }
+                else {
+
+                    val activityMaterial = ActivityMaterial(
                         activityId,
                         material.idMaterial,
                         textViewQuantity.text.toString().toInt()
                     )
-                )
+
+                    selectedMaterials.add(activityMaterial)
+                }
+
             }
 
             return rowView
