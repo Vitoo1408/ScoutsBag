@@ -17,6 +17,7 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.ActivityType
+import java.util.*
 
 
 class FragmentActivity : Fragment() {
@@ -24,7 +25,7 @@ class FragmentActivity : Fragment() {
     // Global Variables
     lateinit var listView : ListView
     lateinit var adapter : ActivitiesAdapter
-    var activities : List<ScoutActivity> = arrayListOf()
+    var activities : MutableList<ScoutActivity> = arrayListOf()
     var activitiesTypes : List<ActivityType> = arrayListOf()
     lateinit var buttonAdd : FloatingActionButton
     lateinit var textViewWelcome : TextView
@@ -69,7 +70,8 @@ class FragmentActivity : Fragment() {
 
             // Get the values to the lists
             Backend.getAllAcceptedActivities(UserLoggedIn.idUser!!) {
-                activities = it
+                activities.addAll(it)
+                sortActivities()
             }
             Backend.getAllActivityTypes {
                 activitiesTypes = it
@@ -90,6 +92,53 @@ class FragmentActivity : Fragment() {
         // Welcome Text
         textViewWelcome.text = "${textViewWelcome.text} ${UserLoggedIn.userName}"
 
+    }
+
+
+    /*
+        This is responsible for sort activities by the date and show the latest first
+    */
+    private fun sortActivities() {
+
+        for (i in 0 until activities.size) {
+
+            for (j in 0 until activities.size - 1) {
+
+                if (firstDateLatestThanSecond(activities[j].startDate!!, activities[j+1].startDate!!)) {
+
+                    val temp = activities[j]
+                    activities[j] = activities[j + 1]
+                    activities[j + 1] = temp
+                }
+            }
+        }
+    }
+
+
+    /*
+        This function compares two dates and return the latest
+     */
+    private fun firstDateLatestThanSecond(date1: String, date2: String): Boolean {
+
+        // Variables
+        val c: Calendar = Calendar.getInstance()
+
+        // Activity Date
+        val d1Day   = Utils.getDay(date1).toInt()
+        val d1Month = Utils.getMonth(date1).toInt()
+        val d1Year  = Utils.getYear(date1).toInt()
+
+        // Current Date
+        val d2Day   = Utils.getDay(date2).toInt()
+        val d2Month = Utils.getMonth(date2).toInt()
+        val d2Year  = Utils.getYear(date2).toInt()
+
+        // Check if it is outdated
+        return if (d1Year > d2Year) {
+            true
+        } else if (d1Year == d2Year && d1Month > d2Month) {
+            true
+        } else (d1Year == d2Year && d1Month == d2Month && d1Day > d2Day)
     }
 
 

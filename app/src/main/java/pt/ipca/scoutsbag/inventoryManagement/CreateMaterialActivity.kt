@@ -1,9 +1,13 @@
 package pt.ipca.scoutsbag.inventoryManagement
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -11,6 +15,7 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
+import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 import pt.ipca.scoutsbag.models.Material
 
 class CreateMaterialActivity : AppCompatActivity() {
@@ -32,7 +37,7 @@ class CreateMaterialActivity : AppCompatActivity() {
         val textViewQuantity = findViewById<TextView>(R.id.editTextMaterialQuantity)
         val buttonCancel = findViewById<TextView>(R.id.button_cancel)
         val buttonConfirm = findViewById<TextView>(R.id.button_confirm)
-        //val materialImage = findViewById<TextView>(R.id.materialAddImage)
+        val materialImage = findViewById<ImageView>(R.id.materialAddImage)
 
         // Button Events
         buttonCancel.setOnClickListener { returnActivity }
@@ -55,5 +60,6 @@ class CreateMaterialActivity : AppCompatActivity() {
         }
 
     }
+
 
 }

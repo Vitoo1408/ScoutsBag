@@ -18,7 +18,6 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.*
 
-
 class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
