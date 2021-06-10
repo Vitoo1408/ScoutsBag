@@ -1,6 +1,5 @@
 package pt.ipca.scoutsbag
 
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -11,54 +10,13 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
-import pt.ipca.scoutsbag.models.ActivityType
-import pt.ipca.scoutsbag.models.Participation
-import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.models.User
+import pt.ipca.scoutsbag.models.*
 
 object Backend {
 
     /*
         ------------------------------------------------ Activities ------------------------------------------------
      */
-
-
-    /*
-        This function returns all activities accepted by the user in the api to an list
-        @idUser = id of the logged user
-        @callBack = return the list
-     */
-    fun getAllAcceptedActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
-
-        val activities : MutableList<ScoutActivity> = arrayListOf()
-
-        // Create the http request
-        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/participations").build()
-
-        // Send the request and analyze the response
-        OkHttpClient().newCall(request).execute().use { response ->
-
-            // Convert the response into string then into JsonArray
-            val jsonArrayStr : String = response.body!!.string()
-            val jsonArray = JSONArray(jsonArrayStr)
-
-            // Add the elements in the list
-            for (index in 0 until jsonArray.length()) {
-                val jsonArticle = jsonArray.get(index) as JSONObject
-                val participation = Participation.fromJson(jsonArticle)
-
-                // If the user participate in the activity add to the list
-                if (participation.idUser == idUser && participation.participated == 1) {
-                    val activity = getActivity(participation.idActivity!!)
-                    activities.add(activity)
-                }
-            }
-
-            // Return list
-            callBack(activities)
-        }
-
-    }
 
 
     /*
@@ -153,7 +111,7 @@ object Backend {
 
     /*
         This function remove the activity from the data base
-        @idActivity =
+        @idActivity = selected activity id
         @changeActivity = a function that return the user to the previous activity
      */
     fun removeActivity(idActivity: Int, changeActivity: ()->Unit) {
@@ -163,8 +121,6 @@ object Backend {
             .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities/$idActivity")
             .delete()
             .build()
-
-        println("!! -" + request.method + "!!- " + request.url + "!!- " + request.body + "!!- " + request.headers)
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
@@ -244,20 +200,61 @@ object Backend {
 
         return when (id) {
 
-            1 -> R.drawable.icon_empty
-            2 -> R.drawable.icon_empty
-            3 -> R.drawable.icon_empty
-            4 -> R.drawable.icon_empty
-            5 -> R.drawable.icon_empty
-            6 -> R.drawable.icon_empty
-            else -> R.drawable.icon_empty
+            1 -> R.drawable.ic_walk
+            2 -> R.drawable.ic_camping
+            3 -> R.drawable.ic_charity
+            4 -> R.drawable.ic_peddy_paper
+            5 -> R.drawable.ic_cantonment
+            6 -> R.drawable.ic_mass
+            else -> R.drawable.ic_meeting
         }
     }
 
 
     /*
-        ------------------------------------------------ Invites ------------------------------------------------
+        ------------------------------------------------ Participation ------------------------------------------------
      */
+
+
+    /*
+        This function returns all activities accepted by the user in the api to an list
+        @idUser = id of the logged user
+        @callBack = return the list
+     */
+    fun getAllAcceptedActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
+
+        val activities : MutableList<ScoutActivity> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+
+                // If the user participate in the activity add to the list
+                if (invite.idUser == idUser && invite.acceptedInvite == 1) {
+                    val activity = getActivity(invite.idActivity!!)
+
+                    // Check if the date is not outdated
+                    if (!Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
+                }
+            }
+
+            // Return list
+            callBack(activities)
+        }
+    }
 
 
     /*
@@ -265,9 +262,9 @@ object Backend {
         @idUserTeam = team id of the selected user
         @callBack = return the list
      */
-    fun getAllTeamInvites(idUserTeam: Int, callBack: (List<Invite>)->Unit) {
+    fun getAllUserPendingActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
 
-        val invites : MutableList<Invite> = arrayListOf()
+        val activities : MutableList<ScoutActivity> = arrayListOf()
 
         // Create the http request
         val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites").build()
@@ -283,14 +280,60 @@ object Backend {
             for (index in 0 until activityJsonArray.length()) {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val invite = Invite.fromJson(jsonArticle)
-                if (invite.idTeam == idUserTeam)
-                    invites.add(invite)
+
+                if (invite.idUser == idUser && invite.acceptedInvite == null) {
+                    val activity = getActivity(invite.idActivity!!)
+
+                    // Check if the date is not outdated
+                    if (!Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
+                }
             }
 
             // Return list
-            callBack(invites)
+            callBack(activities)
         }
+    }
 
+
+    /*
+        This function returns all the invites from a specific user team in the api by an list
+        @idUserTeam = team id of the selected user
+        @callBack = return the list
+     */
+    fun getAllUserPastActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
+
+        val activities : MutableList<ScoutActivity> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val activityJsonArrayStr : String = response.body!!.string()
+            val activityJsonArray = JSONArray(activityJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until activityJsonArray.length()) {
+                val jsonArticle = activityJsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+
+                if (invite.idUser == idUser && invite.acceptedInvite == 1) {
+                    val activity = getActivity(invite.idActivity!!)
+
+                    // Check if the date is outdated
+                    if (Utils.outdatedActivity(activity)) {
+                        activities.add(activity)
+                    }
+                }
+            }
+
+            // Return list
+            callBack(activities)
+        }
     }
 
 
@@ -321,33 +364,36 @@ object Backend {
 
 
     /*
-        ------------------------------------------------ Participation ------------------------------------------------
-     */
-
-
-    /*
         This function add the invite in the data base
         @context = context of the activity
         @idTeam = team invited id
      */
-    fun addParticipation(participation: Participation) {
+    fun editInvite(invite: Invite, changeActivity: ()->Unit) {
 
-        // Prepare the from body request
-        val requestBody = RequestBody.create(
-            "application/json".toMediaTypeOrNull(),
-            participation.toJson().toString()
-        )
+        GlobalScope.launch(Dispatchers.IO) {
 
-        // Build the request
-        val request = Request.Builder()
-            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/participations")
-            .post(requestBody)
-            .build()
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                invite.toJson().toString()
+            )
 
-        // Send the request and verify the response
-        OkHttpClient().newCall(request).execute().use {
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesInvites/${invite.idActivity}/${invite.idUser}")
+                .put(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main){
+                    if (response.message == "OK"){
+                        changeActivity()
+                    }
+                }
+            }
         }
-
     }
 
 
@@ -462,7 +508,7 @@ object Backend {
         var user : User? = null
 
         // Create the http request
-        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/teams/$id").build()
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/$id").build()
 
         // Send the request and analyze the response
         OkHttpClient().newCall(request).execute().use { response ->
@@ -479,6 +525,102 @@ object Backend {
         }
 
         return user!!
+    }
+
+    /*
+        This function returns the name of the section by the given id
+     */
+    fun getSectionName(id: Int): String{
+
+        return when (id) {
+            1 -> "Lobitos"
+            2 -> "Exploradores"
+            3 -> "Pioneiros"
+            else -> "Caminheiros"
+        }
+
+    }
+
+    /*
+        This function returns the team by the given id
+     */
+    fun getTeamById(id: Int, teams: List<Team>): Team {
+
+        // Variables
+        var response: Team? = null
+
+        // Find the activity type
+        for (i in 0 until teams.size) {
+            if (teams[i].idTeam == id)
+                response = teams[i]
+        }
+
+        return response!!
+    }
+
+    /*
+        This function updates a user in the database
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    fun editUser(user: User) {
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                user.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/${user.idUser}")
+                .put(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+                GlobalScope.launch (Dispatchers.Main){
+                    if (response.message == "OK"){
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    /*
+        This function edit the user in the database
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    fun editUser(user: User, changeActivity: ()->Unit) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                user.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/${user.idUser}")
+                .put(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main){
+                    if (response.message == "OK"){
+                        changeActivity()
+                    }
+                }
+            }
+        }
     }
 
 
@@ -524,11 +666,10 @@ object Backend {
         @idActivity = activity that the teams are invited
         @callBack = return the list
      */
-    fun getAllInvitedTeams(idActivity: Int, callBack: (List<Team>)->Unit) {
+    fun getAllInvitedUsers(idActivity: Int, callBack: (List<User>)->Unit) {
 
         // Invites list
-        val invites: MutableList<Invite> = arrayListOf()
-        val teams: MutableList<Team> = arrayListOf()
+        val users: MutableList<User> = arrayListOf()
 
         // Create the http request
         val request = Request.Builder().url(
@@ -539,23 +680,18 @@ object Backend {
         OkHttpClient().newCall(request).execute().use { response ->
 
             // Convert the response into string then into JsonArray
-            val teamJsonArrayStr : String = response.body!!.string()
-            val teamJsonArray = JSONArray(teamJsonArrayStr)
+            val inviteJsonArrayStr : String = response.body!!.string()
+            val inviteJsonArray = JSONArray(inviteJsonArrayStr)
 
             // Add the elements in the list
-            for (index in 0 until teamJsonArray.length()) {
-                val jsonArticle = teamJsonArray.get(index) as JSONObject
+            for (index in 0 until inviteJsonArray.length()) {
+                val jsonArticle = inviteJsonArray.get(index) as JSONObject
                 val invite = Invite.fromJson(jsonArticle)
-                invites.add(invite)
+                users.add(getUser(invite.idUser!!))
             }
         }
 
-        // Get the invited teams
-        for (i in 0 until invites.size) {
-            teams.add(getTeam(invites[i].idTeam!!))
-        }
-
-        callBack(teams)
+        callBack(users)
     }
 
 
@@ -645,6 +781,133 @@ object Backend {
 
                 if (response.message == "OK"){
                     changeActivity()
+                }
+            }
+        }
+    }
+
+
+    /*
+        ------------------------------------------------ Inventory ------------------------------------------------
+     */
+
+
+    /*
+        This function return by callback all materials in the data base
+        @callBack = return the list
+     */
+    fun getAllMaterials(callBack: (List<Material>)->Unit) {
+
+        val materials: MutableList<Material> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val materialJsonArrayStr : String = response.body!!.string()
+            val materialJsonArray = JSONArray(materialJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until materialJsonArray.length()) {
+                val jsonArticle = materialJsonArray.get(index) as JSONObject
+                val material = Material.fromJson(jsonArticle)
+
+                materials.add(material)
+            }
+        }
+
+        callBack(materials)
+    }
+
+
+    /*
+        This function adds a material into the database
+        @id = selected team id
+    */
+    fun addMaterial(material: Material, changeActivity: ()->Unit) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            material.toJson().toString()
+        )
+
+        println(material.toJson().toString())
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main){
+
+                if (response.message == "OK"){
+                    changeActivity()
+                }
+            }
+        }
+    }
+
+
+    /*
+        This function edit the material in the data base
+        @material = selected material
+        @changeActivity = this change to the previous activity
+     */
+    fun editMaterial(material: Material) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Prepare the from body request
+            val requestBody = RequestBody.create(
+                "application/json".toMediaTypeOrNull(),
+                material.toJson().toString()
+            )
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials/${material.idMaterial}")
+                .put(requestBody)
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+            }
+
+        }
+    }
+
+
+    /*
+        This function remove the activity from the data base
+        @idMaterial = material id selected
+        @changeActivity = a function that return the user to the previous activity
+     */
+    fun removeMaterial(idMaterial: Int, changeActivity: ()->Unit) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials/$idMaterial")
+                .delete()
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main) {
+
+                    if (response.message == "OK") {
+                        changeActivity()
+                    }
                 }
             }
         }

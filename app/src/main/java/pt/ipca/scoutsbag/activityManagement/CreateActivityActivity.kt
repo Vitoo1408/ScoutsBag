@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.scoutsteste1.Invite
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -16,9 +16,7 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.models.Participation
-import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.models.User
+import pt.ipca.scoutsbag.models.*
 
 
 class CreateActivityActivity : AppCompatActivity() {
@@ -26,10 +24,12 @@ class CreateActivityActivity : AppCompatActivity() {
     // Global Variables
     var teams: MutableList<Team> = arrayListOf()
     var selectedTeams: MutableList<Team> = arrayListOf()
+    var materials: List<Material> = arrayListOf()
+    var selectedMaterials: MutableList<ActivityMaterial> = arrayListOf()
     private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: TeamsAdapter
-    private var activityId: Int? = null
+    var activityId: Int? = null
 
 
     // This function is for select an section by clicking on the section image
@@ -122,17 +122,30 @@ class CreateActivityActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Get the new activity ID
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+        //set actionbar title
+        supportActionBar?.title = "Criar atividade"
+
+        // Interact with the data base
         GlobalScope.launch(Dispatchers.IO) {
+
+            // Get the new activity ID
             activityId = Backend.getLastActivityId() + 1
+
+            // Get all materials
+            Backend.getAllMaterials {
+                materials = it
+            }
         }
 
         // Pass the view objects to variables
         val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
         val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
-        val addButton = findViewById<TextView>(R.id.buttonAddActivity)
+        val addButton = findViewById<Button>(R.id.buttonAddActivity)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
         listViewTeams = findViewById(R.id.listViewTeams)
         adapter = TeamsAdapter()
         listViewTeams.adapter = adapter
@@ -154,6 +167,7 @@ class CreateActivityActivity : AppCompatActivity() {
         activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
         activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType7))
 
         // On click activity type
         for (image in activityTypesImages)
@@ -166,6 +180,12 @@ class CreateActivityActivity : AppCompatActivity() {
 
         dateEndTextView.setOnClickListener {
             dateEndPickerDialog.show()
+        }
+
+        // Add material to the activity
+        buttonMaterial.setOnClickListener {
+            selectedMaterials.removeAll(selectedMaterials)
+            openSelectMaterialDialog()
         }
 
         // Add activity and invite teams button event
@@ -190,18 +210,8 @@ class CreateActivityActivity : AppCompatActivity() {
                 // Add activity
                 Backend.addActivity(scoutActivity, changeActivity)
 
-                // Invite all teams selected to this activity
+                // Invite all users selected to this activity
                 for (team in selectedTeams) {
-
-                    // Build the invite
-                    val invite = Invite(
-                        activityId,
-                        team.idTeam,
-                        1
-                    )
-
-                    // Invite the team
-                    Backend.addInvite(invite)
 
                     // Get all users from the current team
                     var teamUsers: List<User> = arrayListOf()
@@ -209,18 +219,18 @@ class CreateActivityActivity : AppCompatActivity() {
                         teamUsers = it
                     }
 
-                    // Create participations for all users in the team
+                    // Create invites for all users in the team
                     for (user in teamUsers) {
 
-                        // Build the participation
-                        val participation = Participation(
+                        // Build the invite
+                        val invite = Invite(
                             activityId,
                             user.idUser,
                             null
                         )
 
-                        // Create participation
-                        Backend.addParticipation(participation)
+                        // Create invite
+                        Backend.addInvite(invite)
                     }
 
                 }
@@ -230,6 +240,30 @@ class CreateActivityActivity : AppCompatActivity() {
         }
 
     }
+
+
+    private fun openSelectMaterialDialog() {
+
+        // Variables
+        val alertDialog = AlertDialog.Builder(this)
+        val row = layoutInflater.inflate(R.layout.dialog_material_selected, null)
+        val listView = row.findViewById<ListView>(R.id.listViewMaterials)
+        val mAdapter = MaterialsAdapter()
+
+        // Set data
+        listView.adapter = mAdapter
+        mAdapter.notifyDataSetChanged()
+
+        alertDialog.setOnCancelListener {
+            findViewById<TextView>(R.id.buttonMaterial).text = "Itens selecionados: ${selectedMaterials.size}"
+        }
+
+        // Create dialog
+        alertDialog.setAdapter(mAdapter) { _, _ -> }
+        alertDialog.setView(row)
+        alertDialog.create().show()
+    }
+
 
 
     /*
@@ -322,5 +356,54 @@ class CreateActivityActivity : AppCompatActivity() {
 
             return rowView
         }
+    }
+
+    inner class MaterialsAdapter : BaseAdapter() {
+
+        override fun getCount(): Int {
+            return materials.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return materials[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_selected_material, parent, false)
+
+            // Variables
+            val material = materials[position]
+            val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
+            val textViewType     = rowView.findViewById<TextView>(R.id.textViewMaterialType)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
+            val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
+
+            // Set data
+            textViewName.text = material.nameMaterial
+            textViewType.text = material.materialType
+            textViewQuantity.text = material.qntStock.toString()
+
+            checkBoxMaterial.setOnClickListener {
+                selectedMaterials.add(
+                    ActivityMaterial(
+                        activityId,
+                        material.idMaterial,
+                        textViewQuantity.text.toString().toInt()
+                    )
+                )
+            }
+
+            return rowView
+        }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

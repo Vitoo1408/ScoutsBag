@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,14 +13,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activityManagement.InviteDetailsActivity"></activity>
+        <activity android:name=".inventoryManagement.CreateMaterialActivity" />
+        <activity android:name=".inventoryManagement.InventoryActivity" />
+        <activity android:name=".colonyManagement.ActivityReplyRequest" />
+        <activity android:name=".colonyManagement.ActivityUserRequest" />
+        <activity android:name=".activityManagement.ActivityHistoryActivity" />
+        <activity android:name=".activityManagement.InviteDetailsActivity" />
         <activity android:name=".loginAndRegister.ForgotPassword" />
         <activity android:name=".loginAndRegister.Login" />
         <activity android:name=".loginAndRegister.Register" />
         <activity android:name=".catalogManagement.AddCatalog" />
         <activity android:name=".catalogManagement.AddInstruction" />
         <activity android:name=".catalogManagement.SeeInstructions" />
+        <activity android:name=".catalogManagement.ActivityEditCatalog" />
+        <activity android:name=".catalogManagement.EditInstruction" />
         <activity android:name=".colonyManagement.ColonyActivity" />
         <activity android:name=".colonyManagement.AddTeam" />
         <activity android:name=".colonyManagement.ProfileActivity" />

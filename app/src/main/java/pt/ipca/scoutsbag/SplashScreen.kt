@@ -23,7 +23,7 @@ class SplashScreen: AppCompatActivity() {
             @millisInFuture = timer duration
             @countDownInterval = time interval before enter the onTick function
          */
-        val timer = object: CountDownTimer(1000, 1000) {
+        val timer = object: CountDownTimer(100, 100) {
 
             // Every tick do something
             override fun onTick(millisUntilFinished: Long) {

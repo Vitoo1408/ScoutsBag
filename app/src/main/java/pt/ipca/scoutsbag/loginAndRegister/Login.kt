@@ -80,31 +80,45 @@ class Login : AppCompatActivity() {
                         //convert the body response to a json object
                         val messageJsonObject = JSONTokener(messageBodyJsonStr).nextValue() as JSONObject
                         val message = messageJsonObject.getString("message")
-                        if(message == "Authentication successfull") {
-                            //save the jwt generated token
-                            val token = messageJsonObject.getString("token")
-                            //get user info from html response
-                            val jsonArrayUser = messageJsonObject.getJSONArray("userInfo").getJSONObject(0)
+                        when (message) {
+                            "Authentication successfull" -> {
+                                //save the jwt generated token
+                                val token = messageJsonObject.getString("token")
+                                //get user info from html response
+                                val jsonArrayUser = messageJsonObject.getJSONArray("userInfo").getJSONObject(0)
+                                //get logged in user id
+                                val loggedUserId = jsonArrayUser.getString("id_user")
 
-                            //save the loggedIn state as TRUE and the user details as a json object on the shared preferences
-                            val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
-                            val editor = preferences.edit()
-                            editor.putString("loggedIn", "true")
-                            editor.putString("userDetails", jsonArrayUser.toString())
-                            editor.apply()
+                                //save the loggedIn state as TRUE and the user details as a json object on the shared preferences
+                                val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
+                                val editor = preferences.edit()
+                                editor.putString("loggedIn", "true")
+                                editor.putString("userDetails", jsonArrayUser.toString())
+                                editor.apply()
 
 
-                            //start the main activity after successfull login
-                            GlobalScope.launch(Dispatchers.Main) {
-                                Toast.makeText(this@Login, "Inicio de sessão com sucesso", Toast.LENGTH_LONG).show()
-                                val intent = Intent(this@Login, MainActivity::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                startActivity(intent)
+                                //start the main activity after successfull login
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    Toast.makeText(this@Login, "Inicio de sessão com sucesso", Toast.LENGTH_LONG).show()
+                                    val intent = Intent(this@Login, MainActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    startActivity(intent)
+                                }
                             }
-
-                        } else {
-                            GlobalScope.launch(Dispatchers.Main) {
-                                Toast.makeText(this@Login, "Dados incorretos", Toast.LENGTH_LONG).show()
+                            "Account not active" -> {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    Toast.makeText(this@Login, "Conta inativa", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            "No email found!" -> {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    Toast.makeText(this@Login, "Email não registado", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                            else -> {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    Toast.makeText(this@Login, "Dados incorretos", Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                     }
@@ -115,7 +129,7 @@ class Login : AppCompatActivity() {
 
     //validate every registration form field
     private fun validateFields() : Boolean {
-        if(editTextEmail?.text.toString().isEmpty() && Patterns.EMAIL_ADDRESS.matcher(editTextEmail?.text.toString()).matches()){
+        if(!Patterns.EMAIL_ADDRESS.matcher(editTextEmail?.text.toString()).matches()){
             editTextEmail?.error = "O email é inválido!"
             return false
         } else if (editTextPass?.text.toString().isEmpty()){

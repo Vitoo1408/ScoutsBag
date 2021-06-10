@@ -39,6 +39,15 @@ class ActivityUserRequest : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_request)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Pedidos adesão"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -57,7 +66,7 @@ class ActivityUserRequest : AppCompatActivity() {
         }
 
         // Set data
-        listView = findViewById(R.id.listview_colony)
+        listView = findViewById(R.id.listViewUserRequest)
         adapter = UsersAdapter()
         listView.adapter = adapter
     }
@@ -84,18 +93,14 @@ class ActivityUserRequest : AppCompatActivity() {
 
             // Variables in the row
             val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
-            val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
-            val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
             val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = getSectionName(getTeamById(user.idTeam!!).idSection!!)
-            textViewTeam.text = getTeamById(user.idTeam!!).teamName
             textViewNin.text = user.nin.toString()
 
             rowView.setOnClickListener {
-                val intent = Intent(this@ActivityUserRequest, ProfileActivity::class.java)
+                val intent = Intent(this@ActivityUserRequest, ActivityReplyRequest::class.java)
                 intent.putExtra("user", user.toJson().toString())
                 startActivity(intent)
             }
@@ -104,57 +109,10 @@ class ActivityUserRequest : AppCompatActivity() {
         }
     }
 
-
-    /*
-
-     */
-    private fun getSectionName(id: Int): String{
-
-        return when (id) {
-            1 -> "Lobitos"
-            2 -> "Exploradores"
-            3 -> "Pioneiros"
-            else -> "Caminheiros"
-        }
-
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
-
-
-
-
-    /*
-        This function returns the team
-     */
-    private fun getTeamById(id: Int): Team {
-
-        // Variables
-        var response: Team? = null
-
-        // Find the activity type
-        for (i in 0 until teams.size) {
-            if (teams[i].idTeam == id)
-                response = teams[i]
-        }
-
-        return response!!
-    }
-
-    /*
-        This function returns the section designation
-
-    private fun getSectionById(id: Int): Section {
-
-        // Variables
-        var response: Section? = null
-
-        // Find the activity type
-        for (element in sections) {
-            if (element.idSection == id)
-                response = element
-        }
-
-        return response!!
-    }
-    */
 
 }
