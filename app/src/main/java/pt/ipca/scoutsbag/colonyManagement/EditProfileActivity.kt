@@ -20,21 +20,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
-import pt.ipca.scoutsbag.Backend
-import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import java.util.jar.Manifest
 import pt.ipca.scoutsbag.models.User as User
 
 
-class EditProfileActivity : AppCompatActivity() {
-
-    companion object {
-        private const val IMAGE_REQUEST_CODE = 100
-        private const val STORAGE_PERMISSION_CODE = 101
-    }
+class EditProfileActivity : ActivityWithImageTools() {
 
     private var editImage: ImageView? = null
     private var editName: EditText? = null
@@ -117,75 +109,19 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    //Open phone's gallery to pick photo
-    private fun pickImageGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_REQUEST_CODE)
-    }
 
-    //after picking photo
+    /*
+       This function happen after picking photo, and make changes in the activity
+    */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
             editImage?.setImageURI(data?.data)
             imageUri = data?.data
         }
     }
 
-    // Function to check and request permission.
-    private fun checkPermission(permission: String, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(this@EditProfileActivity, permission) == PackageManager.PERMISSION_DENIED) {
-
-            // Requesting the permission
-            ActivityCompat.requestPermissions(this@EditProfileActivity, arrayOf(permission), requestCode)
-        } else {
-            pickImageGallery()
-        }
-    }
-
-    // This function is called when the user accepts or decline the permission.
-    // Request Code is used to check which permission called this function.
-    // This request code is provided when the user is prompt for permission.
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                pickImageGallery()
-            } else {
-                Toast.makeText(this@EditProfileActivity, "Acesso ao armazenamento interno negado", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun checkConnectivity() {
-        val manager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = manager.activeNetworkInfo
-
-        if (null == activeNetwork) {
-            val dialogBuilder = AlertDialog.Builder(this)
-            // set message of alert dialog
-            dialogBuilder.setMessage("Tenha a certeza que o WI-FI ou os dados móveis estão ligados.")
-                // if the dialog is cancelable
-                .setCancelable(false)
-                // positive button text and action
-                .setPositiveButton("Tentar novamente", DialogInterface.OnClickListener { dialog, id ->
-                    recreate()
-                })
-                // negative button text and action
-                .setNegativeButton("Cancelar", DialogInterface.OnClickListener { dialog, id ->
-                    finish()
-                })
-
-            // create dialog box
-            val alert = dialogBuilder.create()
-            // set title for alert dialog box
-            alert.setTitle("Sem conexão à internet")
-            alert.setIcon(R.mipmap.ic_launcher)
-            // show alert dialog
-            alert.show()
-        }
-    }
 
     private fun saveUserData(imageUrl: String?) {
         //shared preferences initialization

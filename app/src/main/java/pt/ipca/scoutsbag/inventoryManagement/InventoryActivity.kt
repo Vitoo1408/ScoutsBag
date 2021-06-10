@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.Material
 
 
@@ -73,6 +75,12 @@ class InventoryActivity : AppCompatActivity(){
 
             rowView.findViewById<TextView>(R.id.materialName).text = material.nameMaterial
             rowView.findViewById<Button>(R.id.materialQuantity).text = material.qntStock.toString()
+            val imageMaterial = rowView.findViewById<ImageView>(R.id.materialImage)
+
+            // Load material image
+            if (material.imageUrl != ""){
+                Picasso.with(this@InventoryActivity).load(material.imageUrl).into(imageMaterial)
+            }
 
             if (material.qntStock == 0)
                 rowView.findViewById<Button>(R.id.materialQuantity).setBackgroundResource(R.drawable.circle_shape_orange)
