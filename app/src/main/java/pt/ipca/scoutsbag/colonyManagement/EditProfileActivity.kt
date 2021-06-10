@@ -222,7 +222,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         profileTemp.userName = editName?.text.toString()
         profileTemp.nin = editNIN?.text.toString()
-        profileTemp.gender = editGender?.toString()
+        profileTemp.gender = editGender
         profileTemp.contact = editPhone?.text.toString()
         profileTemp.email = editMail?.text.toString()
         profileTemp.birthDate = "1990-02-10"
@@ -257,5 +257,7 @@ class EditProfileActivity : AppCompatActivity() {
         return true
     }
 }
+
+
 
 
