@@ -151,6 +151,20 @@ object Utils {
         return "$date - $time"
     }
 
+    /*
+        This function convert mySqlDateTime to an date string
+        @mysqlDateTime = mysql value
+     */
+    fun mySqlDateTimeToStringUser(mysqlDateTime: String): String {
+
+        // Get the date and the time
+        val date = mySqlDateToString(mysqlDateTime)
+        val time = mySqlTimeToString(mysqlDateTime)
+
+        // Return the two
+        return "$date-$time"
+    }
+
 
     /*
         This function convert conventional Date and Time format to a format that mySql accept
