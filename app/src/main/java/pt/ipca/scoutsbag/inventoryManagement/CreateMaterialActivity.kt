@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.RadioGroup
 import android.widget.TextView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,6 +29,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_material)
+        checkConnectivity()
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.editTextMaterialName)
@@ -44,34 +46,45 @@ class CreateMaterialActivity : ActivityImageHelper() {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
         }
 
+        val radioGroup = findViewById<RadioGroup>(R.id.radioGroupMaterialType)
+
+        var materialType = "Equipamento"
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            if(checkedId == R.id.radioButtonEquipment)
+                materialType = "Equipamento"
+            if(checkedId == R.id.radioButtonConsumable)
+                materialType = "Consumivel"
+        }
+
         buttonConfirm.setOnClickListener {
 
-            // Get image Url
-            if(imageUri != null) {
+            // Variables
+            val fileName = Utils.getFileName(this, imageUri!!)
+            val filePath = Utils.getUriFilePath(this, imageUri!!)
 
-                val fileName = Utils.getFileName(this, imageUri!!)
-                val filePath = Utils.getUriFilePath(this, imageUri!!)
+            GlobalScope.launch(Dispatchers.IO) {
 
-                GlobalScope.launch(Dispatchers.IO) {
+                // Get image Url
+                if(imageUri != null) {
                     Utils.uploadImage(filePath!!, fileName) {
                         imageUrl = it
                     }
                 }
-            }
 
-            // Create the material
-            val material = Material(
-                null,
-                textViewName.text.toString(),
-                textViewQuantity.text.toString().toInt(),
-                if (imageUrl != null) imageUrl else null,
-                "Consumivel"
-            )
+                // Create the material
+                val material = Material(
+                    null,
+                    textViewName.text.toString(),
+                    textViewQuantity.text.toString().toInt(),
+                    if (imageUrl != null) imageUrl else "",
+                    materialType
+                )
 
-            // Add the material
-            GlobalScope.launch(Dispatchers.IO) {
+                // Add the material
                 Backend.addMaterial(material, returnActivity)
+
             }
+
         }
 
     }
