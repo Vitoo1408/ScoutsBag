@@ -54,10 +54,6 @@ class AddTeam: AppCompatActivity() {
             sectionImages[i].setOnClickListener(onClickSection)
         }
 
-        button.setOnClickListener{
-            println(getSection())
-        }
-
         buttonSaveTeam.setOnClickListener {
 
             // Build the team

@@ -27,11 +27,13 @@ class ActivityReplyRequest : AppCompatActivity() {
     lateinit var user: User
     var id = ""
     var teams : MutableList<Team> = arrayListOf()
-    lateinit var selectedTeam: Team
+    var selectedTeam: Team? = null
     var buttonTeamList: MutableList<Button> = arrayListOf()
     private var sectionImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: ActivityReplyRequest.TeamsAdapter
+
+    var buttonAcceptUser : Button? = null
 
 
     // This function is for select an section by clicking on the section image
@@ -63,6 +65,10 @@ class ActivityReplyRequest : AppCompatActivity() {
 
         imageView.isHovered = true
         imageView.setBackgroundResource(R.drawable.border)
+        // Inactivate accept button
+        println("bloqueado")
+        buttonAcceptUser!!.setBackgroundResource(R.drawable.custom_button_white)
+        buttonAcceptUser!!.isClickable = false
 
 
         // Refresh the listView size
@@ -87,6 +93,10 @@ class ActivityReplyRequest : AppCompatActivity() {
         // Select button
         button.setBackgroundResource(R.drawable.custom_button_orange)
         button.setTextColor(Color.WHITE)
+        // Activate accept button
+        println("desbloqueado")
+        buttonAcceptUser!!.setBackgroundResource(R.drawable.custom_button_orange)
+        buttonAcceptUser!!.isClickable = true
         selectedTeam = team
 
     }
@@ -96,6 +106,7 @@ class ActivityReplyRequest : AppCompatActivity() {
         val returnIntent = Intent(this, MainActivity::class.java)
         startActivity(returnIntent)
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,7 +135,7 @@ class ActivityReplyRequest : AppCompatActivity() {
 
 
         // Variables
-        val textName = findViewById<TextView>(R.id.scoutName)
+        val textName = findViewById<TextView>(R.id.textName)
         val textNIN = findViewById<TextView>(R.id.textNIN)
         val textPhone = findViewById<TextView>(R.id.textPhone)
         val textMail = findViewById<TextView>(R.id.textMail)
@@ -132,8 +143,10 @@ class ActivityReplyRequest : AppCompatActivity() {
         val textAddress = findViewById<TextView>(R.id.textAddress)
         val textPostalCode = findViewById<TextView>(R.id.textPostalCode)
 
-        val buttonAcceptUser = findViewById<Button>(R.id.buttonAcceptUser)
+        buttonAcceptUser = findViewById(R.id.buttonAcceptUser)
         val buttonRefuseUser = findViewById<Button>(R.id.buttonRefuseUser)
+
+
 
 
         // Set data
@@ -146,26 +159,26 @@ class ActivityReplyRequest : AppCompatActivity() {
         textPostalCode.text = user.postalCode
 
         // Edit user events
-        buttonAcceptUser.setOnClickListener {
+        buttonAcceptUser!!.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
 
                 // Build the user that will be added
                 val userUpdated = User(
                     user.idUser,
                     textName.text.toString(),
-                    textBirthDate.text.toString(),
-                    textMail.text.toString(),
+                    Utils.dateTimeToMySql(user.birthDate!!),
                     user.pass,
                     user.codType,
+                    textMail.text.toString(),
                     textPhone.text.toString(),
                     user.gender,
                     textAddress.text.toString(),
                     textNIN.text.toString(),
-                    textPostalCode.text.toString(),
                     user.imageUrl,
+                    textPostalCode.text.toString(),
                     1,
                     1,
-                    selectedTeam.idTeam
+                    selectedTeam!!.idTeam
                 )
 
                 // Edit user
@@ -183,7 +196,7 @@ class ActivityReplyRequest : AppCompatActivity() {
                 val userUpdated = User(
                     user.idUser,
                     user.userName,
-                    user.birthDate,
+                    Utils.dateTimeToMySql(user.birthDate!!),
                     user.pass,
                     user.codType,
                     user.email,
@@ -206,6 +219,12 @@ class ActivityReplyRequest : AppCompatActivity() {
 
         }
 
+
+        // Inactivate accept button
+        println("botao esta" + buttonAcceptUser!!.isClickable)
+        buttonAcceptUser!!.setBackgroundResource(R.drawable.custom_button_white)
+        buttonAcceptUser!!.isClickable = false
+        println("botao esta" + buttonAcceptUser!!.isClickable)
     }
 
     /*
@@ -255,6 +274,7 @@ class ActivityReplyRequest : AppCompatActivity() {
 
         return team!!
     }
+
 
     inner class TeamsAdapter : BaseAdapter() {
 

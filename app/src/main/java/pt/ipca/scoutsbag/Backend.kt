@@ -457,7 +457,7 @@ object Backend {
             for (index in 0 until activityJsonArray.length()) {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val user = User.fromJson(jsonArticle)
-                if(user.accepted == 0)
+                if(user.accepted == 0 && user.userActive == 1)
                     users.add(user)
             }
 
