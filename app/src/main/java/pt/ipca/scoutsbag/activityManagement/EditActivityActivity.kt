@@ -19,6 +19,7 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.ActivityMaterial
 import pt.ipca.scoutsbag.models.Material
+import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 
 class EditActivityActivity : AppCompatActivity() {
@@ -145,6 +146,10 @@ class EditActivityActivity : AppCompatActivity() {
         val editTextActivityLocalizationEnd = findViewById<TextView>(R.id.editTextActivityLocalizationEnd)
         val buttonEdit = findViewById<TextView>(R.id.buttonAddActivity)
         val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
+        val imageViewLobitos = findViewById<ImageView>(R.id.imageViewLobitos)
+        val imageViewExploradores = findViewById<ImageView>(R.id.imageViewExploradores)
+        val imageViewPioneiros = findViewById<ImageView>(R.id.imageViewPioneiros)
+        val imageViewCaminheiros = findViewById<ImageView>(R.id.imageViewCaminheiros)
 
         // Create the pop up window to select the date
         val dateStartPickerDialog = Utils.initDatePicker(dateStartButton, this)
@@ -185,17 +190,60 @@ class EditActivityActivity : AppCompatActivity() {
             }
         }
 
-        // Select the sections already selected
+        // Select the selected sections
+
+        // Get all sections
+        val sections: MutableList<Section> = arrayListOf()
+        for (i in 0 until 4)
+            sections.add(Section(i, false))
+
+       GlobalScope.launch(Dispatchers.IO) {
+
+           // Get all previous invited teams
+           Backend.getAllInvitedTeams(activity.idActivity!!) { list ->
+               selectedTeams.addAll(list)
+           }
+
+           // Verify if the section is already displayed
+           for (i in 0 until selectedTeams.size) {
+
+               // Get the team section
+               val section = selectedTeams[i].idSection!!
+               val teamSection = sections[section]
+
+               // Select if its not already selected
+               if (!teamSection.active!!) {
+                   teamSection.active = true
+                   GlobalScope.launch(Dispatchers.Main) {
+
+                       // Select the corresponding section
+                       val sectionImage: ImageView = when (section) {
+                           1 -> imageViewLobitos
+                           2 -> imageViewExploradores
+                           3 -> imageViewPioneiros
+                           else -> imageViewCaminheiros
+                       }
+
+                       onClickSection(sectionImage)
+                   }
+               }
+               //teams[i]
+               //onClickTeam()
+
+           }
+
+
+
+       }
+
         /*
-        ------------------------------------------------------------ AINDA POR FAZER AQUI -------------
-        ------------------------------------------------- E MESMO PRA FAZER?
-         */
+                */
 
         // On click section events
-        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
+        imageViewLobitos.setOnClickListener(onClickSection)
+        imageViewExploradores.setOnClickListener(onClickSection)
+        imageViewPioneiros.setOnClickListener(onClickSection)
+        imageViewCaminheiros.setOnClickListener(onClickSection)
 
         // Add activity type images to the list
         activityTypesImages.add(findViewById(R.id.imageViewActivityType1))
@@ -274,6 +322,13 @@ class EditActivityActivity : AppCompatActivity() {
                 teams.removeAt(i)
         }
 
+        // Find the selected teams of the selected section
+        for (i in teams.size-1 downTo 0) {
+            if (teams[i].idSection == idSection)
+                teams.removeAt(i)
+        }
+
+
         adapter.notifyDataSetChanged()
     }
 
@@ -344,11 +399,20 @@ class EditActivityActivity : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = layoutInflater.inflate(R.layout.row_team, parent, false)
 
-            // Get current activity
+            // Get current team
+            val team = teams[position]
             val teamButton = rowView.findViewById<Button>(R.id.buttonTeam)
 
+            // Set data
             teamButton.text = teams[position].teamName
             teamButton.setOnClickListener(onClickTeam)
+
+            // See if the team is already selected
+            for (i in 0 until selectedTeams.size) {
+                if (team.idTeam == selectedTeams[i].idTeam) {
+                    onClickTeam(teamButton)
+                }
+            }
 
             return rowView
         }

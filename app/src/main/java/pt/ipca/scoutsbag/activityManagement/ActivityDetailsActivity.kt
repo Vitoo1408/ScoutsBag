@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scoutsteste1.ScoutActivity
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
     // Global variables
     private lateinit var activity: ScoutActivity
     var materials: List<Material> = arrayListOf()
-    private var users: List<User> = arrayListOf()
+    var teams: List<Team> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -71,8 +72,8 @@ class ActivityDetailsActivity : AppCompatActivity() {
             }
 
             // Get all invited teams for this activity
-            Backend.getAllInvitedUsers(activity.idActivity!!) {
-                users = it
+            Backend.getAllInvitedTeams(activity.idActivity!!) {
+                teams = it
             }
 
             // Get all sections
@@ -82,22 +83,20 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
             // Verify if the section is already displayed
             var position = 1
-            for (i in users.indices) {
-                if (users[i].idTeam != null) {
+            for (i in teams.indices) {
 
-                    // Get the user section
-                    val team = Backend.getTeam(users[i].idTeam!!)
-                    val teamSection = sections[team.idSection!!-1]
+                // Get the team section
+                val teamSection = sections[teams[i].idSection!!]
 
-                    // Display the image
-                    if (!teamSection.active!!) {
-                        teamSection.active = true
-                        GlobalScope.launch(Dispatchers.Main) {
-                            getSectionImage(teamSection.idSection!!, position)
-                            position++
-                        }
+                // Display the image
+                if (!teamSection.active!!) {
+                    teamSection.active = true
+                    GlobalScope.launch(Dispatchers.Main) {
+                        getSectionImage(teamSection.idSection!!, position)
+                        position++
                     }
                 }
+
             }
         }
 
@@ -234,6 +233,11 @@ class ActivityDetailsActivity : AppCompatActivity() {
             val material = materials[position]
             val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
             val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
+            val materialImage = rowView.findViewById<ImageView>(R.id.materialImage)
+
+            if (material.imageUrl != "") {
+                Picasso.with(this@ActivityDetailsActivity).load(material.imageUrl).into(materialImage)
+            }
 
             // Set data
             textViewName.text = material.nameMaterial

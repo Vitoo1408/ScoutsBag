@@ -666,14 +666,14 @@ object Backend {
         @idActivity = activity that the teams are invited
         @callBack = return the list
      */
-    fun getAllInvitedUsers(idActivity: Int, callBack: (List<User>)->Unit) {
+    fun getAllInvitedTeams(idActivity: Int, callBack: (List<Team>)->Unit) {
 
         // Invites list
-        val users: MutableList<User> = arrayListOf()
+        val teams: MutableList<Team> = arrayListOf()
 
         // Create the http request
         val request = Request.Builder().url(
-            "http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesInvites/${idActivity}")
+            "http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesTeams/${idActivity}")
             .build()
 
         // Send the request and analyze the response
@@ -686,12 +686,12 @@ object Backend {
             // Add the elements in the list
             for (index in 0 until inviteJsonArray.length()) {
                 val jsonArticle = inviteJsonArray.get(index) as JSONObject
-                val invite = Invite.fromJson(jsonArticle)
-                users.add(getUser(invite.idUser!!))
+                val activitiesTeam = ActivityTeam.fromJson(jsonArticle)
+                teams.add(getTeam(activitiesTeam.idTeam!!))
             }
         }
 
-        callBack(users)
+        callBack(teams)
     }
 
 
@@ -724,6 +724,31 @@ object Backend {
         }
 
         callBack(teams)
+    }
+
+
+    /*
+        This adds a team invited to an activity into the database
+        @id = selected team id
+    */
+    fun addActivityTeam(activityTeam: ActivityTeam) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            activityTeam.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesTeams")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+        }
+
     }
 
 

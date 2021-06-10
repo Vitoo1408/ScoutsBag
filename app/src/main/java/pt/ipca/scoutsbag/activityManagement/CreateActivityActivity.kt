@@ -65,6 +65,8 @@ class CreateActivityActivity : AppCompatActivity() {
             imageView.setBackgroundResource(R.drawable.border)
         }
 
+        updateTeamButtons()
+
         // Refresh the listView size
         val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
         params.height = params.height + buttonSpacing
@@ -218,6 +220,11 @@ class CreateActivityActivity : AppCompatActivity() {
                         teamUsers = it
                     }
 
+                    // Create the team invite to activity
+                    Backend.addActivityTeam(
+                        ActivityTeam(activityId, team.idTeam)
+                    )
+
                     // Create invites for all users in the team
                     for (user in teamUsers) {
 
@@ -280,9 +287,33 @@ class CreateActivityActivity : AppCompatActivity() {
 
         // Find the teams of the selected section
         for (i in teams.size-1 downTo 0) {
-            if (teams[i].idSection == idSection)
+            if (teams[i].idSection == idSection) {
+
+                // Find the team in selected teams and remove it
+                for (j in selectedTeams.size-1 downTo 0) {
+                    if (teams[i].idTeam == selectedTeams[j].idTeam)
+                        selectedTeams.removeAt(j)
+                }
+
                 teams.removeAt(i)
+            }
         }
+
+        adapter.notifyDataSetChanged()
+    }
+
+
+    /*
+        This function update all buttons in the View
+        @idSection = selected section
+     */
+    private fun updateTeamButtons() {
+
+        val tempList: MutableList<Team> = arrayListOf()
+        tempList.addAll(teams)
+
+        teams.removeAll(teams)
+        teams.addAll(tempList)
 
         adapter.notifyDataSetChanged()
     }
@@ -354,11 +385,20 @@ class CreateActivityActivity : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = layoutInflater.inflate(R.layout.row_team, parent, false)
 
-            // Get current activity
+            // Get current team
+            val team = teams[position]
             val teamButton = rowView.findViewById<Button>(R.id.buttonTeam)
 
+            // Set data
             teamButton.text = teams[position].teamName
             teamButton.setOnClickListener(onClickTeam)
+
+            // See if the team is already selected
+            for (i in 0 until selectedTeams.size) {
+                if (team.idTeam == selectedTeams[i].idTeam) {
+                    onClickTeam(teamButton)
+                }
+            }
 
             return rowView
         }
