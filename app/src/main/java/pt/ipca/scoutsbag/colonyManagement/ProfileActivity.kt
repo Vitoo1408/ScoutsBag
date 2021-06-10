@@ -22,14 +22,18 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
+import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
 class ProfileActivity : AppCompatActivity() {
 
     lateinit var user: User
     var id = ""
+    var teams : List<Team> = arrayListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -64,16 +68,16 @@ class ProfileActivity : AppCompatActivity() {
         //println("->>" + textName.text.toString())
 
         // Set data
-        textName.text = user.userName
-        //textSection.text = user.sec
-        //textTeam.text = user.idTeam
-        textNIN.text = user.nin
-        textGender.text = user.gender
-        textPhone.text = user.contact
-        textMail.text = user.email
-        textBirthDate.text = user.birthDate
-        textAddress.text = user.address
-        textPostalCode.text = user.postalCode
+        textName.text = user.userName.toString()
+        textSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+        textTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
+        textNIN.text = user.nin.toString()
+        textGender.text = user.gender.toString()
+        textPhone.text = user.contact.toString()
+        textMail.text = user.email.toString()
+        textBirthDate.text = user.birthDate.toString()
+        textAddress.text = user.address.toString()
+        textPostalCode.text = user.postalCode.toString()
 
 
         butEdit.setOnClickListener() {

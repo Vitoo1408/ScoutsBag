@@ -42,57 +42,6 @@ class EditScoutProfileActivity : AppCompatActivity() {
 
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_scout_profile)
-
-        checkConnectivity()
-
-        //actionbar
-        val actionbar = supportActionBar
-        //set actionbar title
-        actionbar!!.title = "Editar perfil escuteiro"
-        //set back button
-        actionbar.setDisplayHomeAsUpEnabled(true)
-
-
-        // Get the selected user
-        val userJsonStr = intent.getStringExtra("idUser")
-        val userJson = JSONObject(userJsonStr!!)
-        user = User.fromJson(userJson)
-
-
-        scoutImage = findViewById<ImageView>(R.id.scoutImage)
-        scoutName = findViewById<TextView>(R.id.scoutName)
-        editNIN = findViewById<EditText>(R.id.editScoutNin)
-        listViewTeams = findViewById(R.id.listViewTeams)
-        adapter = TeamsAdapter()
-        listViewTeams.adapter = adapter
-
-
-        //load profile image
-        if(UserLoggedIn.imageUrl != ""){
-            Picasso.with(this).load(UserLoggedIn.imageUrl).into(scoutImage)
-        }
-
-
-        //load all user data into text views
-        scoutName?.setText(UserLoggedIn.userName)
-        editNIN?.setText(UserLoggedIn.nin)
-
-
-        // On click section events
-        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
-
-        butSave?.setOnClickListener{
-
-
-        }
-    }
-
     private fun checkConnectivity() {
         val manager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = manager.activeNetworkInfo
@@ -126,7 +75,7 @@ class EditScoutProfileActivity : AppCompatActivity() {
 
 
     // This function is for select an section by clicking on the section image
-    private var onClickSection: (view: View)->Unit = {
+    private var onClickSection: (view: View) -> Unit = {
         // Variables
         val imageView = it as ImageView
         val sectionId: Int = getSectionID(imageView.id)
@@ -166,7 +115,7 @@ class EditScoutProfileActivity : AppCompatActivity() {
         listViewTeams.requestLayout()
     }
 
-    var onClickTeam: (view: View)->Unit = {
+    var onClickTeam: (view: View) -> Unit = {
         val button = it as Button
         val team = findTeamByItsButton(button)
 
@@ -187,11 +136,10 @@ class EditScoutProfileActivity : AppCompatActivity() {
     }
 
 
-
     private fun removeSectionTeams(idSection: Int) {
 
         // Find the teams of the selected section
-        for (i in teams.size-1 downTo 0) {
+        for (i in teams.size - 1 downTo 0) {
             if (teams[i].idSection == idSection)
                 teams.removeAt(i)
         }
@@ -202,7 +150,7 @@ class EditScoutProfileActivity : AppCompatActivity() {
 
     private fun getSectionID(imageViewId: Int): Int {
 
-        return when(imageViewId) {
+        return when (imageViewId) {
             R.id.imageViewLobitos -> 1
             R.id.imageViewExploradores -> 2
             R.id.imageViewPioneiros -> 3
@@ -250,9 +198,70 @@ class EditScoutProfileActivity : AppCompatActivity() {
         }
     }
 
+
     //when the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_scout_profile)
+
+        checkConnectivity()
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Editar perfil escuteiro"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+
+
+        // Get the selected user
+        val userJsonStr = intent.getStringExtra("idUser")
+        val userJson = JSONObject(userJsonStr!!)
+        user = User.fromJson(userJson)
+
+
+        scoutImage = findViewById(R.id.scoutImage)
+        scoutName = findViewById(R.id.scoutName)
+        editNIN = findViewById(R.id.editScoutNin)
+        listViewTeams = findViewById(R.id.listViewTeams)
+        adapter = TeamsAdapter()
+        listViewTeams.adapter = adapter
+
+
+        //load profile image
+        if (user.imageUrl != "") {
+            Picasso.with(this).load(user.imageUrl).into(scoutImage)
+        }
+
+
+        //load all user data into text views
+        scoutName?.setText(user.userName)
+        editNIN?.setText(user.nin)
+
+
+        // On click section events
+        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
+
+
+        butSave?.setOnClickListener {
+
+            GlobalScope.launch(Dispatchers.Main) {
+                GlobalScope.launch(Dispatchers.IO) {
+
+                    user.nin = editNIN?.text.toString()
+                    // user.idTeam =
+                }
+            }
+        }
+    }
 }
+
