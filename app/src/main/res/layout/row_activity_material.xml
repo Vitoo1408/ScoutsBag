@@ -24,30 +24,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/checkBoxMaterial"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/image_test" />
 
-    <CheckBox
-        android:id="@+id/checkBoxMaterial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/materialImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/materialImage" />
-
-    <EditText
-        android:id="@+id/editViewMaterialQuantity"
+    <TextView
+        android:id="@+id/textViewMaterialQuantity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/custom_button_black"
         android:ems="10"
-        android:inputType="number"
-        android:padding="6dp"
-        android:textColor="#707070"
+        android:text="Quantidade: "
+        android:textColor="@color/text_gray_color"
         android:textSize="14sp"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"

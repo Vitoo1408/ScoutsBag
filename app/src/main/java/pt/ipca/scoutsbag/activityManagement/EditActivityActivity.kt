@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,8 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.models.ActivityMaterial
+import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Team
 
 class EditActivityActivity : AppCompatActivity() {
@@ -24,6 +27,8 @@ class EditActivityActivity : AppCompatActivity() {
     private lateinit var activity: ScoutActivity
     var teams: MutableList<Team> = arrayListOf()
     var selectedTeams: MutableList<Team> = arrayListOf()
+    var materials: List<Material> = arrayListOf()
+    var selectedMaterials: MutableList<ActivityMaterial> = arrayListOf()
     private var activityTypesImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: TeamsAdapter
@@ -130,8 +135,8 @@ class EditActivityActivity : AppCompatActivity() {
         listViewTeams.adapter = adapter
 
         // Variables in the view
-        val editViewAxtivityName = findViewById<TextView>(R.id.editTextActivityName)
-        val editViewAxtivityDescription = findViewById<TextView>(R.id.editTextActivityDescription)
+        val editViewActivityName = findViewById<TextView>(R.id.editTextActivityName)
+        val editViewActivityDescription = findViewById<TextView>(R.id.editTextActivityDescription)
         val dateStartButton = findViewById<TextView>(R.id.dateStartButton)
         val dateEndButton = findViewById<TextView>(R.id.dateEndButton)
         val editTextActivityPrice = findViewById<TextView>(R.id.editTextActivityPrice)
@@ -139,23 +144,46 @@ class EditActivityActivity : AppCompatActivity() {
         val editTextActivityLocalizationStart = findViewById<TextView>(R.id.editTextActivityLocalizationStart)
         val editTextActivityLocalizationEnd = findViewById<TextView>(R.id.editTextActivityLocalizationEnd)
         val buttonEdit = findViewById<TextView>(R.id.buttonAddActivity)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
 
         // Create the pop up window to select the date
         val dateStartPickerDialog = Utils.initDatePicker(dateStartButton, this)
         val dateEndPickerDialog = Utils.initDatePicker(dateEndButton, this)
 
         // Set values in the view
-        editViewAxtivityName.text = activity.nameActivity
-        editViewAxtivityDescription.text = activity.activityDescription
+        editViewActivityName.text = activity.nameActivity
+        editViewActivityDescription.text = activity.activityDescription
         dateStartButton.text = Utils.mySqlDateTimeToString(activity.startDate!!)
-        dateEndButton.text = Utils.mySqlDateTimeToString(activity.startDate!!)
+        dateEndButton.text = Utils.mySqlDateTimeToString(activity.finishDate!!)
         editTextActivityPrice.text = activity.price.toString()
         editTextActivityLocalization.text = activity.activitySite
         editTextActivityLocalizationStart.text = activity.startSite
         editTextActivityLocalizationEnd.text = activity.finishSite
         buttonEdit.text = "Editar Atividade"
 
+        // Get all materials from this activity from data base
+        GlobalScope.launch(Dispatchers.IO) {
 
+            Backend.getAllMaterials {
+                materials = it
+            }
+
+            Backend.getAllActivityMaterial(activity.idActivity!!) {
+
+                for (i in it.indices) {
+                    val activityMaterial = ActivityMaterial(
+                        activity.idActivity,
+                        it[0].idMaterial,
+                        it[0].qntStock
+                    )
+                    selectedMaterials.add(activityMaterial)
+                }
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    buttonMaterial.text = "Itens selecionados: ${selectedMaterials.size}"
+                }
+            }
+        }
 
         // Select the sections already selected
         /*
@@ -194,11 +222,45 @@ class EditActivityActivity : AppCompatActivity() {
             dateEndPickerDialog.show()
         }
 
+        // Add material to the activity
+        buttonMaterial.setOnClickListener {
+            selectedMaterials.removeAll(selectedMaterials)
+            openSelectMaterialDialog()
+        }
+
         buttonEdit.setOnClickListener {
             // FAZER O PUT
         }
 
     }
+
+
+    /*
+        This function display a dialog window with a list with
+        material that can be selected to this activity
+     */
+    private fun openSelectMaterialDialog() {
+
+        // Variables
+        val alertDialog = AlertDialog.Builder(this)
+        val row = layoutInflater.inflate(R.layout.dialog_material_selected, null)
+        val listView = row.findViewById<ListView>(R.id.listViewMaterials)
+        val mAdapter = MaterialsAdapter()
+
+        // Set data
+        listView.adapter = mAdapter
+        mAdapter.notifyDataSetChanged()
+
+        alertDialog.setOnCancelListener {
+            findViewById<TextView>(R.id.buttonMaterial).text = "Itens selecionados: ${selectedMaterials.size}"
+        }
+
+        // Create dialog
+        alertDialog.setAdapter(mAdapter) { _, _ -> }
+        alertDialog.setView(row)
+        alertDialog.create().show()
+    }
+
 
     /*
         This function all the teams of an selected section from the list
@@ -292,4 +354,63 @@ class EditActivityActivity : AppCompatActivity() {
         }
     }
 
+
+    inner class MaterialsAdapter : BaseAdapter() {
+
+        override fun getCount(): Int {
+            return materials.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return materials[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_selected_material, parent, false)
+
+            // Variables
+            val material = materials[position]
+            val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.editViewMaterialQuantity)
+            val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
+
+            // Set data
+            textViewName.text = material.nameMaterial
+            textViewQuantity.text = material.qntStock.toString()
+
+            checkBoxMaterial.setOnClickListener {
+
+                if (!checkBoxMaterial.isChecked) {
+
+                    var materialFound = false
+                    for (i in 0 until selectedMaterials.size) {
+                        if (!materialFound) {
+                            if (selectedMaterials[i].idActivity == activity.idActivity && selectedMaterials[i].idMaterial == material.idMaterial) {
+                                selectedMaterials.removeAt(i)
+                                materialFound = true
+                            }
+                        }
+                    }
+
+                }
+                else {
+
+                    val activityMaterial = ActivityMaterial(
+                        activity.idActivity,
+                        material.idMaterial,
+                        textViewQuantity.text.toString().toInt()
+                    )
+
+                    selectedMaterials.add(activityMaterial)
+                }
+
+            }
+
+            return rowView
+        }
+    }
 }
