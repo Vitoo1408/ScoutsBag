@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import pt.ipca.scoutsbag.*

@@ -37,7 +37,9 @@ class EditScoutProfileActivity : AppCompatActivity() {
     var teams: MutableList<Team> = arrayListOf()
     var selectedTeams: MutableList<Team> = arrayListOf()
     private lateinit var listViewTeams: ListView
-    lateinit var adapter: CreateActivityActivity.TeamsAdapter
+    lateinit var adapter: TeamsAdapter
+    private lateinit var user: User
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +56,12 @@ class EditScoutProfileActivity : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
 
 
+        // Get the selected user
+        val userJsonStr = intent.getStringExtra("idUser")
+        val userJson = JSONObject(userJsonStr!!)
+        user = User.fromJson(userJson)
+
+
         scoutImage = findViewById<ImageView>(R.id.scoutImage)
         scoutName = findViewById<TextView>(R.id.scoutName)
         editNIN = findViewById<EditText>(R.id.editScoutNin)
@@ -67,15 +75,22 @@ class EditScoutProfileActivity : AppCompatActivity() {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(scoutImage)
         }
 
+
         //load all user data into text views
         scoutName?.setText(UserLoggedIn.userName)
         editNIN?.setText(UserLoggedIn.nin)
 
 
+        // On click section events
+        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
+
         butSave?.setOnClickListener{
 
-        }
 
+        }
     }
 
     private fun checkConnectivity() {
@@ -107,8 +122,8 @@ class EditScoutProfileActivity : AppCompatActivity() {
             // show alert dialog
             alert.show()
         }
-
     }
+
 
     // This function is for select an section by clicking on the section image
     private var onClickSection: (view: View)->Unit = {
