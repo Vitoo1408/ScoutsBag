@@ -18,7 +18,6 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.*
 
-
 class CreateActivityActivity : AppCompatActivity() {
 
     // Global Variables
@@ -122,7 +121,12 @@ class CreateActivityActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_activity)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+        //set actionbar title
+        supportActionBar?.title = "Criar atividade"
 
         // Interact with the data base
         GlobalScope.launch(Dispatchers.IO) {
@@ -227,7 +231,11 @@ class CreateActivityActivity : AppCompatActivity() {
                         // Create invite
                         Backend.addInvite(invite)
                     }
+                }
 
+                // Create the material request for the activity
+                for (activityMaterial in selectedMaterials) {
+                    Backend.addActivityMaterial(activityMaterial)
                 }
 
             }
@@ -237,6 +245,10 @@ class CreateActivityActivity : AppCompatActivity() {
     }
 
 
+    /*
+        This function display a dialog window with a list with
+        material that can be selected to this activity
+     */
     private fun openSelectMaterialDialog() {
 
         // Variables
@@ -258,7 +270,6 @@ class CreateActivityActivity : AppCompatActivity() {
         alertDialog.setView(row)
         alertDialog.create().show()
     }
-
 
 
     /*
@@ -353,6 +364,7 @@ class CreateActivityActivity : AppCompatActivity() {
         }
     }
 
+
     inner class MaterialsAdapter : BaseAdapter() {
 
         override fun getCount(): Int {
@@ -373,26 +385,48 @@ class CreateActivityActivity : AppCompatActivity() {
             // Variables
             val material = materials[position]
             val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
-            val textViewType     = rowView.findViewById<TextView>(R.id.textViewMaterialType)
-            val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.editViewMaterialQuantity)
             val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
 
             // Set data
             textViewName.text = material.nameMaterial
-            textViewType.text = material.materialType
             textViewQuantity.text = material.qntStock.toString()
 
             checkBoxMaterial.setOnClickListener {
-                selectedMaterials.add(
-                    ActivityMaterial(
+
+                if (!checkBoxMaterial.isChecked) {
+
+                    var materialFound = false
+                    for (i in 0 until selectedMaterials.size) {
+                        if (!materialFound) {
+                            if (selectedMaterials[i].idActivity == activityId && selectedMaterials[i].idMaterial == material.idMaterial) {
+                                selectedMaterials.removeAt(i)
+                                materialFound = true
+                            }
+                        }
+                    }
+
+                }
+                else {
+
+                    val activityMaterial = ActivityMaterial(
                         activityId,
                         material.idMaterial,
                         textViewQuantity.text.toString().toInt()
                     )
-                )
+
+                    selectedMaterials.add(activityMaterial)
+                }
+
             }
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

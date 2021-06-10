@@ -38,6 +38,8 @@ class ActivityHistoryActivity : AppCompatActivity() {
         actionbar!!.title = "Histórico de atividades"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         // Set listView Adapter
         val listView = findViewById<ListView>(R.id.listViewActivities)

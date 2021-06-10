@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".inventoryManagement.CreateMaterialActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Clique para escolher a imagem do material"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialAddImage" />
+
+    <ImageView
+        android:id="@+id/materialAddImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <EditText
         android:id="@+id/editTextMaterialName"
         android:layout_width="0dp"
@@ -24,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/editTextMaterialQuantity"
@@ -46,26 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextMaterialName" />
 
-    <EditText
-        android:id="@+id/materialAddImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/custom_button_black"
-        android:ems="10"
-        android:hint="Adicionar Imagem"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textColor="#707070"
-        android:textSize="12sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextMaterialQuantity" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutButtons"
         android:layout_width="wrap_content"
@@ -73,7 +74,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialAddImage">
+        app:layout_constraintTop_toBottomOf="@+id/editTextMaterialQuantity">
 
         <Button
             android:id="@+id/button_cancel"
