@@ -1,16 +1,24 @@
 package pt.ipca.scoutsbag.colonyManagement
 
+import android.R.attr
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.*
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.json.JSONObject
-import pt.ipca.scoutsbag.*
+import pt.ipca.scoutsbag.ActivityImageHelper
+import pt.ipca.scoutsbag.Backend
+import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
-import pt.ipca.scoutsbag.models.User as User
+import pt.ipca.scoutsbag.models.User
 
 
 class EditProfileActivity : ActivityImageHelper() {
@@ -75,7 +83,7 @@ class EditProfileActivity : ActivityImageHelper() {
 
         butSave?.setOnClickListener {
             if(imageUri != null) {
-                val fileName = Utils.getFileName(this, imageUri!!)
+                val fileName = Utils.uniqueImageNameGen()
                 val filePath = Utils.getUriFilePath(this, imageUri!!)
 
                 GlobalScope.launch(Dispatchers.Main) {
@@ -91,9 +99,7 @@ class EditProfileActivity : ActivityImageHelper() {
                 //save the user data without a new image url
                 saveUserData(null)
             }
-
             Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
-
             finish()
         }
     }
@@ -106,8 +112,18 @@ class EditProfileActivity : ActivityImageHelper() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            editImage?.setImageURI(data?.data)
-            imageUri = data?.data
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                editImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
         }
     }
 

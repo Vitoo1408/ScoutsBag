@@ -319,6 +319,19 @@ object Utils {
 
         callBack(imageUrl!!)
     }
+
+    fun uniqueImageNameGen(): String {
+        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&/()=@[]{}"
+
+        val sb = StringBuilder(15)
+
+        for(x in 0 until 15){
+            val random = (characters.indices).random()
+            sb.append(characters[random])
+        }
+
+        return sb.toString()
+    }
 }
 
 

@@ -21,7 +21,7 @@ open class ActivityImageHelper: AppCompatActivity() {
 
 
     //Open phone's gallery to pick photo
-    private fun pickImageGallery() {
+    fun pickImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
