@@ -12,7 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 
-open class ActivityWithImageTools: AppCompatActivity() {
+open class ActivityImageHelper: AppCompatActivity() {
 
     companion object {
         const val IMAGE_REQUEST_CODE = 100

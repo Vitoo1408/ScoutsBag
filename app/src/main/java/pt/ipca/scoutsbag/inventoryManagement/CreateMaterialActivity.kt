@@ -1,29 +1,18 @@
 package pt.ipca.scoutsbag.inventoryManagement
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import pt.ipca.scoutsbag.*
-import pt.ipca.scoutsbag.colonyManagement.ActivityUserRequest
-import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
-import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn.imageUrl
 import pt.ipca.scoutsbag.models.Material
-import pt.ipca.scoutsbag.models.User
 
-class CreateMaterialActivity : ActivityWithImageTools() {
+class CreateMaterialActivity : ActivityImageHelper() {
 
     private var imageUri: Uri? = null
     var materialImage: ImageView? = null

@@ -1,32 +1,19 @@
 package pt.ipca.scoutsbag.colonyManagement
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
-import java.util.jar.Manifest
 import pt.ipca.scoutsbag.models.User as User
 
 
-class EditProfileActivity : ActivityWithImageTools() {
+class EditProfileActivity : ActivityImageHelper() {
 
     private var editImage: ImageView? = null
     private var editName: EditText? = null
