@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
         <activity android:name=".inventoryManagement.CreateMaterialActivity" />
         <activity android:name=".inventoryManagement.InventoryActivity" />
