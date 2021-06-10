@@ -457,7 +457,7 @@ object Backend {
             for (index in 0 until activityJsonArray.length()) {
                 val jsonArticle = activityJsonArray.get(index) as JSONObject
                 val user = User.fromJson(jsonArticle)
-                if(user.accepted == 0)
+                if(user.accepted == 0 && user.userActive == 1)
                     users.add(user)
             }
 
@@ -824,6 +824,35 @@ object Backend {
 
 
     /*
+        This function return an material by an id
+        @id = selected activity id
+     */
+    fun getMaterial(id: Int): Material {
+
+        var material : Material? = null
+
+        // Create the http request
+        val request = Request.Builder().url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/materials/$id").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                material = Material.fromJson(jsonArticle)
+            }
+        }
+
+        return material!!
+    }
+
+
+    /*
         This function adds a material into the database
         @id = selected team id
     */
@@ -912,5 +941,65 @@ object Backend {
             }
         }
     }
+
+
+    /*
+        This function return all materials selected to an activity
+        @idActivity = activity id selected
+     */
+    fun getAllActivityMaterial(idActivity: Int, callBack: (List<Material>)->Unit) {
+
+        val materials: MutableList<Material> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val activityMaterial = ActivityMaterial.fromJson(jsonArticle)
+
+                if (activityMaterial.idActivity == idActivity) {
+                    val material = getMaterial(activityMaterial.idMaterial!!)
+                    materials.add(material)
+                }
+            }
+
+            // Return list
+            callBack(materials)
+        }
+    }
+
+
+    /*
+        This function add the activityMaterial into the data base
+        @activityMaterial = activityMaterial selected
+     */
+    fun addActivityMaterial(activityMaterial: ActivityMaterial) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            activityMaterial.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use {
+        }
+    }
+
 
 }

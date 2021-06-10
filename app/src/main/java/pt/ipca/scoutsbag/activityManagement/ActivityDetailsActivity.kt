@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +18,13 @@ import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
-import pt.ipca.scoutsbag.models.Section
-import pt.ipca.scoutsbag.models.Team
-import pt.ipca.scoutsbag.models.User
+import pt.ipca.scoutsbag.models.*
 
 class ActivityDetailsActivity : AppCompatActivity() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
+    var materials: List<Material> = arrayListOf()
     private var users: List<User> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +51,7 @@ class ActivityDetailsActivity : AppCompatActivity() {
         val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
@@ -63,8 +63,14 @@ class ActivityDetailsActivity : AppCompatActivity() {
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
-        // Get all invited teams for this activity
         GlobalScope.launch(Dispatchers.IO) {
+
+            // Get all materials requested for this activity
+            Backend.getAllActivityMaterial(activity.idActivity!!) {
+                materials = it
+            }
+
+            // Get all invited teams for this activity
             Backend.getAllInvitedUsers(activity.idActivity!!) {
                 users = it
             }
@@ -93,6 +99,11 @@ class ActivityDetailsActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        // View requested material list
+        buttonMaterial.setOnClickListener {
+            openMaterialListDialog()
         }
 
     }
@@ -145,6 +156,29 @@ class ActivityDetailsActivity : AppCompatActivity() {
 
 
     /*
+        This function display a dialog window with a list with
+        material that can be selected to this activity
+     */
+    private fun openMaterialListDialog() {
+
+        // Variables
+        val alertDialog = AlertDialog.Builder(this)
+        val row = layoutInflater.inflate(R.layout.dialog_material_selected, null)
+        val listView = row.findViewById<ListView>(R.id.listViewMaterials)
+        val mAdapter = MaterialsAdapter()
+
+        // Set data
+        listView.adapter = mAdapter
+        mAdapter.notifyDataSetChanged()
+
+        // Create dialog
+        alertDialog.setAdapter(mAdapter) { _, _ -> }
+        alertDialog.setView(row)
+        alertDialog.create().show()
+    }
+
+
+    /*
         Enable the images of the selected sections
         @section = selected section
         @position = slot in the view
@@ -178,4 +212,34 @@ class ActivityDetailsActivity : AppCompatActivity() {
         return true
     }
 
+
+    inner class MaterialsAdapter : BaseAdapter() {
+
+        override fun getCount(): Int {
+            return materials.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return materials[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return 0
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = layoutInflater.inflate(R.layout.row_activity_material, parent, false)
+
+            // Variables
+            val material = materials[position]
+            val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
+            val textViewQuantity = rowView.findViewById<TextView>(R.id.textViewMaterialQuantity)
+
+            // Set data
+            textViewName.text = material.nameMaterial
+            textViewQuantity.text = "Quantidade: " + material.qntStock.toString()
+
+            return rowView
+        }
+    }
 }
