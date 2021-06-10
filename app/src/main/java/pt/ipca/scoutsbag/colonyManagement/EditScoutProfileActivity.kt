@@ -242,7 +242,7 @@ class EditScoutProfileActivity : AppCompatActivity() {
 
         //load all user data into text views
         scoutName?.setText(user.userName)
-        editNIN?.setText(user.nin)
+        editNIN?.setHint(user.nin)
 
 
         // On click section events

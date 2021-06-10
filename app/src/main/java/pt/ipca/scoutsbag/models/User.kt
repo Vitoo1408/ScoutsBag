@@ -18,6 +18,8 @@ class User {
     var userActive : Int? = null
     var accepted   : Int? = null
     var idTeam     : Int? = null
+    var activities : Int? = null
+    var actAccepted : Int? = null
 
     constructor(){
 
@@ -38,7 +40,9 @@ class User {
         imageUrl: String?,
         userActive: Int?,
         accepted: Int?,
-        idTeam: Int?
+        idTeam: Int?,
+        activities: Int?,
+        actAccepted: Int?
     ) {
         this.idUser = idUser
         this.userName = userName
@@ -55,6 +59,8 @@ class User {
         this.userActive = userActive
         this.accepted = accepted
         this.idTeam = idTeam
+        this.activities = activities
+        this.actAccepted = actAccepted
     }
 
 
@@ -76,6 +82,8 @@ class User {
         jsonObject.put("user_active" , userActive )
         jsonObject.put("accepted"    , accepted   )
         jsonObject.put("id_team"    , idTeam   )
+        jsonObject.put("activities", activities)
+        jsonObject.put("actAccepted", actAccepted)
 
         return jsonObject
     }
@@ -98,6 +106,8 @@ class User {
             user.userActive = if (!jsonObject.isNull("user_active" )) jsonObject.getInt("user_active" )else null
             user.accepted   = if (!jsonObject.isNull("accepted"    )) jsonObject.getInt("accepted"    )else null
             user.idTeam     = if (!jsonObject.isNull("id_team"    ))  jsonObject.getInt("id_team"    )else null
+            user.activities = if (!jsonObject.isNull("activities"))   jsonObject.getInt("activities")else null
+            user.actAccepted = if (!jsonObject.isNull("actAccepted")) jsonObject.getInt("actAccepted")else null
 
             return user
         }

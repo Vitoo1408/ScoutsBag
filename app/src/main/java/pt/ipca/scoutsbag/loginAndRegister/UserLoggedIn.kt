@@ -18,4 +18,6 @@ object UserLoggedIn {
     var userActive : Int? = null
     var accepted   : Int? = null
     var idTeam     : Int? = null
+    var activities : Int? = null
+    var actAccepted : Int? = null
 }

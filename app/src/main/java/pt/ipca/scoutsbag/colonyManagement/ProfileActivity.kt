@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -33,8 +35,12 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var user: User
     var id = ""
     var teams : List<Team> = arrayListOf()
+    var activities: Int? = null
+    var activitiesAccepted: Int? = null
+    var percentageActivities: Double? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
@@ -65,7 +71,10 @@ class ProfileActivity : AppCompatActivity() {
         val textStats = findViewById<TextView>(R.id.textStats)
 
 
-        //println("->>" + textName.text.toString())
+        // Stats
+        activities = user.activities
+        activitiesAccepted = user.actAccepted
+        percentageActivities = (activitiesAccepted!!.toDouble() / activities!!.toInt())*100
 
         // Set data
         textName.text = user.userName.toString()
@@ -78,6 +87,7 @@ class ProfileActivity : AppCompatActivity() {
         textBirthDate.text = user.birthDate.toString()
         textAddress.text = user.address.toString()
         textPostalCode.text = user.postalCode.toString()
+        textStats.text = "Participou em " + activitiesAccepted + " / " + activities + " possíveis.\nParticipou em " + percentageActivities + "% das atividades possíveis."
 
 
         butEdit.setOnClickListener() {

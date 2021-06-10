@@ -26,6 +26,9 @@ class InviteDetailsActivity : AppCompatActivity() {
     // Global variables
     private lateinit var activity: ScoutActivity
     private var users: List<User> = arrayListOf()
+    var countActivities: Int? = null
+    var countActivitiesAccepted: Int? = null
+
 
     // This function is for return to the previous activity after a operation
     var changeActivity: ()->Unit = {
@@ -47,6 +50,11 @@ class InviteDetailsActivity : AppCompatActivity() {
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
         val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
+
+
+        countActivities = UserLoggedIn.activities
+        countActivitiesAccepted = UserLoggedIn.actAccepted
+
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.textViewName)
@@ -114,11 +122,19 @@ class InviteDetailsActivity : AppCompatActivity() {
         buttonRefuse.setOnClickListener {
             invite.acceptedInvite = 0
             Backend.editInvite(invite, changeActivity)
+
+            countActivities?.plus(1)
+            UserLoggedIn.activities = countActivities
         }
 
         buttonConfirm.setOnClickListener {
             invite.acceptedInvite = 1
             Backend.editInvite(invite, changeActivity)
+
+            countActivities?.plus(1)
+            countActivitiesAccepted?.plus(1)
+            UserLoggedIn.activities = countActivities
+            UserLoggedIn.actAccepted = countActivitiesAccepted
         }
 
     }
