@@ -2,17 +2,20 @@ package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.ActivityMaterial
 import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Team
@@ -29,6 +32,66 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
     lateinit var listViewTeams: ListView
     var activityId: Int? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Initial Settings
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_create_activity)
+
+        // Enable action bar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
+        // Pass the view objects to variables
+        val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
+        val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
+
+        // Create the pop up window to select the date
+        val dateStartPickerDialog = Utils.initDatePicker(dateStartTextView, this)
+        val dateEndPickerDialog = Utils.initDatePicker(dateEndTextView, this)
+
+        // Variables
+        listViewTeams = findViewById(R.id.listViewTeams)
+        teamAdapter = TeamsAdapter()
+        listViewTeams.adapter = teamAdapter
+
+        // On click section events
+        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
+        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
+
+        // Add activity type images to the list
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType1))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType2))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType3))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
+        activityTypesImages.add(findViewById(R.id.imageViewActivityType7))
+
+        // On click activity type
+        for (image in activityTypesImages)
+            image.setOnClickListener(onClickActivityType)
+
+        // On click button events
+        dateStartTextView.setOnClickListener {
+            dateStartPickerDialog.show()
+        }
+
+        dateEndTextView.setOnClickListener {
+            dateEndPickerDialog.show()
+        }
+
+        // Add material to the activity
+        buttonMaterial.setOnClickListener {
+            openSelectMaterialDialog()
+        }
+
+    }
 
     // This function is for select an section by clicking on the section image
     var onClickSection: (view: View)->Unit = {
@@ -267,7 +330,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
 
             // See if the team is already selected
             for (i in 0 until selectedTeams.size) {
-                if (team.idTeam == selectedTeams[i].idTeam) {
+                if (team.idTeam == selectedTeams[i].idTeam && !teamButton.isHovered) {
                     onClickTeam(teamButton)
                 }
             }
@@ -304,6 +367,36 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             textViewName.text = material.nameMaterial
             textViewQuantity.text = material.qntStock.toString()
 
+            // Activity material Id, this variable is the id of the materialActivity object in the selected materials list
+            var amId: Int? = null
+
+            // Selected all the previous selected materials
+            for (i in 0 until selectedMaterials.size) {
+                if (selectedMaterials[i].idMaterial == material.idMaterial) {
+                    checkBoxMaterial.isChecked = true
+                    textViewQuantity.text = selectedMaterials[i].qnt.toString()
+
+                    // Get the materialActivity index in the list
+                    amId = i
+                }
+            }
+
+            // Change the quantity of the material by his index (amId) in the selected materials list
+            textViewQuantity.doAfterTextChanged {
+                val text = it.toString()
+                if (amId != null) {
+                    if (text != "")
+                        selectedMaterials[amId].qnt = text.toInt()
+                    else {
+                        selectedMaterials[amId].qnt = 0
+                        checkBoxMaterial.isChecked = false
+
+                        selectedMaterials.removeAt(amId)
+                    }
+                }
+            }
+
+            // Remove or Add the material to this activity by clicking on the checkBox
             checkBoxMaterial.setOnClickListener {
 
                 if (!checkBoxMaterial.isChecked) {

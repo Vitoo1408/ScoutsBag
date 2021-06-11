@@ -13,18 +13,12 @@ import pt.ipca.scoutsbag.models.*
 
 class CreateActivityActivity : ScoutActivityCreationHelper() {
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_activity)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //set back icon on action bar
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
-        //set actionbar title
+        // Set actionbar title
         supportActionBar?.title = "Criar atividade"
 
         // Interact with the data base
@@ -39,52 +33,7 @@ class CreateActivityActivity : ScoutActivityCreationHelper() {
             }
         }
 
-        // Pass the view objects to variables
-        val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
-        val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
         val addButton = findViewById<Button>(R.id.buttonAddActivity)
-        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
-        listViewTeams = findViewById(R.id.listViewTeams)
-        teamAdapter = TeamsAdapter()
-        listViewTeams.adapter = teamAdapter
-
-        // Create the pop up window to select the date
-        val dateStartPickerDialog = Utils.initDatePicker(dateStartTextView, this)
-        val dateEndPickerDialog = Utils.initDatePicker(dateEndTextView, this)
-
-        // On click section events
-        findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewExploradores).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewPioneiros).setOnClickListener(onClickSection)
-        findViewById<ImageView>(R.id.imageViewCaminheiros).setOnClickListener(onClickSection)
-
-        // Add activity type images to the list
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType1))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType2))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType3))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType4))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType5))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType6))
-        activityTypesImages.add(findViewById(R.id.imageViewActivityType7))
-
-        // On click activity type
-        for (image in activityTypesImages)
-            image.setOnClickListener(onClickActivityType)
-
-        // On click button events
-        dateStartTextView.setOnClickListener {
-            dateStartPickerDialog.show()
-        }
-
-        dateEndTextView.setOnClickListener {
-            dateEndPickerDialog.show()
-        }
-
-        // Add material to the activity
-        buttonMaterial.setOnClickListener {
-            selectedMaterials.removeAll(selectedMaterials)
-            openSelectMaterialDialog()
-        }
 
         // Add activity and invite teams button event
         addButton.setOnClickListener {

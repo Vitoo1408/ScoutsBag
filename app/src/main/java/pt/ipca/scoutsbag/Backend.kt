@@ -110,6 +110,32 @@ object Backend {
 
 
     /*
+        This function add the invite in the data base
+        @context = context of the activity
+        @idTeam = team invited id
+     */
+    fun editActivity(activity: ScoutActivity) {
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            activity.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities/${activity.idActivity}")
+            .put(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+        }
+
+    }
+
+
+    /*
         This function remove the activity from the data base
         @idActivity = selected activity id
         @changeActivity = a function that return the user to the previous activity
@@ -212,8 +238,40 @@ object Backend {
 
 
     /*
-        ------------------------------------------------ Participation ------------------------------------------------
+        ------------------------------------------------ Invites ------------------------------------------------
      */
+
+
+    /*
+        This function returns all activities accepted by the user in the api to an list
+        @idUser = id of the logged user
+        @callBack = return the list
+     */
+    fun getAllActivityInvites(idActivity: Int, callBack: (List<Invite>)->Unit) {
+
+        val invites : MutableList<Invite> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites/$idActivity").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+                invites.add(invite)
+            }
+
+            // Return list
+            callBack(invites)
+        }
+    }
 
 
     /*
@@ -394,6 +452,26 @@ object Backend {
                 }
             }
         }
+    }
+
+
+    /*
+        This function remove the activity from the data base
+        @idMaterial = material id selected
+        @changeActivity = a function that return the user to the previous activity
+     */
+    fun removeInvite(invite: Invite) {
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesInvites/${invite.idActivity}/${invite.idUser}")
+            .delete()
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+        }
+
     }
 
 
@@ -1023,6 +1101,27 @@ object Backend {
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use {
+        }
+    }
+
+
+    /*
+        This function remove the activityMaterial from the data base
+        @id = activityMaterial selected
+     */
+    fun removeActivityMaterial(id: Int) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/$id")
+                .delete()
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use {
+            }
         }
     }
 
