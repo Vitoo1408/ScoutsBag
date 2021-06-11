@@ -21,12 +21,13 @@ import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
 
-
 open class ScoutActivityDetailsHelper: AppCompatActivity() {
 
+    // Global Variables
     lateinit var activity: ScoutActivity
     var materials: List<Material> = arrayListOf()
     var teams: List<Team> = arrayListOf()
+
 
     // This function is for return to the previous activity after a operation
     var changeActivity: ()->Unit = {
