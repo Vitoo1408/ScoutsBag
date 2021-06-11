@@ -36,7 +36,7 @@ object Utils {
 
         // Current Date
         val cDay   = c.get(Calendar.DAY_OF_MONTH)
-        val cMonth = c.get(Calendar.MONTH)
+        val cMonth = c.get(Calendar.MONTH) + 1
         val cYear  = c.get(Calendar.YEAR)
 
         // Check if it is outdated

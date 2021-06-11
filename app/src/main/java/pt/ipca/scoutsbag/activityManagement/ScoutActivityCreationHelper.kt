@@ -127,7 +127,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             imageView.setBackgroundResource(R.drawable.border)
         }
 
-        updateTeamButtons()
+        // updateTeamButtons()
 
         // Refresh the listView size
         val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
@@ -154,7 +154,20 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         else {
             button.setBackgroundResource(R.drawable.custom_button_orange)
             button.setTextColor(Color.WHITE)
-            selectedTeams.add(team)
+
+            // Verify if the team is already in the list
+            var foundTeam = false
+            for (i in 0 until selectedTeams.size) {
+                if (selectedTeams[i] == team) {
+                    foundTeam = true
+                }
+            }
+
+            // If not add it
+            if (!foundTeam) {
+                selectedTeams.add(team)
+            }
+
         }
     }
 
@@ -189,34 +202,16 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         // Find the teams of the selected section
         for (i in teams.size-1 downTo 0) {
             if (teams[i].idSection == idSection) {
-
                 // Find the team in selected teams and remove it
                 for (j in selectedTeams.size-1 downTo 0) {
-                    if (teams[i].idTeam == selectedTeams[j].idTeam)
+                    if (teams[i].idTeam == selectedTeams[j].idTeam) {
                         selectedTeams.removeAt(j)
+                    }
                 }
 
                 teams.removeAt(i)
             }
         }
-
-        teamAdapter.notifyDataSetChanged()
-    }
-
-
-    /*
-        This function update all buttons in the View
-        @idSection = selected section
-     */
-    private fun updateTeamButtons() {
-
-        val tempList: MutableList<Team> = arrayListOf()
-        tempList.addAll(teams)
-
-        teams.removeAll(teams)
-        teams.addAll(tempList)
-
-        teamAdapter.notifyDataSetChanged()
     }
 
 
@@ -367,23 +362,29 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             textViewName.text = material.nameMaterial
             textViewQuantity.text = material.qntStock.toString()
 
-            // Activity material Id, this variable is the id of the materialActivity object in the selected materials list
-            var amId: Int? = null
-
             // Selected all the previous selected materials
             for (i in 0 until selectedMaterials.size) {
                 if (selectedMaterials[i].idMaterial == material.idMaterial) {
                     checkBoxMaterial.isChecked = true
                     textViewQuantity.text = selectedMaterials[i].qnt.toString()
-
-                    // Get the materialActivity index in the list
-                    amId = i
                 }
             }
 
             // Change the quantity of the material by his index (amId) in the selected materials list
             textViewQuantity.doAfterTextChanged {
                 val text = it.toString()
+
+                // Activity material Id, this variable is the id of the materialActivity object in the selected materials list
+                var amId: Int? = null
+
+                // Check if the material is selected
+                for (i in 0 until selectedMaterials.size) {
+                    if (selectedMaterials[i].idMaterial == material.idMaterial) {
+                        amId = i
+                    }
+                }
+
+                // If material selected the user can change the text and save it
                 if (amId != null) {
                     if (text != "")
                         selectedMaterials[amId].qnt = text.toInt()
