@@ -14,7 +14,7 @@ class Catalog {
     var nameCatalog        : String? = null
     var catalogDescription : String?    = null
     var classification     : Int? = null
-    var instructionsTime   : String? = null
+    var instructionsTime   : Int? = null
 
     constructor(){
 
@@ -25,7 +25,7 @@ class Catalog {
         nameCatalog: String?,
         catalogDescription: String?,
         classification: Int?,
-        instructionsTime: String?
+        instructionsTime: Int?
     ) {
         this.idCatalog = idCatalog
         this.nameCatalog = nameCatalog
@@ -53,7 +53,7 @@ class Catalog {
             catalog.nameCatalog        = if (!jsonObject.isNull("name_catalog"        )) jsonObject.getString("name_catalog"        )else null
             catalog.catalogDescription = if (!jsonObject.isNull("catalog_description" )) jsonObject.getString   ("catalog_description" )else null
             catalog.classification     = if (!jsonObject.isNull("classification"      )) jsonObject.getInt("classification"      )else null
-            catalog.instructionsTime   = if (!jsonObject.isNull("instructions_time"   )) jsonObject.getString("instructions_time"   )else null
+            catalog.instructionsTime   = if (!jsonObject.isNull("instructions_time"   )) jsonObject.getInt("instructions_time"   )else null
 
             return catalog
         }

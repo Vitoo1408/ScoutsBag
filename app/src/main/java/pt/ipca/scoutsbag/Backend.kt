@@ -1,5 +1,7 @@
 package pt.ipca.scoutsbag
 
+import com.example.scoutsteste1.Catalog
+import com.example.scoutsteste1.Instruction
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -913,4 +915,102 @@ object Backend {
         }
     }
 
+
+    fun addCatalog(catalog: Catalog, changeActivity: () -> Unit){
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            catalog.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/catalogs")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main) {
+
+                if (response.message == "OK") {
+                    changeActivity()
+                }
+            }
+        }
+    }
+
+
+
+    fun addInstruction(instruction: Instruction, changeActivity: () -> Unit){
+
+        // Prepare the from body request
+        val requestBody = RequestBody.create(
+            "application/json".toMediaTypeOrNull(),
+            instruction.toJson().toString()
+        )
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/instructions")
+            .post(requestBody)
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            GlobalScope.launch (Dispatchers.Main) {
+
+                if (response.message == "OK") {
+                    changeActivity()
+                }
+            }
+        }
+    }
+
+    fun removeCatalog(idCatalog: Int){
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/catalogs/$idCatalog")
+                .delete()
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main) {
+
+                    if (response.message == "OK") {
+
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeInstruction(idInstruction: Int){
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Build the request
+            val request = Request.Builder()
+                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/instructions/$idInstruction")
+                .delete()
+                .build()
+
+            // Send the request and verify the response
+            OkHttpClient().newCall(request).execute().use { response ->
+
+                GlobalScope.launch (Dispatchers.Main) {
+
+                    if (response.message == "OK") {
+
+                    }
+                }
+            }
+        }
+    }
 }

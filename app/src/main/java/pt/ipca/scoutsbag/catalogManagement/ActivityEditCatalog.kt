@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.scoutsteste1.Catalog
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ class ActivityEditCatalog : AppCompatActivity() {
 
         var editNameCatalog = findViewById<EditText>(R.id.editNameCatalog)
         var editCatalogDescription = findViewById<EditText>(R.id.editCatalogDescription)
-        var editCatalogClassification = findViewById<EditText>(R.id.editCatalogClassification)
+        var ratingBarEditCatalog = findViewById<RatingBar>(R.id.ratingBarEditCatalog)
         var editCatalogTime = findViewById<EditText>(R.id.editCatalogTime)
         val saveEditCatalog = findViewById<Button>(R.id.saveEditCatalog)
 
@@ -44,7 +45,7 @@ class ActivityEditCatalog : AppCompatActivity() {
                     id_catalog.toInt(),
                     editNameCatalog.text.toString(),
                     editCatalogDescription.text.toString(),
-                    editCatalogClassification.text.toString().toInt(),
+                    ratingBarEditCatalog.rating.toInt(),
                     null
 
 
