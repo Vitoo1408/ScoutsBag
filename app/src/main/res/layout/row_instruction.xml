@@ -40,6 +40,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/buttonDeleteInstruction"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/icon_delete"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEditInstruction"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textViewSteps"
         android:layout_width="wrap_content"
