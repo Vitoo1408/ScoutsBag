@@ -28,11 +28,6 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        // Get the selected activity
-        val activityJsonStr = intent.getStringExtra("activity")
-        val activityJson = JSONObject(activityJsonStr!!)
-        activity = ScoutActivity.fromJson(activityJson)
-
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
         val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
@@ -57,23 +52,6 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         textViewLocal.text = activity.activitySite
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
-
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Get all materials requested for this activity
-            Backend.getAllActivityMaterial(activity.idActivity!!) {
-                materials = it
-            }
-
-            // Get all invited teams for this activity
-            Backend.getAllInvitedTeams(activity.idActivity!!) {
-                teams = it
-            }
-
-            // Display all invited sections
-            getAllInvitedSections()
-
-        }
 
         // View requested material list
         buttonMaterial.setOnClickListener {

@@ -1,6 +1,8 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.*
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
@@ -11,12 +13,14 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.*
 
+
 class CreateActivityActivity : ScoutActivityCreationHelper() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
         super.onCreate(savedInstanceState)
+        onClickActivityType(findViewById(R.id.imageViewActivityType1))
 
         // Set actionbar title
         supportActionBar?.title = "Criar atividade"
@@ -33,8 +37,6 @@ class CreateActivityActivity : ScoutActivityCreationHelper() {
             }
         }
 
-        val addButton = findViewById<Button>(R.id.buttonAddActivity)
-
         // Add activity and invite teams button event
         addButton.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
@@ -42,16 +44,16 @@ class CreateActivityActivity : ScoutActivityCreationHelper() {
                 // Build the activity that will be added
                 val scoutActivity = ScoutActivity(
                     activityId,
-                    findViewById<EditText>(R.id.editTextActivityName).text.toString(),
+                    editTextActivityName.text.toString(),
                     getSelectedActivityType(),
-                    findViewById<EditText>(R.id.editTextActivityDescription).text.toString(),
-                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
-                    Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateStartButton).text.toString()),
-                    Utils.dateTimeToMySql(findViewById<TextView>(R.id.dateEndButton).text.toString()),
-                    findViewById<EditText>(R.id.editTextActivityLocalization).text.toString(),
-                    findViewById<EditText>(R.id.editTextActivityLocalizationStart).text.toString(),
-                    findViewById<EditText>(R.id.editTextActivityLocalizationEnd).text.toString(),
-                    findViewById<EditText>(R.id.editTextActivityPrice).text.toString().toFloat()
+                    editTextActivityDescription.text.toString(),
+                    editTextActivityLocalization.text.toString(),
+                    Utils.dateTimeToMySql(dateStartButton.text.toString()),
+                    Utils.dateTimeToMySql(dateEndButton.text.toString()),
+                    editTextActivityLocalization.text.toString(),
+                    editTextActivityLocalizationStart.text.toString(),
+                    editTextActivityLocalizationEnd.text.toString(),
+                    editTextActivityPrice.text.toString().toFloat()
                 )
 
                 // Add activity

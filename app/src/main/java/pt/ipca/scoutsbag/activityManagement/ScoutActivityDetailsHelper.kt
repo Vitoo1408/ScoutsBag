@@ -1,6 +1,7 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.*
 import android.widget.BaseAdapter
 import android.widget.ImageView
@@ -13,6 +14,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
@@ -27,6 +29,35 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
     lateinit var activity: ScoutActivity
     var materials: List<Material> = arrayListOf()
     var teams: List<Team> = arrayListOf()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Initial Settings
+        super.onCreate(savedInstanceState)
+
+        // Get the selected activity
+        val activityJsonStr = intent.getStringExtra("activity")
+        val activityJson = JSONObject(activityJsonStr!!)
+        activity = ScoutActivity.fromJson(activityJson)
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            // Get all materials requested for this activity
+            Backend.getAllActivityMaterial(activity.idActivity!!) {
+                materials = it
+            }
+
+            // Get all invited teams for this activity
+            Backend.getAllInvitedTeams(activity.idActivity!!) {
+                teams = it
+            }
+
+            // Display all invited sections
+            getAllInvitedSections()
+        }
+
+    }
 
 
     // This function is for return to the previous activity after a operation

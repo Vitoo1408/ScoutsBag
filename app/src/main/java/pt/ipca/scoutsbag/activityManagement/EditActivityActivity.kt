@@ -32,28 +32,16 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
         activity = ScoutActivity.fromJson(activityJson)
         activityId = activity.idActivity
 
-        // Variables in the view
-        val editViewActivityName = findViewById<TextView>(R.id.editTextActivityName)
-        val editViewActivityDescription = findViewById<TextView>(R.id.editTextActivityDescription)
-        val dateStartButton = findViewById<TextView>(R.id.dateStartButton)
-        val dateEndButton = findViewById<TextView>(R.id.dateEndButton)
-        val editTextActivityPrice = findViewById<TextView>(R.id.editTextActivityPrice)
-        val editTextActivityLocalization = findViewById<TextView>(R.id.editTextActivityLocalization)
-        val editTextActivityLocalizationStart = findViewById<TextView>(R.id.editTextActivityLocalizationStart)
-        val editTextActivityLocalizationEnd = findViewById<TextView>(R.id.editTextActivityLocalizationEnd)
-        val buttonEdit = findViewById<TextView>(R.id.buttonAddActivity)
-        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
-
         // Set values in the view
-        editViewActivityName.text = activity.nameActivity
-        editViewActivityDescription.text = activity.activityDescription
+        editTextActivityName.text.append(activity.nameActivity)
+        editTextActivityDescription.text.append(activity.activityDescription)
         dateStartButton.text = Utils.mySqlDateTimeToString(activity.startDate!!)
         dateEndButton.text = Utils.mySqlDateTimeToString(activity.finishDate!!)
-        editTextActivityPrice.text = activity.price.toString()
-        editTextActivityLocalization.text = activity.activitySite
-        editTextActivityLocalizationStart.text = activity.startSite
-        editTextActivityLocalizationEnd.text = activity.finishSite
-        buttonEdit.text = "Editar Atividade"
+        editTextActivityPrice.text.append(activity.price.toString())
+        editTextActivityLocalization.text.append(activity.activitySite)
+        editTextActivityLocalizationStart.text.append(activity.startSite)
+        editTextActivityLocalizationEnd.text.append(activity.finishSite)
+        addButton.text = "Editar Atividade"
 
         // Get all materials from this activity from data base
         GlobalScope.launch(Dispatchers.IO) {
@@ -84,6 +72,7 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
         for (i in 0 until 4)
             sections.add(Section(i, false))
 
+        // Get all teams and select them
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get all previous invited teams
@@ -121,16 +110,16 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
         onClickActivityType(activityTypesImages[activity.idType!!-1])
 
         // Edit button
-        buttonEdit.setOnClickListener {
+        addButton.setOnClickListener {
 
             GlobalScope.launch(Dispatchers.IO) {
 
                 // Build the activity that will be added
                 val scoutActivity = ScoutActivity(
                     activityId,
-                    editViewActivityName.text.toString(),
+                    editTextActivityName.text.toString(),
                     getSelectedActivityType(),
-                    editViewActivityDescription.text.toString(),
+                    editTextActivityDescription.text.toString(),
                     editTextActivityLocalization.text.toString(),
                     Utils.dateTimeToMySql(dateStartButton.text.toString()),
                     Utils.dateTimeToMySql(dateEndButton.text.toString()),

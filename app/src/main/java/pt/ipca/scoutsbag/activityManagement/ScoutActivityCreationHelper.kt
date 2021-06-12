@@ -3,6 +3,8 @@ package pt.ipca.scoutsbag.activityManagement
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -32,6 +34,18 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
     lateinit var listViewTeams: ListView
     var activityId: Int? = null
 
+    // Global Variables in View
+    lateinit var editTextActivityName: EditText
+    lateinit var editTextActivityDescription: EditText
+    lateinit var editTextActivityPrice: EditText
+    lateinit var dateStartButton: TextView
+    lateinit var dateEndButton: TextView
+    lateinit var editTextActivityLocalization: EditText
+    lateinit var editTextActivityLocalizationStart: EditText
+    lateinit var editTextActivityLocalizationEnd: EditText
+    lateinit var addButton: Button
+    lateinit var buttonMaterial: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings
@@ -45,18 +59,38 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         // Pass the view objects to variables
-        val dateStartTextView = findViewById<TextView>(R.id.dateStartButton)
-        val dateEndTextView = findViewById<TextView>(R.id.dateEndButton)
-        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
+        dateStartButton = findViewById(R.id.dateStartButton)
+        dateEndButton = findViewById(R.id.dateEndButton)
 
         // Create the pop up window to select the date
-        val dateStartPickerDialog = Utils.initDatePicker(dateStartTextView, this)
-        val dateEndPickerDialog = Utils.initDatePicker(dateEndTextView, this)
+        val dateStartPickerDialog = Utils.initDatePicker(dateStartButton, this)
+        val dateEndPickerDialog = Utils.initDatePicker(dateEndButton, this)
 
         // Variables
         listViewTeams = findViewById(R.id.listViewTeams)
         teamAdapter = TeamsAdapter()
         listViewTeams.adapter = teamAdapter
+
+        // Get Variables in the view
+        editTextActivityName = findViewById(R.id.editTextActivityName)
+        editTextActivityDescription = findViewById(R.id.editTextActivityDescription)
+        editTextActivityPrice = findViewById(R.id.editTextActivityPrice)
+        editTextActivityLocalization = findViewById(R.id.editTextActivityLocalization)
+        editTextActivityLocalizationStart = findViewById(R.id.editTextActivityLocalizationStart)
+        editTextActivityLocalizationEnd = findViewById(R.id.editTextActivityLocalizationEnd)
+        buttonMaterial = findViewById(R.id.buttonMaterial)
+        addButton = findViewById(R.id.buttonAddActivity)
+        addButton.isEnabled = false
+
+        // Add text listeners
+        editTextActivityName.addTextChangedListener(textWatcher)
+        editTextActivityDescription.addTextChangedListener(textWatcher)
+        dateStartButton.addTextChangedListener(textWatcher)
+        dateEndButton.addTextChangedListener(textWatcher)
+        editTextActivityPrice.addTextChangedListener(textWatcher)
+        editTextActivityLocalization.addTextChangedListener(textWatcher)
+        editTextActivityLocalizationStart.addTextChangedListener(textWatcher)
+        editTextActivityLocalizationEnd.addTextChangedListener(textWatcher)
 
         // On click section events
         findViewById<ImageView>(R.id.imageViewLobitos).setOnClickListener(onClickSection)
@@ -78,11 +112,11 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             image.setOnClickListener(onClickActivityType)
 
         // On click button events
-        dateStartTextView.setOnClickListener {
+        dateStartButton.setOnClickListener {
             dateStartPickerDialog.show()
         }
 
-        dateEndTextView.setOnClickListener {
+        dateEndButton.setOnClickListener {
             dateEndPickerDialog.show()
         }
 
@@ -91,6 +125,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             openSelectMaterialDialog()
         }
 
+        refreshButtonState()
     }
 
     // This function is for select an section by clicking on the section image
@@ -165,10 +200,14 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
 
             // If not add it
             if (!foundTeam) {
-                selectedTeams.add(team)
-            }
 
+                if (team != null)
+                    selectedTeams.add(team)
+            }
         }
+
+        // Refresh the confirm button enable property
+        refreshButtonState()
     }
 
 
@@ -190,6 +229,55 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
     var changeActivity: ()->Unit = {
         val returnIntent = Intent(this, MainActivity::class.java)
         startActivity(returnIntent)
+    }
+
+
+    // This function check if all data is written so the user can click in the confirm button
+    private val textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            // Refresh the confirm button enable property
+            refreshButtonState()
+        }
+
+        override fun afterTextChanged(s: Editable) {}
+    }
+
+
+    /*
+        This function active or deactivate the confirm button depending if all data is written and selected
+        @state = if true active the button, if false deactivate it
+     */
+    private fun refreshButtonState() {
+
+        // Verify if all data is written and selected
+        addButton.isEnabled = (
+                editTextActivityName.text.toString().trim().isNotEmpty() &&
+                        editTextActivityName.text.toString().trim().isNotEmpty() &&
+                        editTextActivityDescription.text.toString().trim().isNotEmpty() &&
+                        dateStartButton.text.toString().trim() != "01/01/2020 - 0:00" &&
+                        dateEndButton.text.toString().trim() != "01/01/2020 - 0:00" &&
+                        editTextActivityPrice.text.toString().trim().isNotEmpty() &&
+                        editTextActivityLocalization.text.toString().trim().isNotEmpty() &&
+                        editTextActivityLocalizationStart.text.toString().trim().isNotEmpty() &&
+                        editTextActivityLocalizationEnd.text.toString().trim().isNotEmpty() &&
+                        selectedTeams.size > 0
+                )
+
+        if (addButton.isEnabled) {
+            // Inactivate accept button
+            addButton.setBackgroundResource(R.drawable.custom_button_orange)
+            addButton.setTextColor(resources.getColor(R.color.white))
+            addButton.isClickable = true
+        }
+        else {
+            // Inactivate accept button
+            addButton.setBackgroundResource(R.drawable.custom_button_white)
+            addButton.setTextColor(resources.getColor(R.color.orange))
+            addButton.isClickable = false
+        }
     }
 
 
@@ -219,16 +307,21 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         This function return a team depending on the selected team button
         @button = Selected team button
      */
-    private fun findTeamByItsButton(button: Button): Team {
+    private fun findTeamByItsButton(button: Button): Team? {
 
         var team: Team? = null
 
+        println("------------------")
         for (i in 0 until teams.size) {
+
+            println("team - " + teams[i].teamName)
+            println("button - " + button.text)
+
             if (teams[i].teamName == button.text)
                 team = teams[i]
         }
 
-        return team!!
+        return team
     }
 
 

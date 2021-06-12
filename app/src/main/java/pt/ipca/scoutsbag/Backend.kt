@@ -1071,6 +1071,7 @@ object Backend {
 
                 if (activityMaterial.idActivity == idActivity) {
                     val material = getMaterial(activityMaterial.idMaterial!!)
+                    material.qntStock = activityMaterial.qnt
                     materials.add(material)
                 }
             }
