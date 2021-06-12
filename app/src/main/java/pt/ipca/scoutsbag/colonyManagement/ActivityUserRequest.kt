@@ -45,6 +45,8 @@ class ActivityUserRequest : AppCompatActivity() {
         actionbar!!.title = "Pedidos adesão"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         // Get the values to the lists
         GlobalScope.launch(Dispatchers.IO) {

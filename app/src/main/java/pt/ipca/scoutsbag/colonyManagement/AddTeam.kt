@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
@@ -15,6 +18,8 @@ class AddTeam: AppCompatActivity() {
     // Global Variables
     var sectionImages: MutableList<ImageView> = arrayListOf()
 
+    var buttonSaveTeam : Button? = null
+
     var onClickSection: (view: View)->Unit = {
         val imageView = it as ImageView
 
@@ -24,8 +29,11 @@ class AddTeam: AppCompatActivity() {
         }
 
         imageView.isHovered = true
-
         imageView.setBackgroundResource(R.drawable.border)
+
+        // Inactivate button
+        buttonSaveTeam!!.setBackgroundResource(R.drawable.custom_button_orange)
+        buttonSaveTeam!!.isClickable = true
 
     }
 
@@ -42,8 +50,7 @@ class AddTeam: AppCompatActivity() {
         setContentView(R.layout.activity_add_team)
 
         // Pass the view objects to variables
-        val buttonSaveTeam = findViewById<Button>(R.id.buttonSaveTeam)
-        val button = findViewById<Button>(R.id.button)
+        buttonSaveTeam = findViewById(R.id.buttonSaveTeam)
         sectionImages.add(findViewById(R.id.imageViewLobitos))
         sectionImages.add(findViewById(R.id.imageViewExploradores))
         sectionImages.add(findViewById(R.id.imageViewPioneiros))
@@ -54,21 +61,23 @@ class AddTeam: AppCompatActivity() {
             sectionImages[i].setOnClickListener(onClickSection)
         }
 
-        button.setOnClickListener{
-            println(getSection())
+        buttonSaveTeam!!.setOnClickListener {
+
+            GlobalScope.launch(Dispatchers.IO) {
+                // Build the team
+                val team = Team(
+                    intent.getIntExtra("idTeam", 0),
+                    findViewById<TextView>(R.id.editTextTeamName).text.toString(),
+                    getSection()
+                )
+                Backend.addTeam(team, changeActivity)
+
+            }
         }
 
-        buttonSaveTeam.setOnClickListener {
-
-            // Build the team
-            val team = Team(
-                intent.getIntExtra("idTeam", 0),
-                findViewById<TextView>(R.id.editTextTeamName).text.toString(),
-                getSection()
-            )
-            Backend.addTeam(team, changeActivity)
-
-        }
+        // Inactivate button
+        buttonSaveTeam!!.setBackgroundResource(R.drawable.custom_button_white_unfocused)
+        buttonSaveTeam!!.isClickable = false
 
     }
 
