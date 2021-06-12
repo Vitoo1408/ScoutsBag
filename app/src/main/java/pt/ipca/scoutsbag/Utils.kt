@@ -36,7 +36,7 @@ object Utils {
 
         // Current Date
         val cDay   = c.get(Calendar.DAY_OF_MONTH)
-        val cMonth = c.get(Calendar.MONTH)
+        val cMonth = c.get(Calendar.MONTH) + 1
         val cYear  = c.get(Calendar.YEAR)
 
         // Check if it is outdated
@@ -149,6 +149,20 @@ object Utils {
 
         // Return the two
         return "$date - $time"
+    }
+
+    /*
+        This function convert mySqlDateTime to an date string
+        @mysqlDateTime = mysql value
+     */
+    fun mySqlDateTimeToStringUser(mysqlDateTime: String): String {
+
+        // Get the date and the time
+        val date = mySqlDateToString(mysqlDateTime)
+        val time = mySqlTimeToString(mysqlDateTime)
+
+        // Return the two
+        return "$date-$time"
     }
 
 

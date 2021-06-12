@@ -86,6 +86,8 @@ class Login : AppCompatActivity() {
                                 val token = messageJsonObject.getString("token")
                                 //get user info from html response
                                 val jsonArrayUser = messageJsonObject.getJSONArray("userInfo").getJSONObject(0)
+                                //get logged in user id
+                                val loggedUserId = jsonArrayUser.getString("id_user")
 
                                 //save the loggedIn state as TRUE and the user details as a json object on the shared preferences
                                 val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
