@@ -26,6 +26,9 @@ class ActivityReplyRequest : AppCompatActivity() {
     var teams : MutableList<Team> = arrayListOf()
     var selectedTeam: Team? = null
     var buttonTeamList: MutableList<Button> = arrayListOf()
+    var correctDate : String? = null
+    var correctTime : String? = null
+    var correctDateTime : String? = null
     private var sectionImages: MutableList<ImageView> = arrayListOf()
     private lateinit var listViewTeams: ListView
     lateinit var adapter: ActivityReplyRequest.TeamsAdapter
@@ -155,6 +158,21 @@ class ActivityReplyRequest : AppCompatActivity() {
         textAddress.text = user.address
         textPostalCode.text = user.postalCode
 
+        // Set correct date time format
+        println("DATA BD " + user.birthDate)
+        correctDate = Utils.mySqlDateToString(user.birthDate!!)
+        correctTime = Utils.mySqlTimeToString(user.birthDate!!)
+        println("DATA INCoRRETA " + correctDate)
+        println("TEMPO INCoRRETA " + correctTime)
+        correctDateTime = Utils.changeDateFormat(correctDate!!) + " - " + correctTime
+
+        println("DATA CoRRETA " + correctDateTime)
+
+        correctDateTime = Utils.dateTimeToMySql(correctDateTime!!)
+
+        println("DATA CORRETISSIMA " + correctDateTime)
+
+
         // Edit user events
         buttonAcceptUser!!.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
@@ -162,17 +180,17 @@ class ActivityReplyRequest : AppCompatActivity() {
                 // Build the user that will be added
                 val userUpdated = User(
                     user.idUser,
-                    textName.text.toString(),
-                    Utils.dateTimeToMySql(user.birthDate!!),
-                    user.pass,
+                    user.userName,
+                    correctDateTime,
                     user.codType,
-                    textMail.text.toString(),
-                    textPhone.text.toString(),
+                    user.pass,
+                    user.email,
+                    user.contact,
                     user.gender,
-                    textAddress.text.toString(),
-                    textNIN.text.toString(),
+                    user.address,
+                    user.nin,
                     user.imageUrl,
-                    textPostalCode.text.toString(),
+                    user.postalCode,
                     1,
                     1,
                     selectedTeam!!.idTeam
@@ -193,9 +211,9 @@ class ActivityReplyRequest : AppCompatActivity() {
                 val userUpdated = User(
                     user.idUser,
                     user.userName,
-                    Utils.dateTimeToMySql(user.birthDate!!),
-                    user.pass,
+                    correctDateTime,
                     user.codType,
+                    user.pass,
                     user.email,
                     user.contact,
                     user.gender,
@@ -211,17 +229,14 @@ class ActivityReplyRequest : AppCompatActivity() {
                 // Edit user
                 Backend.editUser(userUpdated, changeActivity)
 
-
             }
 
         }
 
 
         // Inactivate accept button
-        println("botao esta" + buttonAcceptUser!!.isClickable)
         buttonAcceptUser!!.setBackgroundResource(R.drawable.custom_button_white)
         buttonAcceptUser!!.isClickable = false
-        println("botao esta" + buttonAcceptUser!!.isClickable)
     }
 
     /*

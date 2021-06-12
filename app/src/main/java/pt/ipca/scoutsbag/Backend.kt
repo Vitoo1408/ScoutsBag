@@ -636,37 +636,6 @@ object Backend {
         return response!!
     }
 
-    /*
-        This function updates a user in the database
-        @context = context of the activity
-        @idTeam = team invited id
-     */
-    fun editUser(user: User) {
-        GlobalScope.launch(Dispatchers.IO) {
-
-            // Prepare the from body request
-            val requestBody = RequestBody.create(
-                "application/json".toMediaTypeOrNull(),
-                user.toJson().toString()
-            )
-
-            // Build the request
-            val request = Request.Builder()
-                .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/${user.idUser}")
-                .put(requestBody)
-                .build()
-
-            // Send the request and verify the response
-            OkHttpClient().newCall(request).execute().use { response ->
-                GlobalScope.launch (Dispatchers.Main){
-                    if (response.message == "OK"){
-
-                    }
-                }
-            }
-        }
-    }
-
 
     /*
         This function edit the user in the database
@@ -675,14 +644,13 @@ object Backend {
      */
     fun editUser(user: User, changeActivity: ()->Unit) {
 
-        GlobalScope.launch(Dispatchers.IO) {
-
             // Prepare the from body request
             val requestBody = RequestBody.create(
                 "application/json".toMediaTypeOrNull(),
                 user.toJson().toString()
             )
 
+            println("JONHSON " + user.toJson().toString())
             // Build the request
             val request = Request.Builder()
                 .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/users/${user.idUser}")
@@ -699,7 +667,6 @@ object Backend {
                 }
             }
         }
-    }
 
 
     /*
@@ -870,6 +837,7 @@ object Backend {
             "application/json".toMediaTypeOrNull(),
             team.toJson().toString()
         )
+        println("JOHNSON HERE " + team.toJson().toString())
 
         // Build the request
         val request = Request.Builder()
