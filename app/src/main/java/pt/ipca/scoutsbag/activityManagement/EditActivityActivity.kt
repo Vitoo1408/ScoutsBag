@@ -1,12 +1,14 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
@@ -32,11 +34,16 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
         activity = ScoutActivity.fromJson(activityJson)
         activityId = activity.idActivity
 
+        // Get all sections
+        val sections: MutableList<Section> = arrayListOf()
+        for (i in 0 until 4)
+            sections.add(Section(i, false))
+
         // Set values in the view
         editTextActivityName.text.append(activity.nameActivity)
         editTextActivityDescription.text.append(activity.activityDescription)
-        dateStartButton.text = Utils.mySqlDateTimeToString(activity.startDate!!)
-        dateEndButton.text = Utils.mySqlDateTimeToString(activity.finishDate!!)
+        dateStartButton.text = Utils.changeDateFormat(Utils.mySqlDateToString(activity.startDate!!)) + " - " + Utils.mySqlTimeToString(activity.startDate!!)
+        dateEndButton.text = Utils.changeDateFormat(Utils.mySqlDateToString(activity.finishDate!!)) + " - " + Utils.mySqlTimeToString(activity.finishDate!!)
         editTextActivityPrice.text.append(activity.price.toString())
         editTextActivityLocalization.text.append(activity.activitySite)
         editTextActivityLocalizationStart.text.append(activity.startSite)
@@ -65,15 +72,6 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                     buttonMaterial.text = "Itens selecionados: ${selectedMaterials.size}"
                 }
             }
-        }
-
-        // Get all sections
-        val sections: MutableList<Section> = arrayListOf()
-        for (i in 0 until 4)
-            sections.add(Section(i, false))
-
-        // Get all teams and select them
-        GlobalScope.launch(Dispatchers.IO) {
 
             // Get all previous invited teams
             Backend.getAllInvitedTeams(activity.idActivity!!) { list ->
@@ -100,11 +98,30 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                            else -> findViewById(R.id.imageViewCaminheiros)
                        }
 
-                       onClickSection(sectionImage)
+                       // Get all team from the section
+                       GlobalScope.launch(Dispatchers.IO) {
+                           Backend.getAllSectionTeams(section) { list ->
+                               teams.addAll(list)
+                           }
+
+                           GlobalScope.launch(Dispatchers.Main) {
+                               teamAdapter.notifyDataSetChanged()
+                           }
+                       }
+
+                       // Configure the section image and the buttons list
+                       sectionImage.isHovered = !sectionImage.isHovered
+                       sectionImage.setBackgroundResource(R.drawable.border)
+                       val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
+                       params.height = params.height + 600
+                       listViewTeams.layoutParams = params
+                       listViewTeams.requestLayout()
                    }
                }
             }
         }
+
+
 
         // Select the activity type already selected
         onClickActivityType(activityTypesImages[activity.idType!!-1])
@@ -134,15 +151,18 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
 
                 // Variables
                 val newInvites: MutableList<Invite> = arrayListOf()
-                val previousInvites: MutableList<Invite> = arrayListOf()
 
-                // Get the previous invites
-                Backend.getAllActivityInvites(activityId!!) {
-                    previousInvites.addAll(it)
-                }
+                // Delete all invited teams
+                Backend.removeAllInvitedTeams(activityId!!)
+
+                // Delete all invited users
+                //Backend.removeInvite(activityId!!)
 
                 // Get the new invites
                 for (team in selectedTeams) {
+
+                    // Create an ActivityTeam for this team
+                    Backend.addActivityTeam(ActivityTeam(activityId!!, team.idTeam))
 
                     // Get all users from the current team
                     var teamUsers: List<User> = arrayListOf()
@@ -161,22 +181,10 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                         )
                         // Add invite to the list and to the data Base
                         newInvites.add(invite)
+
+                        println("entrou- " + invite.idUser)
                         Backend.addInvite(invite)
                     }
-                }
-
-                // Look if any invite have been removed during the edition, and the remove them from the dataBase
-                for (i in 0 until previousInvites.size) {
-                    var found = false
-                    for (j in 0 until newInvites.size) {
-                        if (previousInvites[i].idUser == newInvites[i].idUser) {
-                            found = true
-                        }
-                    }
-
-                    // Remove it if not found
-                    if (!found)
-                        Backend.removeInvite(previousInvites[i])
                 }
 
                 // Remove all previous activityMaterials
