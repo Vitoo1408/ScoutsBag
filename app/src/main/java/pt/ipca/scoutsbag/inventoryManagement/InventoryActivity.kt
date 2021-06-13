@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -87,6 +88,10 @@ class InventoryActivity : AppCompatActivity(){
             holder.materialName.text = inventoryItem.nameMaterial
             holder.materialQuantity.text = inventoryItem.qntStock.toString()
 
+            if (inventoryItem.imageUrl != "") {
+                Picasso.with(this@InventoryActivity).load(inventoryItem.imageUrl).into(holder.materialImage)
+            }
+
             if(inventoryItem.qntStock == 0)
                 holder.materialQuantity.setBackgroundResource(R.drawable.circle_shape_orange)
 
@@ -110,3 +115,4 @@ class InventoryActivity : AppCompatActivity(){
         return true
     }
 }
+

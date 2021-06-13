@@ -43,24 +43,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editNameCatalog" />
 
     <EditText
-        android:id="@+id/editCatalogClassification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/custom_button_black"
-        android:ems="10"
-        android:hint="Classificação"
-        android:padding="10dp"
-        android:textColor="#707070"
-        android:textSize="15sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCatalogDescription" />
-
-    <EditText
         android:id="@+id/editCatalogTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCatalogClassification" />
+        app:layout_constraintTop_toBottomOf="@+id/ratingBarEditCatalog" />
 
     <Button
         android:id="@+id/saveEditCatalog"
@@ -91,5 +73,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editCatalogTime" />
+
+    <RatingBar
+        android:id="@+id/ratingBarEditCatalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Dificuldade: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCatalogDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

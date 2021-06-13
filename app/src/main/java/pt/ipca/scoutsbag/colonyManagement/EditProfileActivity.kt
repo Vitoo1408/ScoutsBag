@@ -170,7 +170,9 @@ class EditProfileActivity : ActivityImageHelper() {
         Log.d("profileTemp", profileTemp.toJson().toString())
 
         //update user to db
-        Backend.editUser(profileTemp)
+        Backend.editUser(profileTemp) {
+
+        }
     }
 
     //when the support action bar back button is pressed, the app will go back to the previous activity

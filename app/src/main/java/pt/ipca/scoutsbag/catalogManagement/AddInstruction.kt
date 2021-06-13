@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import com.example.scoutsteste1.Catalog
 import com.example.scoutsteste1.Instruction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -14,6 +15,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import pt.ipca.scoutsbag.Backend
+import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 
 class AddInstruction : AppCompatActivity() {
@@ -32,33 +35,25 @@ class AddInstruction : AppCompatActivity() {
             id = it.getString("id").toString()
         }
 
+        var changeActivity: ()->Unit = {
+            val returnIntent = Intent(this, MainActivity::class.java)
+            startActivity(returnIntent)
+        }
+
         buttonSaveInstruction.setOnClickListener {
 
             GlobalScope.launch(Dispatchers.IO){
-                val client = OkHttpClient()
                 val instruction = Instruction(
                     null,
                     editTextInstructionText.text.toString(),
                     editTextImageUrl.text.toString(),
                     id.toInt()
+                )
 
-                )
-                val requestBody = RequestBody.create(
-                    "application/json".toMediaTypeOrNull(),
-                    instruction.toJson().toString()
-                )
-                Log.d("scoutsbag", instruction.toJson().toString())
-                val request = Request.Builder()
-                    .url("http://3.8.19.24:60000/api/v1/instructions")
-                    .post(requestBody)
-                    .build()
-                client.newCall(request).execute().use { response ->
-                    Log.d("scoutsbag", response.message)
-                }
+                Backend.addInstruction(instruction,changeActivity)
             }
-            startActivity(Intent(this, SeeInstructions::class.java))
+
         }
+
     }
-
-
 }

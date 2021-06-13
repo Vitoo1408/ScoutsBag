@@ -1,14 +1,21 @@
 package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.BoringLayout
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.example.scoutsteste1.ScoutActivity
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,7 +28,7 @@ import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.*
 import java.util.ArrayList
 
-class InviteDetailsActivity : AppCompatActivity() {
+class InviteDetailsActivity : ScoutActivityDetailsHelper() {
 
     // Global variables
     private lateinit var activity: ScoutActivity
@@ -41,11 +48,6 @@ class InviteDetailsActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_details)
-
-        // Get the selected activity
-        val activityJsonStr = intent.getStringExtra("activity")
-        val activityJson = JSONObject(activityJsonStr!!)
-        activity = ScoutActivity.fromJson(activityJson)
 
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
@@ -67,6 +69,7 @@ class InviteDetailsActivity : AppCompatActivity() {
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
         val buttonRefuse = findViewById<TextView>(R.id.button_refuse)
         val buttonConfirm = findViewById<TextView>(R.id.button_confirm)
+        val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
@@ -78,37 +81,9 @@ class InviteDetailsActivity : AppCompatActivity() {
         textViewPrice.text = activity.price.toString()
         textViewLocal.text = activity.activitySite
 
-        // Get all invited teams for this activity
-        GlobalScope.launch(Dispatchers.IO) {
-            Backend.getAllInvitedUsers(activity.idActivity!!) {
-                users = it
-            }
-
-            // Get all sections
-            val sections: MutableList<Section> = arrayListOf()
-            for (i in 0 until 4)
-                sections.add(Section(i, false))
-
-            // Verify if the section is already displayed
-            var position = 1
-            for (i in users.indices) {
-                if (users[i].idTeam != null) {
-
-                    // Get the user section
-                    val team = Backend.getTeam(users[i].idTeam!!)
-                    val teamSection = sections[team.idSection!!-1]
-
-                    // Display the image
-                    if (!teamSection.active!!) {
-                        teamSection.active = true
-                        GlobalScope.launch(Dispatchers.Main) {
-                            getSectionImage(teamSection.idSection!!, position)
-                            position++
-                        }
-                    }
-
-                }
-            }
+        // View requested material list
+        buttonMaterial.setOnClickListener {
+            openMaterialListDialog()
         }
 
         // Get the user participation for this invite
