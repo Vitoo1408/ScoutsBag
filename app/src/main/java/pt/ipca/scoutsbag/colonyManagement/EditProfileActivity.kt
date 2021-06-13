@@ -70,7 +70,7 @@ class EditProfileActivity : ActivityImageHelper() {
         genRadioGroup = findViewById(R.id.radioGroup)
 
         //load profile image
-        if(UserLoggedIn.imageUrl != ""){
+        if(UserLoggedIn.imageUrl != "") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
         }
 
@@ -92,10 +92,10 @@ class EditProfileActivity : ActivityImageHelper() {
         }
         editGender = UserLoggedIn.gender
         editName?.setText(UserLoggedIn.userName)
-        editNIN?.setText(UserLoggedIn.nin)
+        if(UserLoggedIn.nin != "null") editNIN?.setText(UserLoggedIn.nin)
         editPhone?.setText(UserLoggedIn.contact)
         editMail?.setText(UserLoggedIn.email)
-        editBirthDate?.setText(UserLoggedIn.birthDate)
+        editBirthDate?.setText(Utils.mySqlDateToString(UserLoggedIn.birthDate.toString()))
         editAddress?.setText(UserLoggedIn.address)
         editPostalCode?.setText(UserLoggedIn.postalCode)
 

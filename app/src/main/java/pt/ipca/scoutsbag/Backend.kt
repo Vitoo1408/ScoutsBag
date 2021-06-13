@@ -124,9 +124,7 @@ object Backend {
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
-
             GlobalScope.launch (Dispatchers.Main) {
-
                 if (response.message == "OK") {
                     changeActivity()
                 }
