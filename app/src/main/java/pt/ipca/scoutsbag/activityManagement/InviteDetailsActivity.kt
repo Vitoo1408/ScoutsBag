@@ -30,18 +30,11 @@ import java.util.ArrayList
 
 class InviteDetailsActivity : ScoutActivityDetailsHelper() {
 
-    // Global variables
-    private lateinit var activity: ScoutActivity
-    private var users: List<User> = arrayListOf()
+
     var countActivities: Int? = null
     var countActivitiesAccepted: Int? = null
 
 
-    // This function is for return to the previous activity after a operation
-    var changeActivity: ()->Unit = {
-        val returnIntent = Intent(this, MainActivity::class.java)
-        startActivity(returnIntent)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 

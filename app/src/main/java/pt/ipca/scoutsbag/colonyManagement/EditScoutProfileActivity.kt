@@ -32,13 +32,16 @@ class EditScoutProfileActivity : AppCompatActivity() {
 
     private var scoutImage: ImageView? = null
     private var scoutName: TextView? = null
+    var scoutSection: String? = null
+    var scoutTeam: String? = null
     private var editNIN: EditText? = null
     private var butSave: Button? = null
     var teams: MutableList<Team> = arrayListOf()
-    var selectedTeams: MutableList<Team> = arrayListOf()
     private lateinit var listViewTeams: ListView
+    var selectedTeams: MutableList<Team> = arrayListOf()
     lateinit var adapter: TeamsAdapter
     private lateinit var user: User
+    private lateinit var team: Team
 
 
 
@@ -258,7 +261,9 @@ class EditScoutProfileActivity : AppCompatActivity() {
                 GlobalScope.launch(Dispatchers.IO) {
 
                     user.nin = editNIN?.text.toString()
-                    // user.idTeam =
+
+                    user.idTeam = Backend.getTeamById(user.idTeam!!, teams).idTeam
+
                 }
             }
         }
