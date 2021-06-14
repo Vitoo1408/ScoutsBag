@@ -144,6 +144,8 @@ object Backend {
      */
     fun removeActivity(idActivity: Int, changeActivity: ()->Unit) {
 
+        println("entrou c");
+
         // Build the request
         val request = Request.Builder()
             .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activities/$idActivity")
@@ -739,6 +741,26 @@ object Backend {
         }
 
         callBack(teams)
+    }
+
+
+    /*
+        This function remove all teams invited from a selected activity
+        @idActivity = activity that the teams are invited
+        @callBack = return the list
+     */
+    fun removeAllInvitedTeams(idActivity: Int) {
+
+        // Build the request
+        val request = Request.Builder()
+            .url("http://${MainActivity.IP}:${MainActivity.PORT}/api/v1/activitiesTeams/$idActivity")
+            .delete()
+            .build()
+
+        // Send the request and verify the response
+        OkHttpClient().newCall(request).execute().use { response ->
+        }
+
     }
 
 

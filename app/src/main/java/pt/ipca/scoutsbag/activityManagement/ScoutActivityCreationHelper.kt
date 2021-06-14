@@ -162,8 +162,6 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             imageView.setBackgroundResource(R.drawable.border)
         }
 
-        // updateTeamButtons()
-
         // Refresh the listView size
         val params: ViewGroup.LayoutParams = listViewTeams.layoutParams
         params.height = params.height + buttonSpacing
@@ -311,14 +309,11 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
 
         var team: Team? = null
 
-        println("------------------")
         for (i in 0 until teams.size) {
-
-            println("team - " + teams[i].teamName)
-            println("button - " + button.text)
 
             if (teams[i].teamName == button.text)
                 team = teams[i]
+
         }
 
         return team
@@ -361,7 +356,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         This function display a dialog window with a list with
         material that can be selected to this activity
      */
-    fun openSelectMaterialDialog() {
+    private fun openSelectMaterialDialog() {
 
         // Variables
         val alertDialog = AlertDialog.Builder(this)
@@ -488,6 +483,10 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
                         selectedMaterials.removeAt(amId)
                     }
                 }
+
+                if (textViewQuantity.text.toString().toInt() > material.qntStock!!)
+                    textViewQuantity.text = material.qntStock.toString()
+
             }
 
             // Remove or Add the material to this activity by clicking on the checkBox
@@ -506,7 +505,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
                     }
 
                 }
-                else {
+                else if (textViewQuantity.text.toString() != "" && textViewQuantity.text.toString().toInt() != 0) {
 
                     val activityMaterial = ActivityMaterial(
                         activityId,

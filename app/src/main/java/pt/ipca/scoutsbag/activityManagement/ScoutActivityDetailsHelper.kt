@@ -139,7 +139,7 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
     /*
         This function return the invited section list
      */
-    fun getAllInvitedSections() {
+    private fun getAllInvitedSections() {
 
         // Get all sections
         val sections: MutableList<Section> = arrayListOf()
