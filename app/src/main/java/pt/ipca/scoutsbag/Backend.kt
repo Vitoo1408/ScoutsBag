@@ -14,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.models.*
 
+
 object Backend {
 
     /*
@@ -154,9 +155,7 @@ object Backend {
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
-
             GlobalScope.launch (Dispatchers.Main) {
-
                 if (response.message == "OK") {
                     changeActivity()
                 }

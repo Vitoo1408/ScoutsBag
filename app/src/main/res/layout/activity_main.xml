@@ -9,14 +9,14 @@
     android:background="@color/background_color">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profileImageColony"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toTopOf="@+id/backgroundMainActivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo2" />
+        app:srcCompat="@drawable/ic_top_bar_logo" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/backgroundMainActivity"
