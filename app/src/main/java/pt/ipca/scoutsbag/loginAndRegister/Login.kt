@@ -2,9 +2,7 @@ package pt.ipca.scoutsbag.loginAndRegister
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -58,6 +56,7 @@ class Login : AppCompatActivity() {
         buttonLogin?.setOnClickListener {
             if(validateFields()) {
                     val client = OkHttpClient()
+
                     //creation of the new object user that will be posted to db
                     newLogin.email = editTextEmail?.text.toString()
                     newLogin.pass = editTextPass?.text.toString()

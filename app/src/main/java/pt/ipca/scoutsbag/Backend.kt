@@ -12,6 +12,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.models.*
 
+
 object Backend {
 
     /*
