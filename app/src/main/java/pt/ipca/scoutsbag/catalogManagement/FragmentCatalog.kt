@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.widget.*
 import com.example.scoutsteste1.Catalog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -109,10 +110,14 @@ class FragmentCatalog : Fragment() {
             val rowView = layoutInflater.inflate(R.layout.row_catalog, parent, false)
 
             // Variables
+            val catalog = catalogs[position]
             val textViewNameCatalog = rowView.findViewById<TextView>(R.id.textViewNameCatalog)
             val textViewDescriptionCatalog = rowView.findViewById<TextView>(R.id.textViewDescriptionCatalog)
             val textViewTimeCatalog = rowView.findViewById<TextView>(R.id.textViewTimeCatalog)
             var rattingBarDifficulty = rowView.findViewById<RatingBar>(R.id.ratingBarDifficulty)
+            val catalogImage = rowView.findViewById<ImageView>(R.id.catalogImage)
+
+
             rattingBarDifficulty.isIndicator
 
             //Set Data
@@ -120,6 +125,10 @@ class FragmentCatalog : Fragment() {
             textViewDescriptionCatalog.text = catalogs[position].catalogDescription
             rattingBarDifficulty.rating = catalogs[position].classification.toString().toFloat()
             textViewTimeCatalog.text = catalogs[position].instructionsTime.toString()
+
+            if (catalog.imageUrl != "") {
+                Picasso.with(activity).load(catalog.imageUrl).into(catalogImage)
+            }
 
 
             rowView.setOnClickListener {
