@@ -36,7 +36,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
         val textViewQuantity = findViewById<TextView>(R.id.editTextMaterialQuantity)
         val buttonCancel = findViewById<TextView>(R.id.button_cancel)
         val buttonConfirm = findViewById<TextView>(R.id.button_confirm)
-        materialImage = findViewById(R.id.materialAddImage)
+        materialImage = findViewById(R.id.catalogAddImage)
 
         // Button Events
         buttonCancel.setOnClickListener { returnActivity }

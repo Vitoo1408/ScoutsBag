@@ -1,35 +1,38 @@
 package pt.ipca.scoutsbag.catalogManagement
 
+import android.app.TimePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RatingBar
-import android.widget.TimePicker
+import android.widget.*
 import com.example.scoutsteste1.Catalog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import pt.ipca.scoutsbag.Backend
-import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.*
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
+import java.util.*
 
-class AddCatalog : AppCompatActivity() {
+
+class AddCatalog : ActivityImageHelper() {
+
+    private var imageUri: Uri? = null
+    lateinit var catalogAddImage : ImageView
+    lateinit var imageUrl: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_catalog)
 
+        checkConnectivity()
+
         var editTextNameCatalog = findViewById<EditText>(R.id.editTextNameCatalog)
         var editTextDescriptionCatalog = findViewById<EditText>(R.id.editTextDescriptionCatalog)
         var rattingBarCatalog = findViewById<RatingBar>(R.id.ratingBarCatalogo)
-        val buttonSaveCatalog = findViewById<Button>(R.id.buttonSaveCatalog)
         var timePickerCatalog = findViewById<TimePicker>(R.id.timePickerCatalog)
+        val buttonSaveCatalog = findViewById<Button>(R.id.buttonSaveCatalog)
+
+        catalogAddImage = findViewById(R.id.catalogAddImage)
 
         //
         timePickerCatalog.setIs24HourView(true)
@@ -52,26 +55,58 @@ class AddCatalog : AppCompatActivity() {
         }
 
 
+
         var changeActivity: ()->Unit = {
             val returnIntent = Intent(this, MainActivity::class.java)
             startActivity(returnIntent)
         }
 
+        catalogAddImage?.setOnClickListener {
+            checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+        }
+
 
         buttonSaveCatalog.setOnClickListener {
 
+            val fileName = Utils.getFileName(this, imageUri!!)
+            val filePath = Utils.getUriFilePath(this, imageUri!!)
+
             GlobalScope.launch(Dispatchers.IO){
+
+                if(imageUri != null) {
+                    Utils.uploadImage(filePath!!, fileName) {
+                        imageUrl = it
+                    }
+                }
+
                 val catalog = Catalog(
                     null,
                     editTextNameCatalog.text.toString(),
                     editTextDescriptionCatalog.text.toString(),
                     rattingBarCatalog.rating.toInt(),
-                    timeCatalog
+                    timeCatalog,
+                    imageUrl
                 )
 
                 Backend.addCatalog(catalog,changeActivity)
             }
 
         }
+
+
+
     }
+
+    /*
+       This function happen after picking photo, and make changes in the activity
+    */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+            catalogAddImage?.setImageURI(data?.data)
+            imageUri = data?.data
+        }
+    }
+
 }
