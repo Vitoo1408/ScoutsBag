@@ -15,6 +15,7 @@ class Catalog {
     var catalogDescription : String?    = null
     var classification     : Int? = null
     var instructionsTime   : Int? = null
+    var imageUrl           : String? = null
 
     constructor(){
 
@@ -25,13 +26,15 @@ class Catalog {
         nameCatalog: String?,
         catalogDescription: String?,
         classification: Int?,
-        instructionsTime: Int?
+        instructionsTime: Int?,
+        imageUrl: String?
     ) {
         this.idCatalog = idCatalog
         this.nameCatalog = nameCatalog
         this.catalogDescription = catalogDescription
         this.classification = classification
         this.instructionsTime = instructionsTime
+        this.imageUrl = imageUrl
     }
 
     fun toJson() : JSONObject {
@@ -42,6 +45,7 @@ class Catalog {
         jsonObject.put("catalog_description" , catalogDescription )
         jsonObject.put("classification"      , classification     )
         jsonObject.put("instructions_time"   , instructionsTime   )
+        jsonObject.put("image_url"           , imageUrl           )
 
         return jsonObject
     }
@@ -54,6 +58,7 @@ class Catalog {
             catalog.catalogDescription = if (!jsonObject.isNull("catalog_description" )) jsonObject.getString   ("catalog_description" )else null
             catalog.classification     = if (!jsonObject.isNull("classification"      )) jsonObject.getInt("classification"      )else null
             catalog.instructionsTime   = if (!jsonObject.isNull("instructions_time"   )) jsonObject.getInt("instructions_time"   )else null
+            catalog.imageUrl           = if (!jsonObject.isNull("image_url"           )) jsonObject.getString("image_url"   )else null
 
             return catalog
         }
