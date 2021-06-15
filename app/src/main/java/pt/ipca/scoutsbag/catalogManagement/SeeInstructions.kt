@@ -29,7 +29,7 @@ class SeeInstructions : AppCompatActivity() {
     var listViewInstructions : ListView? = null
     lateinit var adapter : InstructionsAdapter
     var instructions : MutableList<Instruction> = arrayListOf()
-    var idCatalogSelected = ""
+    var idCatalogSelected: Int? = null
     var nameCatalog = ""
 
 
@@ -51,16 +51,13 @@ class SeeInstructions : AppCompatActivity() {
             val request = Request.Builder().url("http://3.8.19.24:60000/api/v1/instructions").build()
 
             client.newCall(request).execute().use { response ->
-                instructions.clear()
                 val jsStr: String = response.body!!.string()
-                println(jsStr)
-
                 val jsonArrayInstructions = JSONArray(jsStr)
 
                 for (index in 0 until jsonArrayInstructions.length()) {
                     val jsonArticle: JSONObject = jsonArrayInstructions.get(index) as JSONObject
                     val instruction = Instruction.fromJson(jsonArticle)
-                    if (instruction.idCatalog == idCatalogSelected.toInt())
+                    if (instruction.idCatalog == idCatalogSelected)
                     instructions.add(instruction)
                 }
 
@@ -72,8 +69,8 @@ class SeeInstructions : AppCompatActivity() {
         }
 
         bundle?.let{
-            idCatalogSelected = it.getString("id_catalogo").toString()
-            nameCatalog = it.getString("name_Catalog").toString()
+            idCatalogSelected = it.getString("id_catalog").toString().toInt()
+            nameCatalog = it.getString("name_catalog").toString()
         }
 
         buttonAddInstruction.setOnClickListener {
@@ -81,7 +78,7 @@ class SeeInstructions : AppCompatActivity() {
             val intent = Intent(this@SeeInstructions, AddInstruction::class.java)
 
             intent.putExtra("id", idCatalogSelected)
-
+            
             startActivity(intent)
 
         }
@@ -107,9 +104,9 @@ class SeeInstructions : AppCompatActivity() {
         when (item.itemId){
             R.id.itemDelete -> {
 
-                deleteCatalogDialog(idCatalogSelected.toInt())
+                deleteCatalogDialog(idCatalogSelected!!)
                 for(index in 0 until instructions.size){
-                    if(instructions[index].idCatalog == idCatalogSelected.toInt()){
+                    if(instructions[index].idCatalog == idCatalogSelected){
                         Backend.removeInstruction(instructions[index].idInstruction.toString().toInt())
                     }
                 }
@@ -159,16 +156,19 @@ class SeeInstructions : AppCompatActivity() {
             if (instruction.imageUrl != "") {
                 Picasso.with(this@SeeInstructions).load(instruction.imageUrl).into(instructionImage)
             }
+            else {
+                instructionImage.visibility = View.GONE
+            }
 
             textViewSteps.text = "Passo ${position + 1}"
             textViewInstructionText.text = instructions[position].instructionText
 
-
-
-
             buttonEditInstruction.setOnClickListener {
 
                 val intent = Intent(this@SeeInstructions, EditInstruction::class.java)
+
+                intent.putExtra("instruction", instruction.toJson().toString())
+                intent.putExtra("nameCatalog", nameCatalog)
 
                 startActivity(intent)
             }

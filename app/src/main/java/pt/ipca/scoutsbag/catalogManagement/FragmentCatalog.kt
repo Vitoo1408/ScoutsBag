@@ -135,8 +135,8 @@ class FragmentCatalog : Fragment() {
 
                 val intent = Intent(activity, SeeInstructions::class.java)
 
-                intent.putExtra("id_catalogo", catalogs[position].idCatalog.toString())
-                intent.putExtra("name_Catalog", catalogs[position].nameCatalog.toString())
+                intent.putExtra("id_catalog", catalogs[position].idCatalog.toString())
+                intent.putExtra("name_catalog", catalogs[position].nameCatalog.toString())
 
                 startActivity(intent)
 
