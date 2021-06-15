@@ -29,7 +29,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_material)
-        checkConnectivity()
+
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.editTextMaterialName)

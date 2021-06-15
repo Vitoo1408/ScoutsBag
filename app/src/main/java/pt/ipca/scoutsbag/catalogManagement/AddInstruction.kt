@@ -33,7 +33,6 @@ class AddInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_instruction)
 
-        checkConnectivity()
 
         editTextInstructionText = findViewById(R.id.editTextInstructionText)
         buttonSaveInstruction = findViewById(R.id.buttonSaveInstruction)

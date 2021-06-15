@@ -33,7 +33,6 @@ class AddCatalog : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_catalog)
 
-        checkConnectivity()
 
         editTextNameCatalog = findViewById(R.id.editTextNameCatalog)
         editTextDescriptionCatalog = findViewById(R.id.editTextDescriptionCatalog)
