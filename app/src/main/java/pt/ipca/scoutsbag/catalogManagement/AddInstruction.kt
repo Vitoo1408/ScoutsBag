@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -23,7 +25,9 @@ class AddInstruction : ActivityImageHelper() {
 
     private var imageUri: Uri? = null
     lateinit var instructionAddImage : ImageView
-    lateinit var imageUrl: String
+    var imageUrl: String? = null
+    lateinit var editTextInstructionText: EditText
+    lateinit var buttonSaveInstruction: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +35,19 @@ class AddInstruction : ActivityImageHelper() {
 
         checkConnectivity()
 
-        var editTextInstructionText = findViewById<EditText>(R.id.editTextInstructionText)
-        val buttonSaveInstruction = findViewById<Button>(R.id.buttonSaveInstruction)
-        instructionAddImage = findViewById<ImageView>(R.id.instructionAddImage)
+        editTextInstructionText = findViewById(R.id.editTextInstructionText)
+        buttonSaveInstruction = findViewById(R.id.buttonSaveInstruction)
+        instructionAddImage = findViewById(R.id.instructionAddImage)
 
-        var id = ""
+        editTextInstructionText.addTextChangedListener(textWatcher)
+
+        var id: Int? = null
         val bundle = intent.extras
 
         bundle?.let{
-            id = it.getString("id").toString()
+            id = it.getInt("id").toString().toInt()
         }
+
 
         var changeActivity: ()->Unit = {
             val returnIntent = Intent(this, MainActivity::class.java)
@@ -54,8 +61,13 @@ class AddInstruction : ActivityImageHelper() {
 
         buttonSaveInstruction.setOnClickListener {
 
-            val fileName = Utils.getFileName(this, imageUri!!)
-            val filePath = Utils.getUriFilePath(this, imageUri!!)
+            var fileName: String? = null
+            var filePath: String? = null
+
+            if (imageUri != null) {
+                fileName = Utils.getFileName(this, imageUri!!)
+                filePath = Utils.getUriFilePath(this, imageUri!!)
+            }
 
             GlobalScope.launch(Dispatchers.IO){
 
@@ -68,8 +80,8 @@ class AddInstruction : ActivityImageHelper() {
                 val instruction = Instruction(
                     null,
                     editTextInstructionText.text.toString(),
-                    imageUrl,
-                    id.toInt()
+                    if (imageUrl != null) imageUrl else "",
+                    id
                 )
 
                 Backend.addInstruction(instruction,changeActivity)
@@ -78,6 +90,34 @@ class AddInstruction : ActivityImageHelper() {
         }
 
     }
+
+
+    // This function check if all data is written so the user can click in the confirm button
+    private val textWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            // Verify if all data is written and selected
+            buttonSaveInstruction.isEnabled = (
+                        editTextInstructionText.text.toString().trim().isNotEmpty()
+                    )
+
+            if (buttonSaveInstruction.isEnabled) {
+                // Inactivate accept button
+                buttonSaveInstruction.setBackgroundResource(R.drawable.custom_button_orange)
+                buttonSaveInstruction.setTextColor(resources.getColor(R.color.white))
+            }
+            else {
+                // Inactivate accept button
+                buttonSaveInstruction.setBackgroundResource(R.drawable.custom_button_white)
+                buttonSaveInstruction.setTextColor(resources.getColor(R.color.orange))
+            }
+        }
+
+        override fun afterTextChanged(s: Editable) {}
+    }
+
 
     /*
        This function happen after picking photo, and make changes in the activity

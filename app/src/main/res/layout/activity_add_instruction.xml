@@ -11,10 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/custom_button_orange"
+        android:background="@drawable/custom_button_white"
+        android:textColor="@color/orange"
         android:text="Guardar Instrução"
         android:textStyle="normal"
         app:backgroundTint="@null"
+        android:enabled="false"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextInstructionText" />

@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.scoutsteste1.Instruction
+import com.example.scoutsteste1.ScoutActivity
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,14 +19,19 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import org.json.JSONObject
 import pt.ipca.scoutsbag.ActivityImageHelper
+import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class EditInstruction : ActivityImageHelper() {
 
+    lateinit var instruction: Instruction
+    lateinit var nameCatalog: String
     private var imageUri: Uri? = null
+    var imageUrl: String? = null
     lateinit var instructionEditImage : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,49 +42,62 @@ class EditInstruction : ActivityImageHelper() {
 
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)
-        instructionEditImage = findViewById<ImageView>(R.id.instructionEditImage)
-        var idC = ""
-        var idI = ""
-        val bundle = intent.extras
+        instructionEditImage = findViewById(R.id.instructionEditImage)
 
+        val bundle = intent.extras
         bundle?.let{
-            idC = it.getString("idCatalog").toString()
-            idI = it.getString("idInstruction").toString()
+            val instructionJsonStr = it.getString("instruction").toString()
+            val instructionJson = JSONObject(instructionJsonStr)
+            instruction = Instruction.fromJson(instructionJson)
+
+            nameCatalog = it.getString("nameCatalog").toString()
         }
+
+        editTextEditInstruction.text.append(instruction.instructionText)
 
         instructionEditImage?.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
         }
 
+        if (instruction.imageUrl != "") {
+            Picasso.with(this).load(instruction.imageUrl).into(instructionEditImage)
+            imageUrl = instruction.imageUrl
+        }
+
         buttonSaveEditInstruction.setOnClickListener {
 
-            val fileName = Utils.getFileName(this, imageUri!!)
-            val filePath = Utils.getUriFilePath(this, imageUri!!)
+            var fileName: String? = null
+            var filePath: String? = null
+
+            if (imageUri != null) {
+                fileName = Utils.getFileName(this, imageUri!!)
+                filePath = Utils.getUriFilePath(this, imageUri!!)
+            }
 
             GlobalScope.launch(Dispatchers.IO){
 
                 if(imageUri != null) {
                     Utils.uploadImage(filePath!!, fileName) {
-                        UserLoggedIn.imageUrl = it
+                        imageUrl = it
                     }
                 }
 
                 val client = OkHttpClient()
-                val instruction = Instruction(
-                    idI.toInt(),
+                val newInstruction = Instruction(
+                    instruction.idInstruction,
                     editTextEditInstruction.text.toString(),
-                    if (UserLoggedIn.imageUrl != null) UserLoggedIn.imageUrl else "",
-                    idC.toInt()
+                    if (imageUrl != null) imageUrl else "",
+                    instruction.idCatalog
 
 
                 )
                 val requestBody = RequestBody.create(
                     "application/json".toMediaTypeOrNull(),
-                    instruction.toJson().toString()
+                    newInstruction.toJson().toString()
                 )
                 Log.d("scoutsbag", instruction.toJson().toString())
                 val request = Request.Builder()
-                    .url("http://3.8.19.24:60000/api/v1/instructions/${idI.toInt()}")
+                    .url("http://3.8.19.24:60000/api/v1/instructions/${instruction.idInstruction}")
                     .put(requestBody)
                     .build()
                 client.newCall(request).execute().use { response ->
@@ -85,7 +105,11 @@ class EditInstruction : ActivityImageHelper() {
                 }
             }
 
-            startActivity(Intent(this, SeeInstructions::class.java))
+            val intent = Intent(this, SeeInstructions::class.java)
+            intent.putExtra("id_catalog", instruction.idCatalog.toString())
+            intent.putExtra("name_catalog", nameCatalog)
+
+            startActivity(intent)
         }
     }
 
