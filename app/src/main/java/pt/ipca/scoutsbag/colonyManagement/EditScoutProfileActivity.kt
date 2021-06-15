@@ -23,6 +23,7 @@ import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.activityManagement.CreateActivityActivity
 import pt.ipca.scoutsbag.activityManagement.EditActivityActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
+import pt.ipca.scoutsbag.models.Profile
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User as User
 
@@ -269,4 +270,5 @@ class EditScoutProfileActivity : AppCompatActivity() {
         }
     }
 }
+
 

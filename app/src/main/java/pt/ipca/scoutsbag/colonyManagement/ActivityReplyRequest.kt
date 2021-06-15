@@ -193,7 +193,9 @@ class ActivityReplyRequest : AppCompatActivity() {
                     user.postalCode,
                     1,
                     1,
-                    selectedTeam!!.idTeam
+                    selectedTeam!!.idTeam,
+                    user.activities,
+                    user.actAccepted
                 )
 
                 // Edit user
@@ -223,7 +225,9 @@ class ActivityReplyRequest : AppCompatActivity() {
                     user.postalCode,
                     0,
                     0,
-                    user.idTeam
+                    user.idTeam,
+                    user.activities,
+                    user.actAccepted
                 )
 
                 // Edit user
