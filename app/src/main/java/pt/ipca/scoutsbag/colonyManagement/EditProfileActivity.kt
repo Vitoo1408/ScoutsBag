@@ -1,12 +1,12 @@
 package pt.ipca.scoutsbag.colonyManagement
 
-import android.R.attr
-import android.app.DatePickerDialog
+import android.app.Service
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.*
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -21,7 +21,6 @@ import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
-import java.util.*
 
 
 class EditProfileActivity : ActivityImageHelper() {
@@ -44,9 +43,6 @@ class EditProfileActivity : ActivityImageHelper() {
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
-
-        //check the phones internet connectivity
-        checkConnectivity()
 
         //actionbar
         val actionbar = supportActionBar
@@ -82,7 +78,6 @@ class EditProfileActivity : ActivityImageHelper() {
                 R.id.genderOther -> editGender = "O"
             }
         }
-
 
         //load all user data into text views
         when (UserLoggedIn.gender) {
@@ -127,7 +122,6 @@ class EditProfileActivity : ActivityImageHelper() {
             finish()
         }
     }
-
 
     /*
        This function happen after picking photo, and make changes in the activity

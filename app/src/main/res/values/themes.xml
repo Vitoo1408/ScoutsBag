@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ScoutsBag" parent="Theme.AppCompat.DayNight">
+
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/background_color</item>
         <item name="colorPrimaryVariant">@color/orange</item>
