@@ -1074,6 +1074,37 @@ object Backend {
 
 
     /*
+        This function return all activityMaterials from a selected activity
+        @idActivity = activity id selected
+     */
+    fun getAllRequestedActivityMaterial(idActivity: Int, callBack: (List<ActivityMaterial>)->Unit) {
+
+        val activityMaterials: MutableList<ActivityMaterial> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val activityMaterial = ActivityMaterial.fromJson(jsonArticle)
+                activityMaterials.add(activityMaterial)
+            }
+
+            // Return list
+            callBack(activityMaterials)
+        }
+    }
+
+
+    /*
         This function add the activityMaterial into the data base
         @activityMaterial = activityMaterial selected
      */
@@ -1101,13 +1132,13 @@ object Backend {
         This function remove the activityMaterial from the data base
         @id = activityMaterial selected
      */
-    fun removeActivityMaterial(id: Int) {
+    fun removeActivityMaterial(activityMaterial: ActivityMaterial) {
 
         GlobalScope.launch(Dispatchers.IO) {
 
             // Build the request
             val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/$id")
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/${activityMaterial.idActivity}/${activityMaterial.idMaterial}")
                 .delete()
                 .build()
 

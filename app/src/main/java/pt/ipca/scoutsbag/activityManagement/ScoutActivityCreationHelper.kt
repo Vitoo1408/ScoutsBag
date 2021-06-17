@@ -1,12 +1,18 @@
 package pt.ipca.scoutsbag.activityManagement
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.ArrowKeyMovementMethod
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +27,7 @@ import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.ActivityMaterial
 import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Team
+
 
 open class ScoutActivityCreationHelper: AppCompatActivity()  {
 
@@ -181,7 +188,13 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
         if (!button.isHovered) {
             button.setBackgroundResource(R.drawable.custom_button_white)
             button.setTextColor(Color.BLACK)
-            selectedTeams.remove(team)
+
+            for (i in selectedTeams.size-1 downTo 0) {
+                if (selectedTeams[i].idTeam == team?.idTeam) {
+                    selectedTeams.removeAt(i)
+                }
+            }
+
         }
         // Set button as orange
         else {
@@ -421,7 +434,6 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             return rowView
         }
     }
-
 
     inner class MaterialsAdapter : BaseAdapter() {
 
