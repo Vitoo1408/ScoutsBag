@@ -113,9 +113,20 @@ class ColonyActivity : AppCompatActivity() {
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
-            textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
-            textViewNin.text = user.nin.toString()
+            if(user.idTeam!! != null) {
+                textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+                textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
+            } else {
+                textViewSection.text = "Sem secção"
+                textViewTeam.text = "Sem Equipa"
+            }
+
+            if(user.nin != "" && user.nin != null && user.nin != "null") {
+                textViewNin.text = "Nin: " + user.nin.toString()
+            } else {
+                textViewNin.text = "Nin :"
+            }
+
             if(!user.imageUrl.isNullOrEmpty()) {
                 Picasso.with(this@ColonyActivity).load(user.imageUrl).into(profileImage)
             } else {
@@ -126,6 +137,8 @@ class ColonyActivity : AppCompatActivity() {
             rowView.setOnClickListener {
                 val intent = Intent(this@ColonyActivity, ProfileActivity::class.java)
                 intent.putExtra("user", user.toJson().toString())
+                intent.putExtra("team", textViewTeam.text.toString())
+                intent.putExtra("section", textViewSection.text.toString())
                 startActivity(intent)
             }
 
