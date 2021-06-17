@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".loginAndRegister.Register"
-    android:background="@color/background_color">
+    android:background="@color/white"
+    tools:context=".loginAndRegister.Register">
 
 
     <ScrollView
@@ -18,80 +18,56 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/textViewNomeRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_gray_color"
-                android:text="Nome" />
-
             <EditText
                 android:id="@+id/editTextNomeRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Nome"
+                android:inputType="textPersonName"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="textPersonName"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewNinRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/text_gray_color"
-                android:layout_marginTop="20dp"
-                android:text="NIN" />
 
             <EditText
                 android:id="@+id/editTextNinRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="NIN"
+                android:inputType="number"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="number"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewTelemovelRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/text_gray_color"
-                android:text="Telemóvel" />
 
             <EditText
                 android:id="@+id/editTextTelemovelRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Telemóvel"
+                android:inputType="number|phone"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="number|phone"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewGeneroRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/text_gray_color"
-                android:text="Género" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
 
                 <Button
                     android:id="@+id/buttonMasculino"
@@ -119,50 +95,37 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewDtNasc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:text="Data de nascimento"
-                android:textColor="@color/text_gray_color" />
-
             <EditText
                 android:id="@+id/editTextDtNasc"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_style_edittext"
                 android:drawableStart="@drawable/icon_calendar"
                 android:drawablePadding="15dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Data de nascimento"
                 android:inputType="none"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewEmailRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Email"
-                android:textColor="@color/text_gray_color" />
 
             <EditText
                 android:id="@+id/editTextEmailRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Email"
+                android:inputType="textWebEmailAddress"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="textWebEmailAddress"
                 android:textSize="14sp" />
 
             <TextView
@@ -174,55 +137,35 @@
                 android:textColor="@color/red"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/textViewMoradaRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Morada"
-                android:textColor="@color/text_gray_color" />
-
             <EditText
                 android:id="@+id/editTextMoradaRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Morada"
                 android:inputType="text"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewCodPostalRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Código postal"
-                android:textColor="@color/text_gray_color" />
 
             <EditText
                 android:id="@+id/editTextCodPostalRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Código Postal"
+                android:inputType="number|phone"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="number|phone"
                 android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/textViewPpRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Palavra passe"
-                android:textColor="@color/text_gray_color" />
 
             <EditText
                 android:id="@+id/editTextPpRegisto"
@@ -232,9 +175,10 @@
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Palavra passe"
+                android:inputType="textPassword"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="textPassword"
                 android:textSize="14sp" />
 
             <TextView
@@ -249,28 +193,23 @@
                 android:id="@+id/textViewCharacters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="Oito ou mais caracteres"
                 android:textColor="@color/red" />
-
-            <TextView
-                android:id="@+id/textViewConfPpRegisto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Confirmação palavra passe"
-                android:textColor="@color/text_gray_color" />
 
             <EditText
                 android:id="@+id/editTextConfPpRegisto"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/custom_style_edittext"
                 android:elevation="5dp"
                 android:ems="10"
+                android:hint="Confirmação palavra passe"
+                android:inputType="textPassword|textNoSuggestions"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:inputType="textPassword|textNoSuggestions"
                 android:textSize="14sp" />
 
             <TextView

@@ -36,7 +36,7 @@ object Utils {
 
         // Current Date
         val cDay   = c.get(Calendar.DAY_OF_MONTH)
-        val cMonth = c.get(Calendar.MONTH)
+        val cMonth = c.get(Calendar.MONTH) + 1
         val cYear  = c.get(Calendar.YEAR)
 
         // Check if it is outdated
@@ -318,6 +318,19 @@ object Utils {
         }
 
         callBack(imageUrl!!)
+    }
+
+    fun uniqueImageNameGen(): String {
+        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&/()=@[]{}"
+
+        val sb = StringBuilder(15)
+
+        for(x in 0 until 15){
+            val random = (characters.indices).random()
+            sb.append(characters[random])
+        }
+
+        return sb.toString()
     }
 }
 

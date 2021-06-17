@@ -10,6 +10,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ import okhttp3.RequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
 class ProfileActivity : AppCompatActivity() {
@@ -36,26 +39,43 @@ class ProfileActivity : AppCompatActivity() {
         // Get the user from the last activity
         val userJsonStr = intent.getStringExtra("user")!!
         user = User.fromJson(JSONObject(userJsonStr))
+        val userTeam = intent.getStringExtra("team")
+        val userSection = intent.getStringExtra("section")
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = user.userName
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         // Variables
         val textName = findViewById<TextView>(R.id.scoutName)
         val textSection = findViewById<TextView>(R.id.scoutSection)
         val textTeam = findViewById<TextView>(R.id.scoutTeam)
-        val textNIN = findViewById<TextView>(R.id.textNIN)
         val textPhone = findViewById<TextView>(R.id.textPhone)
         val textMail = findViewById<TextView>(R.id.textMail)
         val textBirthDate = findViewById<TextView>(R.id.textBirthDate)
         val textAddress = findViewById<TextView>(R.id.textAddress)
         val textPostalCode = findViewById<TextView>(R.id.textPostalCode)
-        val butEdit = findViewById<Button>(R.id.editProfile)
-
-        //println("->>" + textName.text.toString())
+        val butEdit = findViewById<FloatingActionButton>(R.id.editProfile)
+        val profileImage = findViewById<ImageView>(R.id.imageProfile)
 
         // Set data
+        //load profile image
+        if(user.imageUrl != "" && user.imageUrl != "null") {
+            Picasso.with(this).load(user.imageUrl).into(profileImage)
+        }
         textName.text = user.userName
-        //textSection.text = user.sec
-        //textTeam.text = user.idTeam
-        textNIN.text = user.nin
+        if(userSection != "") {
+            textSection.text = userSection
+        }
+        if(userTeam != "") {
+            textTeam.text = userTeam
+        }
+
         textPhone.text = user.contact
         textMail.text = user.email
         textBirthDate.text = user.birthDate
@@ -68,6 +88,12 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }

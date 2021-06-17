@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ScoutsBag" parent="Theme.AppCompat.DayNight">
+    <style name="Theme.ScoutsBag" parent="Theme.AppCompat.Light">
+
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/background_color</item>
         <item name="colorPrimaryVariant">@color/orange</item>
@@ -28,6 +29,26 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#707070</item>
     </style>
+
+
+
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/orange</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/orange</item>
+    </style>
+
 
     <!-- Buttons text color and padding -->
     <style name="ButtonColor" parent="@android:style/Widget.Button">
