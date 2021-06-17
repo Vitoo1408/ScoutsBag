@@ -66,8 +66,10 @@ class EditProfileActivity : ActivityImageHelper() {
         genRadioGroup = findViewById(R.id.radioGroup)
 
         //load profile image
-        if(UserLoggedIn.imageUrl != "") {
+        if(UserLoggedIn.imageUrl != "" || UserLoggedIn.imageUrl != "null") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
+        } else {
+            editImage?.setImageResource(R.drawable.ic_user)
         }
 
         // edit user gender
@@ -186,7 +188,9 @@ class EditProfileActivity : ActivityImageHelper() {
         Log.d("userLoggedIn", profileTemp.toJson().toString())
 
         //update user to db
-        Backend.editUser(profileTemp)
+        Backend.editUser(profileTemp) {
+
+        }
     }
 
     //when the support action bar back button is pressed, the app will go back to the previous activity

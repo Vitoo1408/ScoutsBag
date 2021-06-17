@@ -126,6 +126,8 @@ class Register : AppCompatActivity() {
                     newUser.idTeam = null
 
                     val postBody = newUser.toJson()
+                    Log.d("postBody", postBody.toString())
+                    //println(postBody)
 
                     val requestBody = RequestBody.create(
                         "application/json".toMediaTypeOrNull(),

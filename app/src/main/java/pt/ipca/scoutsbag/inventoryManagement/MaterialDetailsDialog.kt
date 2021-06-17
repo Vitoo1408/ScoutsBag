@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.widget.doAfterTextChanged
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
@@ -43,10 +44,15 @@ class MaterialDetailsDialog : AppCompatDialogFragment() {
         //
         rootView.findViewById<TextView>(R.id.textViewNameMaterial).text = material.nameMaterial
         rootView.findViewById<TextView>(R.id.textViewMaterialType).text = material.materialType
+        val materialImage = rootView.findViewById<ImageView>(R.id.imageViewMaterial)
         val editTextQuantity = rootView.findViewById<TextView>(R.id.editTextMaterialQuantity)
         val deleteButton = rootView.findViewById<ImageView>(R.id.itemDelete)
 
         editTextQuantity.text = material.qntStock.toString()
+
+        if (material.imageUrl != "") {
+            Picasso.with(this.context).load(material.imageUrl).into(materialImage)
+        }
 
         editTextQuantity.doAfterTextChanged {
             val text = it.toString()
