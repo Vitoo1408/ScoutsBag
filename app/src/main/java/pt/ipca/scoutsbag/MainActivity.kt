@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag
 
+import DialogNoInternet
 import android.content.Intent
 import android.os.Bundle import android.os.Handler
 import android.text.Html
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import org.json.JSONObject
 import org.json.JSONTokener
+import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +29,13 @@ class MainActivity : AppCompatActivity() {
         //Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //var dialog = DialogNoInternet()
+        //dialog.show(supportFragmentManager, "customDialog")
+
+        /*while(!Utils.isOnline(this)){
+            dialog.show(supportFragmentManager, "customDialog")
+        }*/
 
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
@@ -72,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         UserLoggedIn.accepted = userDetailsJsonObject.getString("accepted").toInt()
         if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
         UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
-
     }
 
 }
