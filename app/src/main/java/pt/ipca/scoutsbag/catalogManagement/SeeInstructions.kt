@@ -90,6 +90,8 @@ class SeeInstructions : AppCompatActivity() {
         inflater.inflate(R.menu.delete_edit_menu, menu)
         title = nameCatalog
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         //hide delete and edit icon from activity details
         if(UserLoggedIn.codType == "Esc"){
@@ -228,5 +230,9 @@ class SeeInstructions : AppCompatActivity() {
         return true
     }
 
-
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }

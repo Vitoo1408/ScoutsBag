@@ -317,7 +317,6 @@ object Backend {
         }
     }
 
-
     /*
         This function returns all the invites from a specific user team in the api by an list
         @idUserTeam = team id of the selected user

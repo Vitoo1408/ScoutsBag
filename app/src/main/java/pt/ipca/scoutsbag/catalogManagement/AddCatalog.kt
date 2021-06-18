@@ -8,6 +8,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,6 +35,14 @@ class AddCatalog : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_catalog)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Adicionar catálogo"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         editTextNameCatalog = findViewById(R.id.editTextNameCatalog)
         editTextDescriptionCatalog = findViewById(R.id.editTextDescriptionCatalog)
@@ -82,7 +92,7 @@ class AddCatalog : ActivityImageHelper() {
             var filePath: String? = null
 
             if (imageUri != null) {
-                fileName = Utils.getFileName(this, imageUri!!)
+                fileName = Utils.uniqueImageNameGen()
                 filePath = Utils.getUriFilePath(this, imageUri!!)
             }
 
@@ -146,9 +156,24 @@ class AddCatalog : ActivityImageHelper() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            catalogAddImage?.setImageURI(data?.data)
-            imageUri = data?.data
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                catalogAddImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
         }
     }
 
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }

@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,12 +54,9 @@ class ActivityEditCatalog : ActivityImageHelper() {
         var timeCatalog = 0
 
         //calculation of the time picked in hours
-        if(timePickerHour > 0)
-        {
+        if(timePickerHour > 0) {
             timeCatalog = (timePickerHour * 60) + timePickerMinute
-        }
-        else
-        {
+        } else {
             timeCatalog = timePickerMinute
         }
 
@@ -72,7 +71,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
         saveEditCatalog.setOnClickListener {
 
-            val fileName = Utils.getFileName(this, imageUri!!)
+            val fileName = Utils.uniqueImageNameGen()
             val filePath = Utils.getUriFilePath(this, imageUri!!)
 
             GlobalScope.launch(Dispatchers.IO){
@@ -91,7 +90,6 @@ class ActivityEditCatalog : ActivityImageHelper() {
                     ratingBarEditCatalog.rating.toInt(),
                     timeCatalog,
                     if (UserLoggedIn.imageUrl != null) UserLoggedIn.imageUrl else ""
-
                 )
                 val requestBody = RequestBody.create(
                     "application/json".toMediaTypeOrNull(),
@@ -123,9 +121,19 @@ class ActivityEditCatalog : ActivityImageHelper() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == ActivityImageHelper.IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            catalogEditImage?.setImageURI(data?.data)
-            imageUri = data?.data
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                catalogEditImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
         }
     }
 

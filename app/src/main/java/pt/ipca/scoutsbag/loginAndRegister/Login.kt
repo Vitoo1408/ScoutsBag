@@ -128,13 +128,13 @@ class Login : AppCompatActivity() {
 
     //validate every registration form field
     private fun validateFields() : Boolean {
-        if(!Patterns.EMAIL_ADDRESS.matcher(editTextEmail?.text.toString()).matches()){
+        if(!Patterns.EMAIL_ADDRESS.matcher(editTextEmail?.text.toString()).matches()) {
             editTextEmail?.error = "O email é inválido!"
             return false
-        } else if (editTextPass?.text.toString().isEmpty()){
+        } else if (editTextPass?.text.toString().isEmpty()) {
             editTextPass?.error = "A password deve estar preenchida!"
             return false
-        } else{
+        } else {
             return true
         }
     }
