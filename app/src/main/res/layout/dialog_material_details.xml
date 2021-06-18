@@ -20,9 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="Tipo"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/imageViewMaterial"
             app:layout_constraintTop_toBottomOf="@+id/textViewNameMaterial" />
 
@@ -31,10 +29,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:text="Material"
             android:textSize="18dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintStart_toEndOf="@+id/imageViewMaterial"
             app:layout_constraintTop_toTopOf="parent" />
 

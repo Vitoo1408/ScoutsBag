@@ -50,6 +50,8 @@
         android:textColor="#707070"
         android:textSize="14sp"
         android:textStyle="normal"
+        android:focusable="true"
+        android:windowSoftInputMode="stateVisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
