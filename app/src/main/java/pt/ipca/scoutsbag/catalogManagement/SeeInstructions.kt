@@ -44,41 +44,30 @@ class SeeInstructions : AppCompatActivity() {
         adapter = InstructionsAdapter()
         listViewInstructions?.adapter = adapter
 
-        GlobalScope.launch(Dispatchers.IO) {
-
-
-            val client = OkHttpClient()
-            val request = Request.Builder().url("http://3.8.19.24:60000/api/v1/instructions").build()
-
-            client.newCall(request).execute().use { response ->
-                val jsStr: String = response.body!!.string()
-                val jsonArrayInstructions = JSONArray(jsStr)
-
-                for (index in 0 until jsonArrayInstructions.length()) {
-                    val jsonArticle: JSONObject = jsonArrayInstructions.get(index) as JSONObject
-                    val instruction = Instruction.fromJson(jsonArticle)
-                    if (instruction.idCatalog == idCatalogSelected)
-                    instructions.add(instruction)
-                }
-
-                GlobalScope.launch(Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-            }
-
+        bundle?.let{
+            idCatalogSelected = it.getInt("id_catalog")
+            nameCatalog = it.getString("name_catalog").toString()
         }
 
-        bundle?.let{
-            idCatalogSelected = it.getString("id_catalog").toString().toInt()
-            nameCatalog = it.getString("name_catalog").toString()
+        GlobalScope.launch(Dispatchers.IO) {
+
+            Backend.getAllInstructions(idCatalogSelected!!) {
+                instructions.addAll(it)
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                adapter.notifyDataSetChanged()
+            }
+
         }
 
         buttonAddInstruction.setOnClickListener {
 
             val intent = Intent(this@SeeInstructions, AddInstruction::class.java)
 
-            intent.putExtra("id", idCatalogSelected)
-            
+            intent.putExtra("id_catalog", idCatalogSelected)
+            intent.putExtra("name_catalog", nameCatalog)
+
             startActivity(intent)
 
         }
@@ -169,6 +158,7 @@ class SeeInstructions : AppCompatActivity() {
 
                 val intent = Intent(this@SeeInstructions, EditInstruction::class.java)
 
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra("instruction", instruction.toJson().toString())
                 intent.putExtra("nameCatalog", nameCatalog)
 
