@@ -52,16 +52,21 @@ class AddInstruction : ActivityImageHelper() {
         editTextInstructionText.addTextChangedListener(textWatcher)
 
         var id: Int? = null
+        var nameCatalog: String? = null
         val bundle = intent.extras
 
         bundle?.let{
-            id = it.getInt("id").toString().toInt()
+            id = it.getInt("id_catalog").toString().toInt()
+            nameCatalog = it.getString("name_catalog").toString()
         }
 
 
         var changeActivity: ()->Unit = {
-            val returnIntent = Intent(this, MainActivity::class.java)
-            startActivity(returnIntent)
+            val intent = Intent(this, SeeInstructions::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.putExtra("id_catalog", id)
+            intent.putExtra("name_catalog", nameCatalog)
+            startActivity(intent)
         }
 
         // When the user clicks on the material image to change it

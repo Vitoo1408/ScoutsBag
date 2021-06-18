@@ -158,9 +158,6 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                 for (invite in oldInvites)
                     Backend.removeInvite(invite)
 
-                for (team in selectedTeams)
-                    println("a- " + activityId + " t- " + team.idTeam)
-
                 // Get the new invites
                 for (team in selectedTeams) {
 
