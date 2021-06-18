@@ -18,10 +18,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import pt.ipca.scoutsbag.ActivityImageHelper
-import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import java.sql.Time
 import java.util.*
