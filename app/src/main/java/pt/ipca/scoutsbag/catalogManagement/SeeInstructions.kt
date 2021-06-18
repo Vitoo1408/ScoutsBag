@@ -143,8 +143,6 @@ class SeeInstructions : AppCompatActivity() {
             val instructionImage = rowView.findViewById<ImageView>(R.id.instructionImage)
 
             if (instruction.imageUrl != "") {
-                println("entrou com img: " + instruction.imageUrl)
-                println("e nome: " + instruction.instructionText)
                 Picasso.with(this@SeeInstructions).load(instruction.imageUrl).into(instructionImage)
             }
             else {

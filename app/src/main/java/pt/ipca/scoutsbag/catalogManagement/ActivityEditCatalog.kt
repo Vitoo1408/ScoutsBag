@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,7 +38,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
         var timePickerEditCatalog = findViewById<TimePicker>(R.id.timePickerEditCatalogo)
         catalogEditImage = findViewById<ImageView>(R.id.catalogEditImage)
         val bundle = intent.extras
-        var id_catalog = ""
+        var id_catalog = 0
 
 
         timePickerEditCatalog.setIs24HourView(true)
@@ -59,17 +60,29 @@ class ActivityEditCatalog : ActivityImageHelper() {
             timeCatalog = timePickerMinute
         }
 
-
-        bundle?.let{
-            id_catalog = it.getString("id_catalog").toString()
+        bundle?.let {
+            id_catalog = it.getInt("id_catalog",0)
         }
 
         GlobalScope.launch(Dispatchers.IO) {
 
-            catalog = Backend.getCatalog(id_catalog.toInt())
+            println("id_catalog + " + id_catalog)
+            catalog = Backend.getCatalog(id_catalog)
 
             GlobalScope.launch(Dispatchers.Main) {
-                editNameCatalog
+                editNameCatalog.text.append(catalog.nameCatalog!!)
+                editCatalogDescription.text.append(catalog.catalogDescription!!)
+                ratingBarEditCatalog.rating = catalog.classification!!.toFloat()
+
+                if (catalog.instructionsTime != null) {
+                    timePickerEditCatalog.minute = (catalog.instructionsTime!! % 60)
+                    timePickerEditCatalog.hour = (catalog.instructionsTime!! / 60)
+                }
+
+                if (catalog.imageUrl != "") {
+                    Picasso.with(this@ActivityEditCatalog).load(catalog.imageUrl).into(catalogEditImage)
+                }
+
             }
 
         }
