@@ -15,10 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import pt.ipca.scoutsbag.ActivityImageHelper
-import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import java.sql.Time
 import java.util.*
@@ -27,6 +24,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
     private var imageUri: Uri? = null
     lateinit var catalogEditImage : ImageView
+    lateinit var catalog : Catalog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +41,8 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
 
         timePickerEditCatalog.setIs24HourView(true)
+        timePickerEditCatalog.minute = 0
+        timePickerEditCatalog.hour = 0
 
         //variables that get the values from the time picker
         var timePickerMinute = timePickerEditCatalog.minute
@@ -52,12 +52,10 @@ class ActivityEditCatalog : ActivityImageHelper() {
         var timeCatalog = 0
 
         //calculation of the time picked in hours
-        if(timePickerHour > 0)
-        {
+        if(timePickerHour > 0) {
             timeCatalog = (timePickerHour * 60) + timePickerMinute
         }
-        else
-        {
+        else {
             timeCatalog = timePickerMinute
         }
 
@@ -65,6 +63,17 @@ class ActivityEditCatalog : ActivityImageHelper() {
         bundle?.let{
             id_catalog = it.getString("id_catalog").toString()
         }
+
+        GlobalScope.launch(Dispatchers.IO) {
+
+            catalog = Backend.getCatalog(id_catalog.toInt())
+
+            GlobalScope.launch(Dispatchers.Main) {
+                editNameCatalog
+            }
+
+        }
+
 
         catalogEditImage?.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
@@ -107,6 +116,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
                         if (response.message == "OK"){
                             val returnIntent = Intent(this@ActivityEditCatalog, MainActivity::class.java)
+                            returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(returnIntent)
                         }
 

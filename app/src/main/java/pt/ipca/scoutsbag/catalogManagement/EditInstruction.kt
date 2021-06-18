@@ -88,8 +88,6 @@ class EditInstruction : ActivityImageHelper() {
                     editTextEditInstruction.text.toString(),
                     if (imageUrl != null) imageUrl else "",
                     instruction.idCatalog
-
-
                 )
                 val requestBody = RequestBody.create(
                     "application/json".toMediaTypeOrNull(),
@@ -103,13 +101,14 @@ class EditInstruction : ActivityImageHelper() {
                 client.newCall(request).execute().use { response ->
                     Log.d("scoutsbag", response.message)
                 }
+
+                val intent = Intent(this@EditInstruction, SeeInstructions::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("id_catalog", instruction.idCatalog)
+                intent.putExtra("name_catalog", nameCatalog)
+                startActivity(intent)
             }
 
-            val intent = Intent(this, SeeInstructions::class.java)
-            intent.putExtra("id_catalog", instruction.idCatalog.toString())
-            intent.putExtra("name_catalog", nameCatalog)
-
-            startActivity(intent)
         }
     }
 
