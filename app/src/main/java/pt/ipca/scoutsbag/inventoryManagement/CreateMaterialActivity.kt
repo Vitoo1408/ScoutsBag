@@ -23,6 +23,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
     // This function is for return to the previous activity after a operation
     var returnActivity: ()->Unit = {
         val returnIntent = Intent(this, InventoryActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(returnIntent)
     }
 
@@ -31,7 +32,6 @@ class CreateMaterialActivity : ActivityImageHelper() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_material)
-
 
         // Variables in the activity
         val textViewName = findViewById<TextView>(R.id.editTextMaterialName)

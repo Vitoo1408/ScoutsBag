@@ -7,6 +7,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.example.scoutsteste1.Instruction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
@@ -98,6 +99,8 @@ class FragmentCatalog : Fragment() {
             val textViewTimeCatalog = rowView.findViewById<TextView>(R.id.textViewTimeCatalog)
             var rattingBarDifficulty = rowView.findViewById<RatingBar>(R.id.ratingBarDifficulty)
             val catalogImage = rowView.findViewById<ImageView>(R.id.catalogImage)
+            val buttonEdit = rowView.findViewById<Button>(R.id.buttonEdit)
+            val buttonDelete = rowView.findViewById<Button>(R.id.buttonDelete)
 
             rattingBarDifficulty.isIndicator
 
@@ -125,8 +128,49 @@ class FragmentCatalog : Fragment() {
                 startActivity(intent)
             }
 
+            if (UserLoggedIn.codType != "Esc") {
+
+                buttonEdit.setOnClickListener {
+                    val intent = Intent(activity, ActivityEditCatalog::class.java)
+                    intent.putExtra("id_catalog", catalog.idCatalog)
+                    startActivity(intent)
+                }
+
+                buttonDelete.setOnClickListener {
+                    deleteCatalogDialog(catalog.idCatalog!!)
+                }
+
+            }
+            else {
+                buttonEdit.visibility = View.GONE
+                buttonDelete.visibility = View.GONE
+            }
+
             return rowView
         }
+    }
+
+
+    private fun deleteCatalogDialog(catalogSelected: Int): Boolean{
+
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this.requireContext(), R.style.MyDialogTheme)
+
+        builder.setTitle("Aviso!!")
+        builder.setMessage("Tem a certeza que pretende eliminar este catalogo?")
+        builder.setPositiveButton("Sim"){dialog , id ->
+
+            Backend.removeCatalog(catalogSelected)
+
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
+
+        }
+        builder.setNegativeButton("Não"){dialog,id->
+            dialog.dismiss()
+        }
+        builder.show()
+
+        return true
     }
 
 

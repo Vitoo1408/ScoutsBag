@@ -64,6 +64,7 @@ class InventoryActivity : AppCompatActivity(){
         // Create material button event
         findViewById<FloatingActionButton>(R.id.buttonAddMaterial).setOnClickListener {
             val intent = Intent(this, CreateMaterialActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
 

@@ -61,17 +61,22 @@ class SeeInstructions : AppCompatActivity() {
 
         }
 
-        buttonAddInstruction.setOnClickListener {
-
-            val intent = Intent(this@SeeInstructions, AddInstruction::class.java)
-
-            intent.putExtra("id_catalog", idCatalogSelected)
-            intent.putExtra("name_catalog", nameCatalog)
-
-            startActivity(intent)
-
+        //hide button catalog if user logged in is a scout
+        if (UserLoggedIn.codType == "Esc") {
+            buttonAddInstruction.visibility = View.GONE
         }
+        else {
+            buttonAddInstruction.setOnClickListener {
 
+                val intent = Intent(this@SeeInstructions, AddInstruction::class.java)
+
+                intent.putExtra("id_catalog", idCatalogSelected)
+                intent.putExtra("name_catalog", nameCatalog)
+
+                startActivity(intent)
+
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,40 +87,7 @@ class SeeInstructions : AppCompatActivity() {
         //set back icon on action bar
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
-        //hide delete and edit icon from activity details
-        if(UserLoggedIn.codType == "Esc"){
-            return false
-        }
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when (item.itemId){
-            R.id.itemDelete -> {
-
-                deleteCatalogDialog(idCatalogSelected!!)
-                for(index in 0 until instructions.size){
-                    if(instructions[index].idCatalog == idCatalogSelected){
-                        Backend.removeInstruction(instructions[index].idInstruction.toString().toInt())
-                    }
-                }
-
-
-                return true
-            }
-            R.id.itemEdit -> {
-                val intent = Intent(this, ActivityEditCatalog::class.java)
-
-                intent.putExtra("id_catalog", idCatalogSelected)
-
-                startActivity(intent)
-                return true
-            }
-        }
-
-        return false
     }
 
     inner class InstructionsAdapter : BaseAdapter(){
@@ -138,7 +110,8 @@ class SeeInstructions : AppCompatActivity() {
 
             val instruction = instructions[position]
             var instructionSelected = 0
-            val textViewInstructionText = rowView.findViewById<TextView>(R.id.textViewInstructionText)
+            val textViewInstructionText =
+                rowView.findViewById<TextView>(R.id.textViewInstructionText)
             val buttonEditInstruction = rowView.findViewById<Button>(R.id.buttonEditInstruction)
             val buttonDeleteInstruction = rowView.findViewById<Button>(R.id.buttonDeleteInstruction)
             val textViewSteps = rowView.findViewById<TextView>(R.id.textViewSteps)
@@ -146,32 +119,32 @@ class SeeInstructions : AppCompatActivity() {
 
             if (instruction.imageUrl != "") {
                 Picasso.with(this@SeeInstructions).load(instruction.imageUrl).into(instructionImage)
-            }
-            else {
+            } else {
                 instructionImage.visibility = View.GONE
             }
 
             textViewSteps.text = "Passo ${position + 1}"
             textViewInstructionText.text = instructions[position].instructionText
 
-            buttonEditInstruction.setOnClickListener {
+            if (UserLoggedIn.codType != "Esc") {
 
-                val intent = Intent(this@SeeInstructions, EditInstruction::class.java)
+                buttonEditInstruction.setOnClickListener {
+                    val intent = Intent(this@SeeInstructions, EditInstruction::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("instruction", instruction.toJson().toString())
+                    intent.putExtra("nameCatalog", nameCatalog)
+                    startActivity(intent)
+                }
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.putExtra("instruction", instruction.toJson().toString())
-                intent.putExtra("nameCatalog", nameCatalog)
-
-                startActivity(intent)
+                buttonDeleteInstruction.setOnClickListener {
+                    instructionSelected = instructions[position].idInstruction.toString().toInt()
+                    deleteInstructionDialog(instructionSelected)
+                }
             }
-
-            buttonDeleteInstruction.setOnClickListener {
-
-                instructionSelected = instructions[position].idInstruction.toString().toInt()
-                deleteInstructionDialog(instructionSelected)
+            else {
+                buttonEditInstruction.visibility = View.GONE
+                buttonDeleteInstruction.visibility = View.GONE
             }
-
-
 
             return rowView
         }
@@ -183,7 +156,7 @@ class SeeInstructions : AppCompatActivity() {
         val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
 
         builder.setTitle("Aviso!!")
-        builder.setMessage("Tem a certeza que pretende eliminar esta instrução?" + position)
+        builder.setMessage("Tem a certeza que pretende eliminar esta instrução?")
         builder.setPositiveButton("Sim"){dialog , id ->
 
             Backend.removeInstruction(position)
@@ -197,28 +170,7 @@ class SeeInstructions : AppCompatActivity() {
         builder.show()
     }
 
-    private fun deleteCatalogDialog(catalogSelected: Int): Boolean{
 
-
-        val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-
-        builder.setTitle("Aviso!!")
-        builder.setMessage("Tem a certeza que pretende eliminar este catalogo?")
-        builder.setPositiveButton("Sim"){dialog , id ->
-
-            Backend.removeCatalog(catalogSelected)
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-
-        }
-        builder.setNegativeButton("Não"){dialog,id->
-            dialog.dismiss()
-        }
-        builder.show()
-
-        return true
-    }
 
     //when the support action bar back button is pressed, the app will go back to the previous activity
     override fun onSupportNavigateUp(): Boolean {

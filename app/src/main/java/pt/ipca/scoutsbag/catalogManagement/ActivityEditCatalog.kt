@@ -28,6 +28,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
     private var imageUri: Uri? = null
     lateinit var catalogEditImage : ImageView
     lateinit var catalog : Catalog
+    var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,6 @@ class ActivityEditCatalog : ActivityImageHelper() {
         val bundle = intent.extras
         var id_catalog = 0
 
-
         timePickerEditCatalog.setIs24HourView(true)
         timePickerEditCatalog.minute = 0
         timePickerEditCatalog.hour = 0
@@ -50,17 +50,6 @@ class ActivityEditCatalog : ActivityImageHelper() {
         //variables that get the values from the time picker
         var timePickerMinute = timePickerEditCatalog.minute
         var timePickerHour = timePickerEditCatalog.hour
-
-        //variable that will save the result of the time picked in minutes
-        var timeCatalog = 0
-
-        //calculation of the time picked in hours
-        if(timePickerHour > 0) {
-            timeCatalog = (timePickerHour * 60) + timePickerMinute
-        }
-        else {
-            timeCatalog = timePickerMinute
-        }
 
         bundle?.let {
             id_catalog = it.getInt("id_catalog",0)
@@ -83,6 +72,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
                 if (catalog.imageUrl != "") {
                     Picasso.with(this@ActivityEditCatalog).load(catalog.imageUrl).into(catalogEditImage)
+                    imageUrl = catalog.imageUrl
                 }
 
             }
@@ -96,14 +86,19 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
         saveEditCatalog.setOnClickListener {
 
-            val fileName = Utils.uniqueImageNameGen()
-            val filePath = Utils.getUriFilePath(this, imageUri!!)
+            var fileName: String? = null
+            var filePath: String? = null
+
+            if (imageUri != null) {
+                fileName = Utils.uniqueImageNameGen()
+                filePath = Utils.getUriFilePath(this, imageUri!!)
+            }
 
             GlobalScope.launch(Dispatchers.IO){
 
                 if(imageUri != null) {
                     Utils.uploadImage(filePath!!, fileName) {
-                        UserLoggedIn.imageUrl = it
+                        imageUrl = it
                     }
                 }
 
@@ -113,8 +108,8 @@ class ActivityEditCatalog : ActivityImageHelper() {
                     editNameCatalog.text.toString(),
                     editCatalogDescription.text.toString(),
                     ratingBarEditCatalog.rating.toInt(),
-                    timeCatalog,
-                    if (UserLoggedIn.imageUrl != null) UserLoggedIn.imageUrl else ""
+                    (timePickerEditCatalog.hour * 60) + timePickerEditCatalog.minute,
+                    if (imageUrl != null) imageUrl else ""
 
                 )
                 val requestBody = RequestBody.create(
