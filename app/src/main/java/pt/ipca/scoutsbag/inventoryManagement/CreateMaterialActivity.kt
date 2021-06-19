@@ -6,6 +6,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
+import android.widget.ImageView
+import android.widget.RadioGroup
+import android.widget.TextView
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,6 +30,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
 
     var returnActivity: ()->Unit = {
         val returnIntent = Intent(this, InventoryActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(returnIntent)
     }
 
@@ -46,15 +52,19 @@ class CreateMaterialActivity : ActivityImageHelper() {
         textViewName.addTextChangedListener(textWatcher)
         textViewQuantity.addTextChangedListener(textWatcher)
 
-        // Button Events
-        buttonCancel.setOnClickListener {
-            returnActivity()
-        }
-
         // When the user clicks on the material image to change it
         materialImage?.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
         }
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Adicionar Material"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         val radioGroup = findViewById<RadioGroup>(R.id.radioGroupMaterialType)
 
@@ -66,10 +76,15 @@ class CreateMaterialActivity : ActivityImageHelper() {
                 materialType = "Consumivel"
         }
 
+        // Button Events
+        buttonCancel.setOnClickListener {
+            returnActivity
+        }
+
         buttonConfirm.setOnClickListener {
 
             // Variables
-            val fileName = Utils.getFileName(this, imageUri!!)
+            val fileName = Utils.uniqueImageNameGen()
             val filePath = Utils.getUriFilePath(this, imageUri!!)
 
             GlobalScope.launch(Dispatchers.IO) {
@@ -136,9 +151,25 @@ class CreateMaterialActivity : ActivityImageHelper() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            materialImage?.setImageURI(data?.data)
-            imageUri = data?.data
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
         }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                materialImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
+        }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }

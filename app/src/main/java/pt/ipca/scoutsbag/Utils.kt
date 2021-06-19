@@ -285,7 +285,6 @@ object Utils {
             cursor.moveToFirst()
             fileName = cursor.getString(nameIndex)
         }
-
         return fileName
     }
 
@@ -319,7 +318,6 @@ object Utils {
                 imageUrl = messageJsonObject.getString("Location")
             }
         }
-
         callBack(imageUrl!!)
     }
 

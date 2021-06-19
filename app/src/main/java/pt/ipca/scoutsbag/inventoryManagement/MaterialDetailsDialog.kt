@@ -67,6 +67,7 @@ class MaterialDetailsDialog : AppCompatDialogFragment() {
         deleteButton.setOnClickListener {
             Backend.removeMaterial(material.idMaterial!!) {
                 val intent = Intent(this.context, InventoryActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
             }
         }
@@ -82,6 +83,7 @@ class MaterialDetailsDialog : AppCompatDialogFragment() {
         // Refresh the activity
         if (materialChanged) {
             val intent = Intent(this.context, InventoryActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
         }
 

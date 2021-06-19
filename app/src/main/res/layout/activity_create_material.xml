@@ -134,7 +134,7 @@
             android:background="@drawable/custom_button_white"
             android:textColor="@color/orange"
             android:textStyle="normal"
-            android:text="Confirmar"
+            android:text="Adicionar"
             app:backgroundTint="@null"
             android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"

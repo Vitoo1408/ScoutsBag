@@ -93,12 +93,7 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
 
         when (item.itemId){
             R.id.itemDelete -> {
-                GlobalScope.launch(Dispatchers.IO) {
-                    Backend.removeActivity(activity.idActivity!!) {
-                        val intent = Intent(this@ScoutActivityDetailsHelper, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
+                deleteActivityDialog()
                 return true
             }
             R.id.itemEdit -> {
@@ -110,6 +105,33 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
         }
 
         return false
+    }
+
+
+    /*
+        This function shows a pop-up window that alerts the user that the activity will be deleted.
+     */
+    private fun deleteActivityDialog() {
+
+        val builder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+
+        builder.setTitle("Aviso!!")
+        builder.setMessage("Tem a certeza que pretende eliminar esta atividade?")
+        builder.setPositiveButton("Sim"){dialog , id ->
+
+            GlobalScope.launch(Dispatchers.IO) {
+                Backend.removeActivity(activity.idActivity!!) {
+                    val intent = Intent(this@ScoutActivityDetailsHelper, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+        }
+        builder.setNegativeButton("Não"){dialog,id->
+            dialog.dismiss()
+        }
+        builder.show()
+
     }
 
 
