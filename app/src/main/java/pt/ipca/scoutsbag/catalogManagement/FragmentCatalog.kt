@@ -7,6 +7,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.example.scoutsteste1.Instruction
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,7 @@ class FragmentCatalog : Fragment() {
     // Global Variables
     lateinit var listViewCatalog : ListView
     lateinit var adapter : CatalogAdapter
-    var catalogs : MutableList<Catalog> = arrayListOf()
+    var catalogs : List<Catalog> = arrayListOf()
 
 
     override fun onCreateView(
@@ -48,7 +49,6 @@ class FragmentCatalog : Fragment() {
             rootView.findViewById<FloatingActionButton>(R.id.buttonAddCatalog).visibility = View.GONE
         }
 
-
         buttonAddCatalog.setOnClickListener {
             val intent = Intent(activity, AddCatalog::class.java)
             startActivity(intent)
@@ -63,30 +63,13 @@ class FragmentCatalog : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         GlobalScope.launch(Dispatchers.IO) {
-
-
-            val client = OkHttpClient()
-            val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/catalogs").build()
-
-            client.newCall(request).execute().use { response ->
-
-                catalogs.clear()
-
-                val str : String = response.body!!.string()
-                val jsonArrayActivity = JSONArray(str)
-
-                for (index in 0 until jsonArrayActivity.length()) {
-                    val jsonArticle = jsonArrayActivity.get(index) as JSONObject
-                    val catalog = Catalog.fromJson(jsonArticle)
-                    catalogs.add(catalog)
-                }
-
-                GlobalScope.launch (Dispatchers.Main) {
-                    adapter.notifyDataSetChanged()
-                }
-
+            Backend.getAllCatalogs {
+                catalogs = it
             }
 
+            GlobalScope.launch (Dispatchers.Main) {
+                adapter.notifyDataSetChanged()
+            }
         }
 
 
@@ -116,7 +99,8 @@ class FragmentCatalog : Fragment() {
             val textViewTimeCatalog = rowView.findViewById<TextView>(R.id.textViewTimeCatalog)
             var rattingBarDifficulty = rowView.findViewById<RatingBar>(R.id.ratingBarDifficulty)
             val catalogImage = rowView.findViewById<ImageView>(R.id.catalogImage)
-
+            val buttonEdit = rowView.findViewById<Button>(R.id.buttonEdit)
+            val buttonDelete = rowView.findViewById<Button>(R.id.buttonDelete)
 
             rattingBarDifficulty.isIndicator
 
@@ -124,25 +108,82 @@ class FragmentCatalog : Fragment() {
             textViewNameCatalog.text = catalogs[position].nameCatalog
             textViewDescriptionCatalog.text = catalogs[position].catalogDescription
             rattingBarDifficulty.rating = catalogs[position].classification.toString().toFloat()
-            textViewTimeCatalog.text = catalogs[position].instructionsTime.toString()
+
+            if (catalogs[position].instructionsTime != null)
+                textViewTimeCatalog.text = "Tempo: " + convertSecondsToFullTime(catalogs[position].instructionsTime!!)
+            else
+                textViewTimeCatalog.text = "Tempo Indeterminado"
 
             if (catalog.imageUrl != "") {
                 Picasso.with(activity).load(catalog.imageUrl).into(catalogImage)
             }
 
-
             rowView.setOnClickListener {
 
                 val intent = Intent(activity, SeeInstructions::class.java)
-
-                intent.putExtra("id_catalog", catalogs[position].idCatalog.toString())
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("id_catalog", catalogs[position].idCatalog)
                 intent.putExtra("name_catalog", catalogs[position].nameCatalog.toString())
 
                 startActivity(intent)
+            }
 
+            if (UserLoggedIn.codType != "Esc") {
+
+                buttonEdit.setOnClickListener {
+                    val intent = Intent(activity, ActivityEditCatalog::class.java)
+                    intent.putExtra("id_catalog", catalog.idCatalog)
+                    startActivity(intent)
+                }
+
+                buttonDelete.setOnClickListener {
+                    deleteCatalogDialog(catalog.idCatalog!!)
+                }
+
+            }
+            else {
+                buttonEdit.visibility = View.GONE
+                buttonDelete.visibility = View.GONE
             }
 
             return rowView
         }
     }
+
+
+    private fun deleteCatalogDialog(catalogSelected: Int): Boolean{
+
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this.requireContext(), R.style.MyDialogTheme)
+
+        builder.setTitle("Aviso!!")
+        builder.setMessage("Tem a certeza que pretende eliminar este catalogo?")
+        builder.setPositiveButton("Sim"){dialog , id ->
+
+            Backend.removeCatalog(catalogSelected)
+
+            val intent = Intent(activity, MainActivity::class.java)
+            startActivity(intent)
+
+        }
+        builder.setNegativeButton("Não"){dialog,id->
+            dialog.dismiss()
+        }
+        builder.show()
+
+        return true
+    }
+
+
+    /*
+        This function convert seconds to minutes and seconds
+        @seconds = the initial amount of seconds
+     */
+    fun convertSecondsToFullTime(seconds: Int): String {
+
+        val minutes = seconds / 60
+        val newSeconds = seconds % 60
+
+        return "$minutes Minutos e $newSeconds Segundos"
+    }
+
 }

@@ -56,29 +56,13 @@ class AddCatalog : ActivityImageHelper() {
 
         //
         timePickerCatalog.setIs24HourView(true)
-
-        //variables that get the values from the time picker
-        var timePickerMinute = timePickerCatalog.minute
-        var timePickerHour = timePickerCatalog.hour
-
-        //variable that will save the result of the time picked in minutes
-        var timeCatalog = 0
-
-        //calculation of the time picked in hours
-        if(timePickerHour > 0)
-        {
-            timeCatalog = (timePickerHour * 60) + timePickerMinute
-        }
-        else
-        {
-            timeCatalog = timePickerMinute
-        }
-
-
+        timePickerCatalog.minute = 0
+        timePickerCatalog.hour = 0
 
         var changeActivity: ()->Unit = {
-            val returnIntent = Intent(this, MainActivity::class.java)
-            startActivity(returnIntent)
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
         }
 
         catalogAddImage?.setOnClickListener {
@@ -109,7 +93,7 @@ class AddCatalog : ActivityImageHelper() {
                     editTextNameCatalog.text.toString(),
                     editTextDescriptionCatalog.text.toString(),
                     rattingBarCatalog.rating.toInt(),
-                    timeCatalog,
+                    (timePickerCatalog.hour * 60) + timePickerCatalog.minute,
                     if (imageUrl != null) imageUrl else ""
                 )
 

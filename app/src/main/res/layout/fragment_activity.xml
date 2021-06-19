@@ -55,9 +55,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.855">
+            app:layout_constraintVertical_bias="0.855"/>
 
-        </ListView>
+        <TextView
+            android:id="@+id/emptyElementActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="De momento não tem atividades marcadas, diriga-se ao menu convites para aceitar atividades"
+            android:textAlignment="center"
+            android:textColor="#707070"
+            android:textSize="17.3sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/buttonAddActivity"
