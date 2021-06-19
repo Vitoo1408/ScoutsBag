@@ -131,9 +131,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:background="@drawable/custom_button_orange"
+            android:background="@drawable/custom_button_white"
+            android:textColor="@color/orange"
+            android:textStyle="normal"
             android:text="Confirmar"
             app:backgroundTint="@null"
+            android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/button_cancel"
             app:layout_constraintTop_toTopOf="parent" />

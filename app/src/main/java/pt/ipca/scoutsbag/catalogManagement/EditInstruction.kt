@@ -38,8 +38,6 @@ class EditInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_instruction)
 
-
-
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)
         instructionEditImage = findViewById(R.id.instructionEditImage)

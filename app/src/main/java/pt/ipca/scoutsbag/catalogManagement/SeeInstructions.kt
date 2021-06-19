@@ -46,7 +46,6 @@ class SeeInstructions : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
 
-
             val client = OkHttpClient()
             val request = Request.Builder().url("http://3.8.19.24:60000/api/v1/instructions").build()
 
