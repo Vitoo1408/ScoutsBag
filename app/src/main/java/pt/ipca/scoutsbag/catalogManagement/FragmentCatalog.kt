@@ -113,6 +113,8 @@ class FragmentCatalog : Fragment() {
 
             if (catalog.imageUrl != "") {
                 Picasso.with(activity).load(catalog.imageUrl).into(catalogImage)
+            } else {
+                catalogImage.setImageResource(R.drawable.ic_instrucoes_icon)
             }
 
             rowView.setOnClickListener {

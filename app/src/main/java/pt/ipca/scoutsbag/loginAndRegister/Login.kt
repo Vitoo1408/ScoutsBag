@@ -20,7 +20,7 @@ import org.json.JSONTokener
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 
-class Login : AppCompatActivity() {
+class   Login : AppCompatActivity() {
 
     var editTextEmail: EditText? = null
     var editTextPass: EditText? = null

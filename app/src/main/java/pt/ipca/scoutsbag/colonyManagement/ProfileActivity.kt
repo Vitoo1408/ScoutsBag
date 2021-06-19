@@ -84,7 +84,8 @@ class ProfileActivity : AppCompatActivity() {
 
 
         butEdit.setOnClickListener() {
-            val intent = Intent(this, EditProfileActivity::class.java)
+            val intent = Intent(this, EditScoutProfileActivity::class.java)
+            intent.putExtra("user", userJsonStr)
             startActivity(intent)
         }
 
