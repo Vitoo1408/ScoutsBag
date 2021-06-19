@@ -173,5 +173,4 @@ class ActivityEditCatalog : ActivityImageHelper() {
         onBackPressed()
         return true
     }
-
 }

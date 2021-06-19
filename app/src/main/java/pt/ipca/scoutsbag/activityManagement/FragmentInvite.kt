@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.isEmpty
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import com.example.scoutsteste1.ScoutActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,10 +38,13 @@ class FragmentInvite : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_invite, container, false)
 
+        var emptyElement = rootView.findViewById<TextView>(R.id.emptyElementInvite)
+
         // Set data
         listView = rootView.findViewById(R.id.listViewInvites)
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
+        listView.setEmptyView(emptyElement)
 
         return rootView
     }
