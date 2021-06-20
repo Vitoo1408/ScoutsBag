@@ -317,6 +317,7 @@ object Backend {
         }
     }
 
+
     /*
         This function returns all the invites from a specific user team in the api by an list
         @idUserTeam = team id of the selected user
@@ -353,6 +354,41 @@ object Backend {
 
             // Return list
             callBack(activities)
+        }
+    }
+
+
+    /*
+        This function returns all the invites from a specific user in the api by an list
+        @idUser = id of the selected user
+        @callBack = return the list
+     */
+    fun getAllUserInvites(idUser: Int, callBack: (List<Invite>)->Unit) {
+
+        val invites: MutableList<Invite> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val activityJsonArrayStr : String = response.body!!.string()
+            val activityJsonArray = JSONArray(activityJsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until activityJsonArray.length()) {
+                val jsonArticle = activityJsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+
+                if (invite.idUser == idUser) {
+                    invites.add(invite)
+                }
+            }
+
+            // Return list
+            callBack(invites)
         }
     }
 
