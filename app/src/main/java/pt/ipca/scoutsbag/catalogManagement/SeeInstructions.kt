@@ -84,8 +84,6 @@ class SeeInstructions : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.delete_edit_menu, menu)
         title = nameCatalog
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //set back icon on action bar
