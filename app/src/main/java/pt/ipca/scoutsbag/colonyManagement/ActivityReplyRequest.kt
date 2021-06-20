@@ -123,6 +123,15 @@ class ActivityReplyRequest : AppCompatActivity() {
         adapter = TeamsAdapter()
         listViewTeams.adapter = adapter
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = user.userName
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
         // Add activity type images to the list
         sectionImages.add(findViewById(R.id.imageViewLobitos))
         sectionImages.add(findViewById(R.id.imageViewExploradores))
@@ -318,5 +327,11 @@ class ActivityReplyRequest : AppCompatActivity() {
 
             return rowView
         }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

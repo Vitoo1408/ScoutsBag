@@ -32,7 +32,7 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.035"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/profileImageColony"
         app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
 
     <TextView
@@ -48,11 +48,11 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/profileImageColony"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profileImageColony"
         android:layout_width="74dp"
         android:layout_height="70dp"
         android:layout_marginStart="20dp"
@@ -76,7 +76,7 @@
         android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/profileImageColony"
         app:layout_constraintTop_toBottomOf="@+id/textView_user_team" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

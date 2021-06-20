@@ -12,6 +12,8 @@ import android.widget.TextView
 import com.example.scoutsteste1.Instruction
 import com.example.scoutsteste1.ScoutActivity
 import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -38,7 +40,6 @@ class EditInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_instruction)
 
-        checkConnectivity()
 
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)
@@ -52,6 +53,15 @@ class EditInstruction : ActivityImageHelper() {
 
             nameCatalog = it.getString("nameCatalog").toString()
         }
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = instruction.instructionText
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
         editTextEditInstruction.text.append(instruction.instructionText)
 
@@ -70,7 +80,7 @@ class EditInstruction : ActivityImageHelper() {
             var filePath: String? = null
 
             if (imageUri != null) {
-                fileName = Utils.getFileName(this, imageUri!!)
+                fileName = Utils.uniqueImageNameGen()
                 filePath = Utils.getUriFilePath(this, imageUri!!)
             }
 
@@ -88,8 +98,6 @@ class EditInstruction : ActivityImageHelper() {
                     editTextEditInstruction.text.toString(),
                     if (imageUrl != null) imageUrl else "",
                     instruction.idCatalog
-
-
                 )
                 val requestBody = RequestBody.create(
                     "application/json".toMediaTypeOrNull(),
@@ -103,13 +111,14 @@ class EditInstruction : ActivityImageHelper() {
                 client.newCall(request).execute().use { response ->
                     Log.d("scoutsbag", response.message)
                 }
+
+                val intent = Intent(this@EditInstruction, SeeInstructions::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("id_catalog", instruction.idCatalog)
+                intent.putExtra("name_catalog", nameCatalog)
+                startActivity(intent)
             }
 
-            val intent = Intent(this, SeeInstructions::class.java)
-            intent.putExtra("id_catalog", instruction.idCatalog.toString())
-            intent.putExtra("name_catalog", nameCatalog)
-
-            startActivity(intent)
         }
     }
 
@@ -120,8 +129,24 @@ class EditInstruction : ActivityImageHelper() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            instructionEditImage?.setImageURI(data?.data)
-            imageUri = data?.data
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
         }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                instructionEditImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
+        }
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

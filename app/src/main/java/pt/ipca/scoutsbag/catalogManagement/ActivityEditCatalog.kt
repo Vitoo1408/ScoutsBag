@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.scoutsteste1.Catalog
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,10 +18,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import pt.ipca.scoutsbag.ActivityImageHelper
-import pt.ipca.scoutsbag.MainActivity
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import java.sql.Time
 import java.util.*
@@ -27,6 +27,8 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
     private var imageUri: Uri? = null
     lateinit var catalogEditImage : ImageView
+    lateinit var catalog : Catalog
+    var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,32 +41,44 @@ class ActivityEditCatalog : ActivityImageHelper() {
         var timePickerEditCatalog = findViewById<TimePicker>(R.id.timePickerEditCatalogo)
         catalogEditImage = findViewById<ImageView>(R.id.catalogEditImage)
         val bundle = intent.extras
-        var id_catalog = ""
-
+        var id_catalog = 0
 
         timePickerEditCatalog.setIs24HourView(true)
+        timePickerEditCatalog.minute = 0
+        timePickerEditCatalog.hour = 0
 
         //variables that get the values from the time picker
         var timePickerMinute = timePickerEditCatalog.minute
         var timePickerHour = timePickerEditCatalog.hour
 
-        //variable that will save the result of the time picked in minutes
-        var timeCatalog = 0
-
-        //calculation of the time picked in hours
-        if(timePickerHour > 0)
-        {
-            timeCatalog = (timePickerHour * 60) + timePickerMinute
-        }
-        else
-        {
-            timeCatalog = timePickerMinute
+        bundle?.let {
+            id_catalog = it.getInt("id_catalog",0)
         }
 
+        GlobalScope.launch(Dispatchers.IO) {
 
-        bundle?.let{
-            id_catalog = it.getString("id_catalog").toString()
+            println("id_catalog + " + id_catalog)
+            catalog = Backend.getCatalog(id_catalog)
+
+            GlobalScope.launch(Dispatchers.Main) {
+                editNameCatalog.text.append(catalog.nameCatalog!!)
+                editCatalogDescription.text.append(catalog.catalogDescription!!)
+                ratingBarEditCatalog.rating = catalog.classification!!.toFloat()
+
+                if (catalog.instructionsTime != null) {
+                    timePickerEditCatalog.minute = (catalog.instructionsTime!! % 60)
+                    timePickerEditCatalog.hour = (catalog.instructionsTime!! / 60)
+                }
+
+                if (catalog.imageUrl != "") {
+                    Picasso.with(this@ActivityEditCatalog).load(catalog.imageUrl).into(catalogEditImage)
+                    imageUrl = catalog.imageUrl
+                }
+
+            }
+
         }
+
 
         catalogEditImage?.setOnClickListener {
             checkPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
@@ -72,14 +86,19 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
         saveEditCatalog.setOnClickListener {
 
-            val fileName = Utils.getFileName(this, imageUri!!)
-            val filePath = Utils.getUriFilePath(this, imageUri!!)
+            var fileName: String? = null
+            var filePath: String? = null
+
+            if (imageUri != null) {
+                fileName = Utils.uniqueImageNameGen()
+                filePath = Utils.getUriFilePath(this, imageUri!!)
+            }
 
             GlobalScope.launch(Dispatchers.IO){
 
                 if(imageUri != null) {
                     Utils.uploadImage(filePath!!, fileName) {
-                        UserLoggedIn.imageUrl = it
+                        imageUrl = it
                     }
                 }
 
@@ -89,8 +108,8 @@ class ActivityEditCatalog : ActivityImageHelper() {
                     editNameCatalog.text.toString(),
                     editCatalogDescription.text.toString(),
                     ratingBarEditCatalog.rating.toInt(),
-                    timeCatalog,
-                    if (UserLoggedIn.imageUrl != null) UserLoggedIn.imageUrl else ""
+                    (timePickerEditCatalog.hour * 60) + timePickerEditCatalog.minute,
+                    if (imageUrl != null) imageUrl else ""
 
                 )
                 val requestBody = RequestBody.create(
@@ -107,6 +126,7 @@ class ActivityEditCatalog : ActivityImageHelper() {
 
                         if (response.message == "OK"){
                             val returnIntent = Intent(this@ActivityEditCatalog, MainActivity::class.java)
+                            returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(returnIntent)
                         }
 
@@ -123,9 +143,19 @@ class ActivityEditCatalog : ActivityImageHelper() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == ActivityImageHelper.IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
-            catalogEditImage?.setImageURI(data?.data)
-            imageUri = data?.data
+        if(requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
+            CropImage.activity(data?.data)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(this)
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                catalogEditImage?.setImageURI(result.uri)
+                imageUri = result.uri
+            }
         }
     }
 

@@ -7,17 +7,16 @@
 
     <ScrollView
         android:id="@+id/scrollViewProfile"
-        android:layout_width="379dp"
-        android:layout_height="487dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scoutName"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.464">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayoutScrollView"
@@ -25,61 +24,21 @@
             android:layout_height="560dp">
 
             <TextView
-                android:id="@+id/textTitleNIN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="NIN"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scoutTeam" />
-
-            <TextView
-                android:id="@+id/textNIN"
-                android:layout_width="379dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleNIN" />
-
-            <TextView
-                android:id="@+id/textTitleGender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Gênero"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textNIN" />
-
-            <TextView
-                android:id="@+id/textGender"
-                android:layout_width="379dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleGender" />
-
-            <TextView
                 android:id="@+id/textTitlePhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Telefone"
+                android:text="Telemóvel: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textGender" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textTitleMail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="E-mail"
+                android:text="E-mail: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textPhone" />
 
@@ -88,7 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Endereço"
+                android:text="Endereço: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textBirthDate" />
 
@@ -97,157 +57,188 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Data Nascimento"
+                android:text="Data Nascimento: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textMail" />
 
             <TextView
                 android:id="@+id/textPhone"
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textSize="24sp"
+                android:text="Telemóvel escuteiro"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitlePhone" />
+                app:layout_constraintStart_toEndOf="@+id/textTitlePhone"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textMail"
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
-                android:text="TextView"
-                android:textSize="24sp"
+                android:layout_marginTop="24dp"
+                android:text="E-mail escuteiro"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleMail" />
+                app:layout_constraintStart_toEndOf="@+id/textTitleMail"
+                app:layout_constraintTop_toBottomOf="@+id/textPhone" />
 
             <TextView
                 android:id="@+id/textPostalCode"
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
+                android:layout_marginTop="24dp"
                 android:text="TextView"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitlePostalCode" />
+                app:layout_constraintStart_toEndOf="@+id/textTitlePostalCode"
+                app:layout_constraintTop_toBottomOf="@+id/textAddress" />
 
             <TextView
                 android:id="@+id/textBirthDate"
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
+                android:layout_marginTop="24dp"
                 android:text="TextView"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleBirthDate" />
+                app:layout_constraintStart_toEndOf="@+id/textTitleBirthDate"
+                app:layout_constraintTop_toBottomOf="@+id/textMail" />
 
             <TextView
                 android:id="@+id/textTitlePostalCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Código Postal"
+                android:text="Código Postal: "
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+                app:layout_constraintTop_toBottomOf="@+id/textAddress"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textAddress"
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_button_white"
-                android:padding="8dp"
+                android:layout_marginTop="24dp"
                 android:text="TextView"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleAddress" />
-
-            <TextView
-                android:id="@+id/scoutSection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Secção"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textTitleNIN"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/scoutTeam"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Equipa"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scoutSection" />
-
-            <TextView
-                android:id="@+id/textStats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textPostalCode" />
+                app:layout_constraintStart_toEndOf="@+id/textTitleAddress"
+                app:layout_constraintTop_toBottomOf="@+id/textBirthDate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/editProfile"
-        style="@android:style/Widget.Material.Light.Button.Toggle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/orange"
-        android:backgroundTint="@color/orange"
-        android:backgroundTintMode="screen"
-        android:foreground="@color/material_on_background_disabled"
-        android:foregroundTint="@color/teal_200"
-        android:text="Editar"
-        android:textColor="@color/black"
-        app:icon="@android:drawable/ic_menu_edit"
-        app:iconPadding="64dp"
-        app:iconSize="64dp"
-        app:iconTint="@color/orange"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/background_color"
-        app:strokeColor="#009688" />
-
-    <ImageView
-        android:id="@+id/imageProfile"
-        android:layout_width="371dp"
-        android:layout_height="146dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/user" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/scoutName"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageProfile"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_perfil" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome: "
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/scoutName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nome Escuteiro"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Secção: "
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/scoutSection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Secção"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipa: "
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/scoutTeam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipa"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Nome"
-        android:textSize="34sp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        android:scaleX="1"
+        android:scaleY="1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
+        app:srcCompat="@drawable/icon_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

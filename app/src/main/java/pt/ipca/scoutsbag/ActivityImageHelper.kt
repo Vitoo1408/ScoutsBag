@@ -21,7 +21,7 @@ open class ActivityImageHelper: AppCompatActivity() {
 
 
     //Open phone's gallery to pick photo
-    private fun pickImageGallery() {
+    fun pickImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_REQUEST_CODE)
@@ -51,36 +51,6 @@ open class ActivityImageHelper: AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Acesso ao armazenamento interno negado", Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-
-    fun checkConnectivity() {
-        val manager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = manager.activeNetworkInfo
-
-        if (null == activeNetwork) {
-            val dialogBuilder = AlertDialog.Builder(this)
-            // set message of alert dialog
-            dialogBuilder.setMessage("Tenha a certeza que o WI-FI ou os dados móveis estão ligados.")
-                // if the dialog is cancelable
-                .setCancelable(false)
-                // positive button text and action
-                .setPositiveButton("Tentar novamente", DialogInterface.OnClickListener { dialog, id ->
-                    recreate()
-                })
-                // negative button text and action
-                .setNegativeButton("Cancelar", DialogInterface.OnClickListener { dialog, id ->
-                    finish()
-                })
-
-            // create dialog box
-            val alert = dialogBuilder.create()
-            // set title for alert dialog box
-            alert.setTitle("Sem conexão à internet")
-            alert.setIcon(R.mipmap.ic_launcher)
-            // show alert dialog
-            alert.show()
         }
     }
 

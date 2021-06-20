@@ -4,7 +4,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.provider.OpenableColumns
 import android.widget.TextView
 import com.example.scoutsteste1.ScoutActivity
@@ -282,7 +285,6 @@ object Utils {
             cursor.moveToFirst()
             fileName = cursor.getString(nameIndex)
         }
-
         return fileName
     }
 
@@ -316,9 +318,40 @@ object Utils {
                 imageUrl = messageJsonObject.getString("Location")
             }
         }
-
         callBack(imageUrl!!)
     }
+
+    fun uniqueImageNameGen(): String {
+        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#$$%&/()=@[]{}"
+
+        val sb = StringBuilder(15)
+
+        for(x in 0 until 15){
+            val random = (characters.indices).random()
+            sb.append(characters[random])
+        }
+
+        return sb.toString()
+    }
+
+
+    fun isOnline(context: Context): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val n = cm.activeNetwork
+            if (n != null) {
+                val nc = cm.getNetworkCapabilities(n)
+                //It will check for both wifi and cellular network
+                return nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            }
+            return false
+        } else {
+            val netInfo = cm.activeNetworkInfo
+            return netInfo != null && netInfo.isConnectedOrConnecting
+        }
+    }
+
 }
 
 

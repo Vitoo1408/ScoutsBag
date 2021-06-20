@@ -149,14 +149,14 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                 // Edit activity
                 Backend.editActivity(scoutActivity)
 
-                // Variables
-                val newInvites: MutableList<Invite> = arrayListOf()
-
                 // Delete all invited teams
                 Backend.removeAllInvitedTeams(activityId!!)
 
-                // Delete all invited users
-                //Backend.removeInvite(activityId!!)
+                // Get and then Delete all invited users
+                var oldInvites: List<Invite> = arrayListOf()
+                Backend.getAllActivityInvites(activityId!!) { oldInvites = it }
+                for (invite in oldInvites)
+                    Backend.removeInvite(invite)
 
                 // Get the new invites
                 for (team in selectedTeams) {
@@ -179,17 +179,17 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
                             user.idUser,
                             null
                         )
-                        // Add invite to the list and to the data Base
-                        newInvites.add(invite)
 
-                        println("entrou- " + invite.idUser)
+                        // Add invite to the data Base
                         Backend.addInvite(invite)
                     }
                 }
 
                 // Remove all previous activityMaterials
-                for (activityMaterial in selectedMaterials) {
-                    Backend.removeActivityMaterial(activityId!!)
+                var oldActivityMaterials: List<ActivityMaterial> = arrayListOf()
+                Backend.getAllRequestedActivityMaterial(activityId!!) { oldActivityMaterials = it}
+                for (activityMaterial in oldActivityMaterials) {
+                    Backend.removeActivityMaterial(activityMaterial)
                 }
 
                 // Add all new activityMaterials

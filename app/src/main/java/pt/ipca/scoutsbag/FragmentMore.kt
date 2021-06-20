@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -113,6 +114,8 @@ class FragmentMore: Fragment() {
             UserLoggedIn.userActive =null
             UserLoggedIn.accepted = null
             UserLoggedIn.idTeam = null
+
+            Toast.makeText(this.activity, "Terminou sessão com sucesso", Toast.LENGTH_LONG).show()
 
             //go back to the login or register activity
             val intent = Intent(this.activity, LogInOrRegisterActivity::class.java)

@@ -64,15 +64,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_lobitos" />
 
-        <TextView
-            android:id="@+id/textViewLobitos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:text="Lobitos"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewLobitos" />
-
         <ImageView
             android:id="@+id/imageViewExploradores"
             android:layout_width="wrap_content"
@@ -82,15 +73,6 @@
             app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_exploradores" />
-
-        <TextView
-            android:id="@+id/textViewExploradores"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="Exploradores"
-            app:layout_constraintStart_toEndOf="@+id/textViewLobitos"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewExploradores" />
 
         <ImageView
             android:id="@+id/imageViewPioneiros"
@@ -102,17 +84,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_pioneiros" />
 
-        <TextView
-            android:id="@+id/textViewPioneiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="32dp"
-            android:text="Pioneiros"
-            app:layout_constraintEnd_toStartOf="@+id/textViewCaminheiros"
-            app:layout_constraintStart_toEndOf="@+id/textViewExploradores"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewPioneiros" />
-
         <ImageView
             android:id="@+id/imageViewCaminheiros"
             android:layout_width="wrap_content"
@@ -122,15 +93,6 @@
             app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
             app:layout_constraintTop_toBottomOf="@+id/textViewSections"
             app:srcCompat="@drawable/icon_caminheiros" />
-
-        <TextView
-            android:id="@+id/textViewCaminheiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:text="Caminheiros"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewCaminheiros" />
 
         <TextView
             android:id="@+id/textViewSections"

@@ -5,42 +5,50 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScoutsBag"
-        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
-        <activity android:name=".inventoryManagement.CreateMaterialActivity" />
-        <activity android:name=".inventoryManagement.InventoryActivity" />
-        <activity android:name=".colonyManagement.ActivityReplyRequest" />
-        <activity android:name=".colonyManagement.ActivityUserRequest" />
-        <activity android:name=".activityManagement.ActivityHistoryActivity" />
-        <activity android:name=".activityManagement.InviteDetailsActivity" />
-        <activity android:name=".loginAndRegister.ForgotPassword" />
-        <activity android:name=".loginAndRegister.Login" />
-        <activity android:name=".loginAndRegister.Register" />
-        <activity android:name=".catalogManagement.AddCatalog" />
-        <activity android:name=".catalogManagement.AddInstruction" />
-        <activity android:name=".catalogManagement.SeeInstructions" />
-        <activity android:name=".catalogManagement.ActivityEditCatalog" />
-        <activity android:name=".catalogManagement.EditInstruction" />
-        <activity android:name=".colonyManagement.ColonyActivity" />
-        <activity android:name=".colonyManagement.AddTeam" />
-        <activity android:name=".colonyManagement.ProfileActivity" />
-        <activity android:name=".colonyManagement.EditProfileActivity" />
-        <activity android:name=".activityManagement.ActivityDetailsActivity" />
-        <activity android:name=".activityManagement.EditActivityActivity" />
-        <activity android:name=".activityManagement.CreateActivityActivity" />
+        <activity android:name=".loginAndRegister.RecoverPassword" android:screenOrientation="portrait"/>
+        <activity android:name=".inventoryManagement.CreateMaterialActivity" android:screenOrientation="portrait" />
+        <activity android:name=".inventoryManagement.InventoryActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.ActivityReplyRequest" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.ActivityUserRequest" android:screenOrientation="portrait"/>
+        <activity android:name=".activityManagement.ActivityHistoryActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activityManagement.InviteDetailsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".loginAndRegister.ForgotPassword" android:screenOrientation="portrait"/>
+        <activity android:name=".loginAndRegister.Login" android:screenOrientation="portrait"/>
+        <activity android:name=".loginAndRegister.Register" android:screenOrientation="portrait"/>
+        <activity android:name=".catalogManagement.AddCatalog" android:screenOrientation="portrait"/>
+        <activity android:name=".catalogManagement.AddInstruction" android:screenOrientation="portrait"/>
+        <activity android:name=".catalogManagement.SeeInstructions" android:screenOrientation="portrait"/>
+        <activity android:name=".catalogManagement.ActivityEditCatalog" android:screenOrientation="portrait"/>
+        <activity android:name=".catalogManagement.EditInstruction" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.ColonyActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.AddTeam" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.ProfileActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".colonyManagement.EditProfileActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activityManagement.ActivityDetailsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activityManagement.EditActivityActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activityManagement.CreateActivityActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".loginAndRegister.LogInOrRegisterActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,7 +56,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

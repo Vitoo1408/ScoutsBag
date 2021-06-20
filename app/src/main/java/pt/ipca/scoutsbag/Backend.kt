@@ -14,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.models.*
 
+
 object Backend {
 
     /*
@@ -154,9 +155,7 @@ object Backend {
 
         // Send the request and verify the response
         OkHttpClient().newCall(request).execute().use { response ->
-
             GlobalScope.launch (Dispatchers.Main) {
-
                 if (response.message == "OK") {
                     changeActivity()
                 }
@@ -234,7 +233,7 @@ object Backend {
             2 -> R.drawable.ic_camping
             3 -> R.drawable.ic_charity
             4 -> R.drawable.ic_peddy_paper
-            5 -> R.drawable.ic_cantonment
+            5 -> R.drawable.ic_acantonamento
             6 -> R.drawable.ic_mass
             else -> R.drawable.ic_meeting
         }
@@ -317,7 +316,6 @@ object Backend {
             callBack(activities)
         }
     }
-
 
     /*
         This function returns all the invites from a specific user team in the api by an list
@@ -1075,6 +1073,37 @@ object Backend {
 
 
     /*
+        This function return all activityMaterials from a selected activity
+        @idActivity = activity id selected
+     */
+    fun getAllRequestedActivityMaterial(idActivity: Int, callBack: (List<ActivityMaterial>)->Unit) {
+
+        val activityMaterials: MutableList<ActivityMaterial> = arrayListOf()
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/${idActivity}").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val activityMaterial = ActivityMaterial.fromJson(jsonArticle)
+                activityMaterials.add(activityMaterial)
+            }
+
+            // Return list
+            callBack(activityMaterials)
+        }
+    }
+
+
+    /*
         This function add the activityMaterial into the data base
         @activityMaterial = activityMaterial selected
      */
@@ -1102,13 +1131,13 @@ object Backend {
         This function remove the activityMaterial from the data base
         @id = activityMaterial selected
      */
-    fun removeActivityMaterial(id: Int) {
+    fun removeActivityMaterial(activityMaterial: ActivityMaterial) {
 
         GlobalScope.launch(Dispatchers.IO) {
 
             // Build the request
             val request = Request.Builder()
-                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/$id")
+                .url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesMaterials/${activityMaterial.idActivity}/${activityMaterial.idMaterial}")
                 .delete()
                 .build()
 
@@ -1118,6 +1147,71 @@ object Backend {
         }
     }
 
+
+    fun getCatalog(id: Int): Catalog {
+
+        var catalog : Catalog? = null
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/catalogs/$id").build()
+
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            val str : String = response.body!!.string()
+            val jsonArrayActivity = JSONArray(str)
+
+            for (index in 0 until jsonArrayActivity.length()) {
+                val jsonArticle = jsonArrayActivity.get(index) as JSONObject
+                catalog = Catalog.fromJson(jsonArticle)
+            }
+        }
+
+        return catalog!!
+    }
+
+
+    fun getAllCatalogs(callBack: (List<Catalog>) -> Unit) {
+
+        val catalogs: MutableList<Catalog> = arrayListOf()
+
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/catalogs").build()
+
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            val str : String = response.body!!.string()
+            val jsonArrayActivity = JSONArray(str)
+
+            for (index in 0 until jsonArrayActivity.length()) {
+                val jsonArticle = jsonArrayActivity.get(index) as JSONObject
+                val catalog = Catalog.fromJson(jsonArticle)
+                catalogs.add(catalog)
+            }
+
+            callBack(catalogs)
+        }
+    }
+
+
+    fun getAllInstructions(idCatalogSelected: Int, callBack: (List<Instruction>) -> Unit) {
+
+        val instructions: MutableList<Instruction> = arrayListOf()
+
+        val client = OkHttpClient()
+        val request = Request.Builder().url("http://3.8.19.24:60000/api/v1/instructions").build()
+
+        client.newCall(request).execute().use { response ->
+            val jsStr: String = response.body!!.string()
+            val jsonArrayInstructions = JSONArray(jsStr)
+
+            for (index in 0 until jsonArrayInstructions.length()) {
+                val jsonArticle: JSONObject = jsonArrayInstructions.get(index) as JSONObject
+                val instruction = Instruction.fromJson(jsonArticle)
+                if (instruction.idCatalog == idCatalogSelected)
+                    instructions.add(instruction)
+            }
+
+            callBack(instructions)
+        }
+
+    }
 
 
     fun addCatalog(catalog: Catalog, changeActivity: () -> Unit){

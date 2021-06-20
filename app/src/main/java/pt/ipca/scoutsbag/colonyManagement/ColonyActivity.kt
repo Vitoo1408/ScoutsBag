@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,6 +21,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
@@ -30,7 +33,6 @@ class ColonyActivity : AppCompatActivity() {
     lateinit var buttonAddTeam : FloatingActionButton
     var users : List<User> = arrayListOf()
     var teams : List<Team> = arrayListOf()
-
 
     /*
         This function create the view
@@ -107,16 +109,36 @@ class ColonyActivity : AppCompatActivity() {
             val textViewSection = rowView.findViewById<TextView>(R.id.textView_user_section)
             val textViewTeam    = rowView.findViewById<TextView>(R.id.textView_user_team)
             val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
+            val profileImage    = rowView.findViewById<ImageView>(R.id.profileImageColony)
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
-            textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
-            textViewNin.text = user.nin.toString()
+            if(user.idTeam!! != null) {
+                textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
+                textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
+            } else {
+                textViewSection.text = "Sem secção"
+                textViewTeam.text = "Sem Equipa"
+            }
+
+            if(user.nin != "" && user.nin != null && user.nin != "null") {
+                textViewNin.text = "Nin: " + user.nin.toString()
+            } else {
+                textViewNin.text = "Nin :"
+            }
+
+            if(!user.imageUrl.isNullOrEmpty()) {
+                Picasso.with(this@ColonyActivity).load(user.imageUrl).into(profileImage)
+            } else {
+                profileImage.setImageResource(R.drawable.ic_perfil)
+            }
+
 
             rowView.setOnClickListener {
                 val intent = Intent(this@ColonyActivity, ProfileActivity::class.java)
                 intent.putExtra("user", user.toJson().toString())
+                intent.putExtra("team", textViewTeam.text.toString())
+                intent.putExtra("section", textViewSection.text.toString())
                 startActivity(intent)
             }
 
