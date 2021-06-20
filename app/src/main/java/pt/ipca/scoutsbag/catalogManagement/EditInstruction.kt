@@ -40,6 +40,8 @@ class EditInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_instruction)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)

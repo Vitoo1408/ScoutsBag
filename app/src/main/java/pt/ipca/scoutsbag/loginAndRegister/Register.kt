@@ -26,6 +26,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import org.w3c.dom.Text
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.User
 import java.util.*
 import java.util.regex.Pattern
@@ -61,6 +62,9 @@ class Register : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //find all id's
         editTextNome = findViewById(R.id.editTextNomeRegisto)

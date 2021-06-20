@@ -41,6 +41,8 @@ class CreateMaterialActivity : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_material)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         // Variables in the activity
         textViewName = findViewById(R.id.editTextMaterialName)

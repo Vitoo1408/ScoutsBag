@@ -115,6 +115,9 @@ class ActivityReplyRequest : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply_request)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         // Get the user from the last activity
         val userJsonStr = intent.getStringExtra("user")!!
         user = User.fromJson(JSONObject(userJsonStr))

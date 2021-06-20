@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
 
 class AddTeam: AppCompatActivity() {
@@ -48,6 +49,9 @@ class AddTeam: AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_team)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         // Pass the view objects to variables
         buttonSaveTeam = findViewById(R.id.buttonSaveTeam)

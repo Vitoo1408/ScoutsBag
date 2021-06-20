@@ -34,6 +34,9 @@ class ActivityEditCatalog : ActivityImageHelper() {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_edit_catalog)
 
+            //check internet connection
+            Utils.connectionLiveData(this)
+
             var editNameCatalog = findViewById<EditText>(R.id.editNameCatalog)
         var editCatalogDescription = findViewById<EditText>(R.id.editCatalogDescription)
         var ratingBarEditCatalog = findViewById<RatingBar>(R.id.ratingBarEditCatalog)

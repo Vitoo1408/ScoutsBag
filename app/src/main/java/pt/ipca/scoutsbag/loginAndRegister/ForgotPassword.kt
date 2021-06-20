@@ -18,6 +18,7 @@ import okhttp3.RequestBody
 import org.json.JSONObject
 import org.json.JSONTokener
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.activityManagement.ActivityDetailsActivity
 
 class ForgotPassword : AppCompatActivity() {
@@ -28,6 +29,9 @@ class ForgotPassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //hide topbar
         this.supportActionBar?.hide()

@@ -76,7 +76,7 @@ class FragmentActivity : Fragment() {
 
             // Get the values to the lists
             Log.d("UserLoggedinId", UserLoggedIn.idUser.toString())
-            Backend.getAllAcceptedActivities(7) {
+            Backend.getAllAcceptedActivities(UserLoggedIn.idUser!!) {
                 activities.addAll(it)
                 sortActivities()
             }

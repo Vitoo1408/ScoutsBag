@@ -22,6 +22,7 @@ import okhttp3.RequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
@@ -35,6 +36,9 @@ class ProfileActivity : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         // Get the user from the last activity
         val userJsonStr = intent.getStringExtra("user")!!

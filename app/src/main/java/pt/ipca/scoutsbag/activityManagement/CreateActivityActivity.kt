@@ -22,6 +22,9 @@ class CreateActivityActivity : ScoutActivityCreationHelper() {
         super.onCreate(savedInstanceState)
         onClickActivityType(findViewById(R.id.imageViewActivityType1))
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         // Set actionbar title
         supportActionBar?.title = "Criar atividade"
 

@@ -17,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Material
 
 
@@ -33,6 +34,9 @@ class InventoryActivity : AppCompatActivity(){
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inventory)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //set back icon on action bar

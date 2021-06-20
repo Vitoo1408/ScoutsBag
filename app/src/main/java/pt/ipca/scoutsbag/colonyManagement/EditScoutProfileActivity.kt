@@ -9,6 +9,7 @@ import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
@@ -22,6 +23,9 @@ class EditScoutProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_scout_profile)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         val userJsonStr = intent.getStringExtra("user")!!
         user = User.fromJson(JSONObject(userJsonStr))

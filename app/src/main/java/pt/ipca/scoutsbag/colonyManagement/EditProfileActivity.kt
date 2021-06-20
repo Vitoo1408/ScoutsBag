@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.colonyManagement
 
+import android.app.AlertDialog
 import android.app.Service
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -16,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import pt.ipca.scoutsbag.*
+import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
@@ -35,6 +37,7 @@ class EditProfileActivity : ActivityImageHelper() {
     private var imageUrl: String? = null
     private var genRadioGroup: RadioGroup? = null
     private var editGender: String? = null
+    lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -49,6 +52,9 @@ class EditProfileActivity : ActivityImageHelper() {
         actionbar.setDisplayHomeAsUpEnabled(true)
         //set back icon on action bar
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //find all views id's
         editImage = findViewById(R.id.profileImage)

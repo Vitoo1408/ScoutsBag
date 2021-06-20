@@ -37,6 +37,9 @@ class InviteDetailsActivity : ScoutActivityDetailsHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_invite_details)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         // Variables
         val startDate = Utils.mySqlDateTimeToString(activity.startDate.toString())
         val endDate = Utils.mySqlDateTimeToString(activity.finishDate.toString())
