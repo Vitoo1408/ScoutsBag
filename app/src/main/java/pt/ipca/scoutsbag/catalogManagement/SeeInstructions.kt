@@ -21,6 +21,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.activityManagement.EditActivityActivity
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
@@ -36,6 +37,9 @@ class SeeInstructions : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_see_instructions)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         val buttonAddInstruction = findViewById<FloatingActionButton>(R.id.buttonAddInstruction)
         val bundle = intent.extras

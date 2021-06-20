@@ -19,8 +19,9 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 
-class Login : AppCompatActivity() {
+class   Login : AppCompatActivity() {
 
     var editTextEmail: EditText? = null
     var editTextPass: EditText? = null
@@ -36,6 +37,9 @@ class Login : AppCompatActivity() {
         //hide top bar
         this.supportActionBar?.hide()
         setContentView(R.layout.activity_login)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         editTextEmail = findViewById(R.id.editTextEmailLogin)
         editTextPass = findViewById(R.id.editTextPasswordLogin)

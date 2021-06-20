@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.colonyManagement
 
+import android.app.AlertDialog
 import android.app.Service
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -15,10 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import pt.ipca.scoutsbag.ActivityImageHelper
-import pt.ipca.scoutsbag.Backend
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
+import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
@@ -38,6 +37,7 @@ class EditProfileActivity : ActivityImageHelper() {
     private var imageUrl: String? = null
     private var genRadioGroup: RadioGroup? = null
     private var editGender: String? = null
+    lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -53,6 +53,9 @@ class EditProfileActivity : ActivityImageHelper() {
         //set back icon on action bar
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         //find all views id's
         editImage = findViewById(R.id.profileImage)
         editName = findViewById(R.id.editTextName)
@@ -66,10 +69,10 @@ class EditProfileActivity : ActivityImageHelper() {
         genRadioGroup = findViewById(R.id.radioGroup)
 
         //load profile image
-        if(UserLoggedIn.imageUrl != "" || UserLoggedIn.imageUrl != "null") {
+        if(UserLoggedIn.imageUrl != "" && UserLoggedIn.imageUrl != "null") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
         } else {
-            editImage?.setImageResource(R.drawable.ic_user)
+            editImage?.setImageResource(R.drawable.ic_upload_image)
         }
 
         // edit user gender
@@ -117,8 +120,10 @@ class EditProfileActivity : ActivityImageHelper() {
                     }
                 }
             } else {
-                //save the user data without a new image url
-                saveUserData(null)
+                GlobalScope.launch(Dispatchers.IO) {
+                    //save the user data without a new image url
+                    saveUserData(null)
+                }
             }
             Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
             finish()
@@ -184,8 +189,6 @@ class EditProfileActivity : ActivityImageHelper() {
         //save new user details as json string to sharedPrefs
         editor.putString("userDetails", profileTemp.toJson().toString())
         editor.apply()
-
-        Log.d("userLoggedIn", profileTemp.toJson().toString())
 
         //update user to db
         Backend.editUser(profileTemp) {

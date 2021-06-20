@@ -8,7 +8,7 @@
     <ScrollView
         android:id="@+id/scrollViewEditProfile"
         android:layout_width="0dp"
-        android:layout_height="729dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,97 +21,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/scoutImage"
-                android:layout_width="132dp"
-                android:layout_height="132dp"
-                android:layout_marginTop="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user" />
-
-            <TextView
-                android:id="@+id/textScoutName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:hint="Nome"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scoutImage" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutSections"
+            <EditText
+                android:id="@+id/editTextNIN"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editScoutNin">
-
-                <ImageView
-                    android:id="@+id/imageViewLobitos"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-                    app:srcCompat="@drawable/icon_lobitos" />
-
-                <ImageView
-                    android:id="@+id/imageViewExploradores"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-                    app:srcCompat="@drawable/icon_exploradores" />
-
-                <ImageView
-                    android:id="@+id/imageViewPioneiros"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewExploradores"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-                    app:srcCompat="@drawable/icon_pioneiros" />
-
-                <ImageView
-                    android:id="@+id/imageViewCaminheiros"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-                    app:srcCompat="@drawable/icon_caminheiros" />
-
-                <TextView
-                    android:id="@+id/textViewSections"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Secção"
-                    android:textColor="#707070"
-                    android:textSize="20sp"
-                    android:textStyle="normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <EditText
-                android:id="@+id/editScoutNin"
-                style="@android:style/Widget.Material.Light.AutoCompleteTextView"
-                android:layout_width="379dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/custom_button_black"
                 android:ems="10"
@@ -124,54 +39,101 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textScoutName" />
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout2"
-                android:layout_width="379dp"
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
+                android:text="NIN"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSections">
+                app:layout_constraintTop_toBottomOf="@+id/editTextNIN">
 
-                <TextView
-                    android:id="@+id/textViewTeams2"
+                <ImageView
+                    android:id="@+id/imageViewCaminheiros2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Equipas"
-                    android:textColor="#707070"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    app:srcCompat="@drawable/icon_caminheiros" />
 
-                <ListView
-                    android:id="@+id/listViewTeams2"
-                    android:layout_width="0dp"
+                <ImageView
+                    android:id="@+id/imageViewLobitos2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewTeams2" />
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/icon_lobitos" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/imageViewExploradores2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/icon_exploradores" />
+
+                <ImageView
+                    android:id="@+id/imageViewPioneiros2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/icon_pioneiros" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/butSaveChangesProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/custom_button_orange"
                 android:text="Salvar alterações"
                 android:textStyle="normal"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/user" />
+
+            <CheckBox
+                android:id="@+id/checkBoxDirigente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:text="CheckBox"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/butSaveChangesProfile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

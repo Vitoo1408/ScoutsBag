@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activityManagement.FragmentInvite"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".activityManagement.FragmentInvite">
 
     <TextView
         android:id="@+id/textInvites"
@@ -31,8 +31,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInvites"
-        app:layout_constraintVertical_bias="0.855">
+        app:layout_constraintVertical_bias="0.855"/>
 
-    </ListView>
+    <TextView
+        android:id="@+id/emptyElementInvite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="De momento não tem convites, espere até algum dirigente o convidar para uma atividade"
+        android:textAlignment="center"
+        android:textColor="#707070"
+        android:textSize="17.3sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

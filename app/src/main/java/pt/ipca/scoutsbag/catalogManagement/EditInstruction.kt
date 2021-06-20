@@ -40,6 +40,8 @@ class EditInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_instruction)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         var editTextEditInstruction = findViewById<EditText>(R.id.editTextEditInstruction)
         val buttonSaveEditInstruction = findViewById<Button>(R.id.buttonSaveEditInstruction)
@@ -72,6 +74,8 @@ class EditInstruction : ActivityImageHelper() {
         if (instruction.imageUrl != "") {
             Picasso.with(this).load(instruction.imageUrl).into(instructionEditImage)
             imageUrl = instruction.imageUrl
+        } else {
+            instructionEditImage.setImageResource(R.drawable.ic_upload_image)
         }
 
         buttonSaveEditInstruction.setOnClickListener {

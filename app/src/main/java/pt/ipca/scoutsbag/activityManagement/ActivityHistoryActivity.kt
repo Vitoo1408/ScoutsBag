@@ -32,6 +32,9 @@ class ActivityHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title

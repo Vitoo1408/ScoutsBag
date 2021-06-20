@@ -10,6 +10,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import com.example.scoutsteste1.ScoutActivity
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -17,9 +19,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
+import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.system.exitProcess
 
 object Utils {
 
@@ -350,6 +354,41 @@ object Utils {
             val netInfo = cm.activeNetworkInfo
             return netInfo != null && netInfo.isConnectedOrConnecting
         }
+    }
+
+    fun connectionLiveData(context: Context) {
+
+        var alertDialog = AlertDialog.Builder(context)
+        alertDialog.setTitle("Sem internet")
+        alertDialog.setMessage("A aplicação precisa de acesso à internet para funcionar corretamente. Ligue os dados móveis ou o wifi para continuar.")
+        alertDialog.setIcon(R.drawable.ic_no_internet)
+
+        val alert = alertDialog.create()
+        alert.setCanceledOnTouchOutside(false)
+        alert.setOnCancelListener {
+            //moveTaskToBack(true)
+            exitProcess(-1)
+        }
+        //alert.setCancelable(false)
+
+        var connectionLiveData = ConnectionLiveData(context)
+        connectionLiveData.observe(context as LifecycleOwner, { isNetworkAvailable ->
+            if(!isNetworkAvailable) {
+                alert.show()
+            } else {
+                alert.dismiss()
+            }
+        })
+    }
+
+    fun connectionLiveDataReturn(context: Context): Boolean{
+        var internet: Boolean? = null
+        var connectionLiveData = ConnectionLiveData(context)
+        connectionLiveData.observe(context as LifecycleOwner, { isNetworkAvailable ->
+            internet = isNetworkAvailable
+        })
+
+        return internet!!
     }
 
 }

@@ -26,6 +26,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import org.w3c.dom.Text
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.User
 import java.util.*
 import java.util.regex.Pattern
@@ -61,6 +62,9 @@ class Register : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //find all id's
         editTextNome = findViewById(R.id.editTextNomeRegisto)
@@ -118,11 +122,11 @@ class Register : AppCompatActivity() {
                     newUser.address = morada?.text.toString()
                     newUser.postalCode = codPostal?.text.toString()
                     newUser.pass = palavraPasse?.text.toString()
-                    newUser.imageUrl = null
+                    newUser.imageUrl = ""
                     newUser.codType = "ESC"
                     if (buttonMascChecked) newUser.gender = "m" else newUser.gender = "f"
                     newUser.accepted = 0
-                    newUser.userActive = 0
+                    newUser.userActive = 1
                     newUser.idTeam = null
 
                     val postBody = newUser.toJson()
@@ -253,9 +257,6 @@ class Register : AppCompatActivity() {
     private fun validateFields() : Boolean {
         if(editTextNome?.text.toString().isEmpty()){
             editTextNome?.error = "O nome deve estar preenchido!"
-            return false
-        } else if (editTextNin?.text.toString().isEmpty()){
-            editTextNin?.error = "O nin deve estar preenchido!"
             return false
         } else if (editTextTelemovel?.text.toString().isEmpty()){
             editTextTelemovel?.error = "O nº de telemóvel deve estar preenchido!"

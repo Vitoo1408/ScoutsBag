@@ -28,6 +28,9 @@ class EditActivityActivity : ScoutActivityCreationHelper() {
         // Set actionbar title
         supportActionBar?.title = "Editar atividade"
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         // Get the selected activity
         val activityJsonStr = intent.getStringExtra("activity")
         val activityJson = JSONObject(activityJsonStr!!)

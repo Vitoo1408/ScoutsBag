@@ -2,11 +2,12 @@ package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import com.example.scoutsteste1.ScoutActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,6 @@ class FragmentActivity : Fragment() {
     lateinit var buttonAdd : FloatingActionButton
     lateinit var textViewWelcome : TextView
 
-
     /*
         This function create the view
      */
@@ -43,12 +43,18 @@ class FragmentActivity : Fragment() {
         // Create the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_activity, container, false)
 
+        var emptyElement = rootView.findViewById<TextView>(R.id.emptyElementActivity)
+
         // Set data
         buttonAdd = rootView.findViewById(R.id.buttonAddActivity)
         textViewWelcome = rootView.findViewById(R.id.TextViewWelcome)
         listView = rootView.findViewById(R.id.listViewActivities)
         adapter = ActivitiesAdapter()
         listView.adapter = adapter
+        listView.setEmptyView(emptyElement)
+
+
+
 
         //hide add button if a scout logs in
         if(UserLoggedIn.codType == "Esc"){
@@ -69,6 +75,7 @@ class FragmentActivity : Fragment() {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
+            Log.d("UserLoggedinId", UserLoggedIn.idUser.toString())
             Backend.getAllAcceptedActivities(UserLoggedIn.idUser!!) {
                 activities.addAll(it)
                 sortActivities()

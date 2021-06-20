@@ -19,6 +19,7 @@ import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 import pt.ipca.scoutsbag.models.Team
 import pt.ipca.scoutsbag.models.User
 
@@ -38,6 +39,9 @@ class ActivityUserRequest : AppCompatActivity() {
         // Initial Settings
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_request)
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //actionbar
         val actionbar = supportActionBar

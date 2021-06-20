@@ -35,6 +35,9 @@ class AddInstruction : ActivityImageHelper() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_instruction)
 
+        //check internet connection
+        Utils.connectionLiveData(this)
+
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title

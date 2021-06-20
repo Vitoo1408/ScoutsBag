@@ -19,6 +19,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.R
+import pt.ipca.scoutsbag.Utils
 
 
 class RecoverPassword : AppCompatActivity() {
@@ -33,6 +34,9 @@ class RecoverPassword : AppCompatActivity() {
 
         //hide topbar
         this.supportActionBar?.hide()
+
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         //get new pass details
         newPassDetails = intent.getStringExtra("newPassDetails")

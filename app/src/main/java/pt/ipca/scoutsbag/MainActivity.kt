@@ -1,11 +1,7 @@
 package pt.ipca.scoutsbag
 
-import DialogNoInternet
-import android.content.Intent
-import android.os.Bundle import android.os.Handler
-import android.text.Html
+import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,8 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import org.json.JSONObject
-import org.json.JSONTokener
-import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class MainActivity : AppCompatActivity() {
@@ -30,12 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //var dialog = DialogNoInternet()
-        //dialog.show(supportFragmentManager, "customDialog")
-
-        /*while(!Utils.isOnline(this)){
-            dialog.show(supportFragmentManager, "customDialog")
-        }*/
+        //check internet connection
+        Utils.connectionLiveData(this)
 
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
@@ -61,9 +51,6 @@ class MainActivity : AppCompatActivity() {
         //convert user details json object of type string to a json object
         val userDetailsJsonObject = JSONObject(userDetails)
 
-        Log.d("UserDetails", userDetailsJsonObject.toString())
-
-
         //save all user details to the object UserLoggedIn
         UserLoggedIn.idUser = userDetailsJsonObject.getString("id_user").toInt()
         UserLoggedIn.userName = userDetailsJsonObject.getString("user_name")
@@ -81,6 +68,8 @@ class MainActivity : AppCompatActivity() {
         UserLoggedIn.accepted = userDetailsJsonObject.getString("accepted").toInt()
         if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
         UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
+
+        Log.d("UserLoggedIn", UserLoggedIn.imageUrl.toString())
     }
 
 }
