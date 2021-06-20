@@ -66,7 +66,7 @@ class EditProfileActivity : ActivityImageHelper() {
         genRadioGroup = findViewById(R.id.radioGroup)
 
         //load profile image
-        if(UserLoggedIn.imageUrl != "" || UserLoggedIn.imageUrl != "null") {
+        if(UserLoggedIn.imageUrl != "" && UserLoggedIn.imageUrl != "null") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
         } else {
             editImage?.setImageResource(R.drawable.ic_user)

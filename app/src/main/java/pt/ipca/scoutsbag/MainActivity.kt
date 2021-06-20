@@ -30,13 +30,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //var dialog = DialogNoInternet()
-        //dialog.show(supportFragmentManager, "customDialog")
-
-        /*while(!Utils.isOnline(this)){
-            dialog.show(supportFragmentManager, "customDialog")
-        }*/
-
         // Variables
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -61,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         //convert user details json object of type string to a json object
         val userDetailsJsonObject = JSONObject(userDetails)
 
-        Log.d("UserDetails", userDetailsJsonObject.toString())
-
-
         //save all user details to the object UserLoggedIn
         UserLoggedIn.idUser = userDetailsJsonObject.getString("id_user").toInt()
         UserLoggedIn.userName = userDetailsJsonObject.getString("user_name")
@@ -81,6 +71,8 @@ class MainActivity : AppCompatActivity() {
         UserLoggedIn.accepted = userDetailsJsonObject.getString("accepted").toInt()
         if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
         UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
+
+        Log.d("UserLoggedIn", UserLoggedIn.imageUrl.toString())
     }
 
 }
