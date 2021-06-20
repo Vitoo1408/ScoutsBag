@@ -2,6 +2,7 @@ package pt.ipca.scoutsbag.activityManagement
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +75,8 @@ class FragmentActivity : Fragment() {
         GlobalScope.launch(Dispatchers.IO) {
 
             // Get the values to the lists
-            Backend.getAllAcceptedActivities(UserLoggedIn.idUser!!) {
+            Log.d("UserLoggedinId", UserLoggedIn.idUser.toString())
+            Backend.getAllAcceptedActivities(7) {
                 activities.addAll(it)
                 sortActivities()
             }
