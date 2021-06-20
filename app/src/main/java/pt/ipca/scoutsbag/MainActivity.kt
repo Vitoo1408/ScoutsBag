@@ -1,11 +1,7 @@
 package pt.ipca.scoutsbag
 
-import DialogNoInternet
-import android.content.Intent
-import android.os.Bundle import android.os.Handler
-import android.text.Html
+import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -13,8 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import org.json.JSONObject
-import org.json.JSONTokener
-import pt.ipca.scoutsbag.loginAndRegister.DialogAfterRegister
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class MainActivity : AppCompatActivity() {
