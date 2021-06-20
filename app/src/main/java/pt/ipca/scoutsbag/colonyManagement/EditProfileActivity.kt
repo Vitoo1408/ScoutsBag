@@ -35,21 +35,11 @@ class EditProfileActivity : ActivityImageHelper() {
     private var imageUrl: String? = null
     private var genRadioGroup: RadioGroup? = null
     private var editGender: String? = null
-    lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
-
-        connectionLiveData = ConnectionLiveData(this)
-        connectionLiveData.observe(this, { isNetworkAvailable ->
-            if(!isNetworkAvailable) {
-                Toast.makeText(this, "Sem internet", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Com internet", Toast.LENGTH_LONG).show()
-            }
-        })
 
         //actionbar
         val actionbar = supportActionBar
@@ -73,7 +63,7 @@ class EditProfileActivity : ActivityImageHelper() {
         genRadioGroup = findViewById(R.id.radioGroup)
 
         //load profile image
-        if(UserLoggedIn.imageUrl != "" || UserLoggedIn.imageUrl != "null") {
+        if(UserLoggedIn.imageUrl != "" && UserLoggedIn.imageUrl != "null") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
         } else {
             editImage?.setImageResource(R.drawable.ic_user)

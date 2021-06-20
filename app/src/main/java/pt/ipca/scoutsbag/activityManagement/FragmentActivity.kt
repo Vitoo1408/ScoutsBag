@@ -30,7 +30,6 @@ class FragmentActivity : Fragment() {
     lateinit var buttonAdd : FloatingActionButton
     lateinit var textViewWelcome : TextView
 
-
     /*
         This function create the view
      */
