@@ -72,7 +72,7 @@ class EditProfileActivity : ActivityImageHelper() {
         if(UserLoggedIn.imageUrl != "" && UserLoggedIn.imageUrl != "null") {
             Picasso.with(this).load(UserLoggedIn.imageUrl).into(editImage)
         } else {
-            editImage?.setImageResource(R.drawable.ic_user)
+            editImage?.setImageResource(R.drawable.ic_upload_image)
         }
 
         // edit user gender
@@ -120,8 +120,10 @@ class EditProfileActivity : ActivityImageHelper() {
                     }
                 }
             } else {
-                //save the user data without a new image url
-                saveUserData(null)
+                GlobalScope.launch(Dispatchers.IO) {
+                    //save the user data without a new image url
+                    saveUserData(null)
+                }
             }
             Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
             finish()
@@ -187,8 +189,6 @@ class EditProfileActivity : ActivityImageHelper() {
         //save new user details as json string to sharedPrefs
         editor.putString("userDetails", profileTemp.toJson().toString())
         editor.apply()
-
-        Log.d("userLoggedIn", profileTemp.toJson().toString())
 
         //update user to db
         Backend.editUser(profileTemp) {

@@ -48,10 +48,10 @@ class EditScoutProfileActivity : AppCompatActivity() {
         }
 
         //load profile image
-        if(user.imageUrl != "" || user.imageUrl != "null") {
+        if(user.imageUrl != "" && user.imageUrl != "null") {
             Picasso.with(this).load(user.imageUrl).into(profileImage)
         } else {
-            profileImage?.setImageResource(R.drawable.ic_user)
+            profileImage?.setImageResource(R.drawable.ic_perfil)
         }
 
         if(UserLoggedIn.nin != "null") {
