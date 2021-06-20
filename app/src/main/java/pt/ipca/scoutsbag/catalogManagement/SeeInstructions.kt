@@ -91,7 +91,9 @@ class SeeInstructions : AppCompatActivity() {
         //set back icon on action bar
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
-        return true
+        return UserLoggedIn.codType != "Esc"
+
+
     }
 
     inner class InstructionsAdapter : BaseAdapter(){
