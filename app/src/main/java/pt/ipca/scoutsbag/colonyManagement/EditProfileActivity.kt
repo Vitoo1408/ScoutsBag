@@ -15,10 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import pt.ipca.scoutsbag.ActivityImageHelper
-import pt.ipca.scoutsbag.Backend
-import pt.ipca.scoutsbag.R
-import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.*
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.User
 
@@ -38,11 +35,21 @@ class EditProfileActivity : ActivityImageHelper() {
     private var imageUrl: String? = null
     private var genRadioGroup: RadioGroup? = null
     private var editGender: String? = null
+    lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+
+        connectionLiveData = ConnectionLiveData(this)
+        connectionLiveData.observe(this, { isNetworkAvailable ->
+            if(!isNetworkAvailable) {
+                Toast.makeText(this, "Sem internet", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Com internet", Toast.LENGTH_LONG).show()
+            }
+        })
 
         //actionbar
         val actionbar = supportActionBar

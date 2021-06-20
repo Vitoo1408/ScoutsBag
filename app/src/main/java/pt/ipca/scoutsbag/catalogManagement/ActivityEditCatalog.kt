@@ -28,13 +28,13 @@ class ActivityEditCatalog : ActivityImageHelper() {
     private var imageUri: Uri? = null
     lateinit var catalogEditImage : ImageView
     lateinit var catalog : Catalog
-    var imageUrl: String? = null
+        var imageUrl: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_catalog)
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_edit_catalog)
 
-        var editNameCatalog = findViewById<EditText>(R.id.editNameCatalog)
+            var editNameCatalog = findViewById<EditText>(R.id.editNameCatalog)
         var editCatalogDescription = findViewById<EditText>(R.id.editCatalogDescription)
         var ratingBarEditCatalog = findViewById<RatingBar>(R.id.ratingBarEditCatalog)
         val saveEditCatalog = findViewById<Button>(R.id.saveEditCatalog)
@@ -82,6 +82,8 @@ class ActivityEditCatalog : ActivityImageHelper() {
                 if (catalog.imageUrl != "") {
                     Picasso.with(this@ActivityEditCatalog).load(catalog.imageUrl).into(catalogEditImage)
                     imageUrl = catalog.imageUrl
+                } else {
+                    catalogEditImage.setImageResource(R.drawable.ic_instrucoes_icon)
                 }
 
             }
