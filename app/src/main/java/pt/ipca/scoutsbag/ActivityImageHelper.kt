@@ -31,7 +31,6 @@ open class ActivityImageHelper: AppCompatActivity() {
     // Function to check and request permission.
     fun checkPermission(permission: String, requestCode: Int) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-
             // Requesting the permission
             ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
         } else {
