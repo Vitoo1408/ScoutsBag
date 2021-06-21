@@ -7,12 +7,10 @@
     tools:context=".colonyManagement.ActivityReplyRequest">
 
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,18 +28,29 @@
                 android:id="@+id/imageProfile"
                 android:layout_width="match_parent"
                 android:layout_height="132dp"
-                android:layout_marginTop="0dp"
+                android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user" />
+                app:srcCompat="@drawable/ic_perfil" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nome: "
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
 
             <TextView
                 android:id="@+id/textName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Nome"
-                android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nome"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
                 app:layout_constraintTop_toBottomOf="@+id/imageProfile" />
 
             <TextView
@@ -49,26 +58,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="NIN"
+                android:text="Nin: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textName" />
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
             <TextView
                 android:id="@+id/textNIN"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleNIN" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitleNIN"
+                app:layout_constraintTop_toTopOf="@+id/textTitleNIN" />
 
             <TextView
                 android:id="@+id/textTitlePhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Telefone"
+                android:text="Telefone: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textNIN" />
 
@@ -77,7 +87,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="E-mail"
+                android:text="E-mail: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textPhone" />
 
@@ -86,7 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Endereço"
+                android:text="Endereço: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textBirthDate" />
 
@@ -95,71 +107,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Data Nascimento"
+                android:text="Data Nascimento: "
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textMail" />
 
             <TextView
                 android:id="@+id/textPhone"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitlePhone" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitlePhone"
+                app:layout_constraintTop_toTopOf="@+id/textTitlePhone" />
 
             <TextView
                 android:id="@+id/textMail"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleMail" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitleMail"
+                app:layout_constraintTop_toTopOf="@+id/textTitleMail" />
 
             <TextView
                 android:id="@+id/textPostalCode"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitlePostalCode" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitlePostalCode"
+                app:layout_constraintTop_toTopOf="@+id/textTitlePostalCode" />
 
             <TextView
                 android:id="@+id/textBirthDate"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleBirthDate" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitleBirthDate"
+                app:layout_constraintTop_toTopOf="@+id/textTitleBirthDate" />
 
             <TextView
                 android:id="@+id/textTitlePostalCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Código Postal"
+                android:text="Código Postal: "
+                android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAddress"
                 app:layout_constraintVertical_bias="0.0" />
 
+
             <TextView
                 android:id="@+id/textAddress"
-                android:layout_width="379dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textTitleAddress" />
-
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/textTitleAddress"
+                app:layout_constraintTop_toTopOf="@+id/textTitleAddress" />
 
             <ImageView
                 android:id="@+id/imageViewLobitos"
@@ -204,21 +213,23 @@
                 android:id="@+id/textViewSections"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Secção"
+                android:layout_marginTop="24dp"
+                android:text="Secção:"
                 android:textColor="#707070"
-                android:textSize="12sp"
+                android:textSize="18sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textPostalCode" />
+                app:layout_constraintTop_toBottomOf="@+id/textPostalCode"
+                tools:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textViewTeams"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Equipas"
+                android:text="Equipas:"
                 android:textColor="#707070"
-                android:textSize="12sp"
+                android:textSize="18sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

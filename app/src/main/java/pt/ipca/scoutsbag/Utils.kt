@@ -87,6 +87,34 @@ object Utils {
         return DatePickerDialog(context, style, dateSetListener, year, month, day)
     }
 
+    /*
+        This function create a Date picker
+        @dateTextView = the textView responsible for select the date
+        @context = activity that the date picker is in
+     */
+    fun initOnlyDatePicker(dateTextView: TextView, context: Context): DatePickerDialog {
+
+        // After the user finish selecting a date, change the date in the button
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+
+                // Add the date to the button
+                val date = "$day-${month+1}-$year"
+                dateTextView.text = date
+
+            }
+
+        // Get the data to create the date picker
+        val cal: Calendar = Calendar.getInstance()
+        val year: Int = cal.get(Calendar.YEAR)
+        val month: Int = cal.get(Calendar.MONTH)
+        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
+        val style: Int = AlertDialog.THEME_HOLO_LIGHT
+
+        // Create and return the date picker
+        return DatePickerDialog(context, style, dateSetListener, year, month, day)
+    }
+
 
     /*
         This function create a Time picker and join the time with the date previous selected
@@ -182,6 +210,34 @@ object Utils {
         val min: String = strTimeArray[1]
 
         return "$year-$month-$day $hour:$min:00"
+    }
+
+    /*
+        This function convert conventional Date format to a format that mySql accept
+        @date = conventional date
+     */
+
+    fun dateToMySql(date: String): String {
+        // Split the Date in day, month and year
+        val strDateArray = Pattern.compile("-").split(date, 3)
+        val day: String = strDateArray[0]
+        val month: String = strDateArray[1]
+        val year: String = strDateArray[2]
+        return "$year-$month-$day"
+    }
+
+    /*
+        This function convert conventional Date format to a format that mySql accept
+        @date = conventional date
+     */
+
+    fun mySqlDateToDate(date: String): String {
+        // Split the Date in day, month and year
+        val strDateArray = Pattern.compile("-").split(date, 3)
+        val year: String = strDateArray[0]
+        val month: String = strDateArray[1]
+        val day: String = strDateArray[2]
+        return "$day-$month-$year"
     }
 
 

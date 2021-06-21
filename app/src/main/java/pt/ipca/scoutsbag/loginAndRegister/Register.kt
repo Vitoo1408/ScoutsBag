@@ -1,5 +1,6 @@
 package pt.ipca.scoutsbag.loginAndRegister
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
@@ -38,7 +39,6 @@ class Register : AppCompatActivity() {
     var editTextTelemovel: EditText? = null
     var buttonGeneroMasc: Button? = null
     var buttonGeneroFem: Button? = null
-    var editTextCalendar : EditText? = null
     var email: EditText? = null
     var morada: EditText? = null
     var codPostal: EditText? = null
@@ -51,10 +51,12 @@ class Register : AppCompatActivity() {
     var password: String? = null
     var secondPass: String? = null
     var tvLoginFromRegister: TextView? = null
+    lateinit var editTextCalendar : TextView
 
     //models
     var newUser = User()
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //hide topbar
@@ -92,20 +94,12 @@ class Register : AppCompatActivity() {
             finish()
         }
 
-        //Calendar
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        // Create the pop up window to select the date
+        val birthDatePickerDialog = Utils.initOnlyDatePicker(editTextCalendar, this)
 
         //select date of birth
-        editTextCalendar?.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{ _, mYear, mMonth, mDay ->
-                    editTextCalendar?.setText(mDay.toString() + "-" + (mMonth + 1).toString() + "-" + mYear.toString())
-                }, year, month, day)
-                dpd.show()
-            }
+        editTextCalendar.setOnClickListener {
+            birthDatePickerDialog.show()
         }
 
         //send json object to db
@@ -117,7 +111,7 @@ class Register : AppCompatActivity() {
                     newUser.userName = editTextNome?.text.toString()
                     if(editTextNin?.text.toString().isNotEmpty()) newUser.nin = editTextNin?.text.toString() else newUser.nin = null
                     newUser.contact = editTextTelemovel?.text.toString()
-                    newUser.birthDate = "$year-$month-$day"
+                    newUser.birthDate = Utils.dateToMySql(editTextCalendar.text.toString())
                     newUser.email = email?.text.toString()
                     newUser.address = morada?.text.toString()
                     newUser.postalCode = codPostal?.text.toString()

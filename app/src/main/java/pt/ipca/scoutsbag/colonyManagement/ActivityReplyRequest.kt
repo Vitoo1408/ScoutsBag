@@ -164,7 +164,12 @@ class ActivityReplyRequest : AppCompatActivity() {
 
         // Set data
         textName.text = user.userName
-        textNIN.text = user.nin
+        if(user.nin != null) {
+            textNIN.text = user.nin
+        } else {
+            textNIN.text = "Não tem"
+        }
+
         textPhone.text = user.contact
         textMail.text = user.email
         textBirthDate.text = Utils.mySqlDateTimeToString(user.birthDate!!)

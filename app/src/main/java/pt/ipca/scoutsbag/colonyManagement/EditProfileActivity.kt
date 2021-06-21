@@ -7,8 +7,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -29,7 +32,6 @@ class EditProfileActivity : ActivityImageHelper() {
     private var editNIN: EditText? = null
     private var editPhone: EditText? = null
     private var editMail: EditText? = null
-    private var editBirthDate: EditText? = null
     private var editAddress: EditText? = null
     private var editPostalCode: EditText? = null
     private var butSave: Button? = null
@@ -38,6 +40,10 @@ class EditProfileActivity : ActivityImageHelper() {
     private var genRadioGroup: RadioGroup? = null
     private var editGender: String? = null
     lateinit var connectionLiveData: ConnectionLiveData
+    lateinit var editBirthDate: TextView
+    private var textViewValidatePass: TextView? = null
+    private var editTextNewPass: EditText? = null
+    private var password: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -67,6 +73,8 @@ class EditProfileActivity : ActivityImageHelper() {
         editPostalCode = findViewById(R.id.EditTextPostalCode)
         butSave = findViewById(R.id.butSaveChangesProfile)
         genRadioGroup = findViewById(R.id.radioGroup)
+        textViewValidatePass = findViewById(R.id.textViewValidatePass)
+        editTextNewPass = findViewById(R.id.editProfileNewPass)
 
         //load profile image
         if(UserLoggedIn.imageUrl != "" && UserLoggedIn.imageUrl != "null") {
@@ -90,12 +98,34 @@ class EditProfileActivity : ActivityImageHelper() {
             "M" -> findViewById<RadioButton>(R.id.genderMasc).isChecked = true
             "O" -> findViewById<RadioButton>(R.id.genderOther).isChecked = true
         }
+
+        // Create the pop up window to select the date
+        val birthDatePickerDialog = Utils.initOnlyDatePicker(editBirthDate, this)
+
+        //set new birth date
+        editBirthDate.setOnClickListener {
+            birthDatePickerDialog.show()
+        }
+
+        //set new password
+        editTextNewPass?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                password = editTextNewPass?.text.toString()
+                validatePassword(password!!)
+            }
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+
         editGender = UserLoggedIn.gender
         editName?.setText(UserLoggedIn.userName)
         if(UserLoggedIn.nin != "null") editNIN?.setText(UserLoggedIn.nin)
         editPhone?.setText(UserLoggedIn.contact)
         editMail?.setText(UserLoggedIn.email)
-        editBirthDate?.setText(Utils.mySqlDateToString(UserLoggedIn.birthDate.toString()))
+        editBirthDate?.setText(Utils.mySqlDateToDate(Utils.mySqlDateToString(UserLoggedIn.birthDate.toString())))
         editAddress?.setText(UserLoggedIn.address)
         editPostalCode?.setText(UserLoggedIn.postalCode)
 
@@ -106,27 +136,31 @@ class EditProfileActivity : ActivityImageHelper() {
 
         //save user details
         butSave?.setOnClickListener {
-            if(imageUri != null) {
-                val fileName = Utils.uniqueImageNameGen()
-                val filePath = Utils.getUriFilePath(this, imageUri!!)
+            if (editTextNewPass?.text.toString() != "" && editTextNewPass?.text.toString().length < 8) {
+                editTextNewPass?.error = "A palavra passe é inválida!"
+            } else {
+                if (imageUri != null) {
+                    val fileName = Utils.uniqueImageNameGen()
+                    val filePath = Utils.getUriFilePath(this, imageUri!!)
 
-                GlobalScope.launch(Dispatchers.Main) {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        Utils.uploadImage(filePath!!, fileName) {
-                            imageUrl = it
+                    GlobalScope.launch(Dispatchers.Main) {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            Utils.uploadImage(filePath!!, fileName) {
+                                imageUrl = it
+                            }
+                            //save the user data with a new image url
+                            saveUserData(imageUrl)
                         }
-                        //save the user data with a new image url
-                        saveUserData(imageUrl)
+                    }
+                } else {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        //save the user data without a new image url
+                        saveUserData(null)
                     }
                 }
-            } else {
-                GlobalScope.launch(Dispatchers.IO) {
-                    //save the user data without a new image url
-                    saveUserData(null)
-                }
+                Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
+                finish()
             }
-            Toast.makeText(this, "Perfil atualizado!", Toast.LENGTH_LONG).show()
-            finish()
         }
     }
 
@@ -169,11 +203,14 @@ class EditProfileActivity : ActivityImageHelper() {
         profileTemp.nin = editNIN?.text.toString()
         profileTemp.contact = editPhone?.text.toString()
         profileTemp.email = editMail?.text.toString()
-        profileTemp.birthDate = "1997-07-12"
+        profileTemp.birthDate = Utils.dateToMySql(editBirthDate.text.toString())
         profileTemp.address = editAddress?.text.toString()
         profileTemp.postalCode = editPostalCode?.text.toString()
         profileTemp.gender = editGender
         if(imageUrl != null) profileTemp.imageUrl = imageUrl
+        if(editTextNewPass?.text.toString() != "") {
+            profileTemp.pass = editTextNewPass?.text.toString()
+        }
 
         //save new user details to UserLoggedIn object
         UserLoggedIn.userName = profileTemp.userName
@@ -200,5 +237,13 @@ class EditProfileActivity : ActivityImageHelper() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun validatePassword(password: String) {
+        if(password.length < 8){
+            textViewValidatePass?.setTextColor(resources.getColor(R.color.red))
+        } else {
+            textViewValidatePass?.setTextColor(resources.getColor(R.color.green))
+        }
     }
 }
