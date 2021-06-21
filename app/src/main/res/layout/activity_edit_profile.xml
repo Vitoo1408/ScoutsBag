@@ -114,6 +114,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/EditTextAddress" />
 
             <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="Código Postal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/EditTextPostalCode" />
+
+            <TextView
+                android:id="@+id/textViewValidatePass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Oito ou mais caracteres"
+                android:textColor="#FF0000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editProfileNewPass" />
+
+            <TextView
                 android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -219,7 +240,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-            <EditText
+            <TextView
                 android:id="@+id/EditBirthDate"
                 style="?android:spinnerStyle"
                 android:layout_width="0dp"
@@ -232,7 +253,7 @@
                 android:drawablePadding="10dp"
                 android:padding="10dp"
                 android:text="Data Nascimento"
-                android:textColor="@color/black"
+                android:textColor="#707070"
                 android:textSize="20sp"
                 app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -285,22 +306,44 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                 app:layout_constraintVertical_bias="0.0" />
 
+            <EditText
+                android:id="@+id/editProfileNewPass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/custom_button_black"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Nova Palavra passe"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textColor="#707070"
+                android:textSize="20sp"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toTopOf="@+id/butSaveChangesProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
             <Button
                 android:id="@+id/butSaveChangesProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="50dp"
                 android:background="@drawable/custom_button_orange"
                 android:text="Salvar alterações"
                 android:textStyle="normal"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/EditTextPostalCode" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView"
