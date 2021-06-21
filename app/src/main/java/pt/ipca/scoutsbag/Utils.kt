@@ -380,17 +380,6 @@ object Utils {
             }
         })
     }
-
-    fun connectionLiveDataReturn(context: Context): Boolean{
-        var internet: Boolean? = null
-        var connectionLiveData = ConnectionLiveData(context)
-        connectionLiveData.observe(context as LifecycleOwner, { isNetworkAvailable ->
-            internet = isNetworkAvailable
-        })
-
-        return internet!!
-    }
-
 }
 
 

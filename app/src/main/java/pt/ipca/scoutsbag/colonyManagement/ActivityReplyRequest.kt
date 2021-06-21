@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -190,30 +191,12 @@ class ActivityReplyRequest : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
 
                 // Build the user that will be added
-                val userUpdated = User(
-                    user.idUser,
-                    user.userName,
-                    correctDateTime,
-                    user.codType,
-                    user.pass,
-                    user.email,
-                    user.contact,
-                    user.gender,
-                    user.address,
-                    user.nin,
-                    user.imageUrl,
-                    user.postalCode,
-                    1,
-                    1,
-                    selectedTeam!!.idTeam,
-                    user.activities,
-                    user.actAccepted
-                )
+                user.accepted = 1
+                user.birthDate = Utils.mySqlDateToString(user.birthDate!!)
+                user.idTeam = selectedTeam?.idTeam
 
                 // Edit user
-                Backend.editUser(userUpdated, changeActivity)
-
-
+                Backend.editUser(user, changeActivity)
             }
 
         }
@@ -221,29 +204,12 @@ class ActivityReplyRequest : AppCompatActivity() {
         buttonRefuseUser.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
 
-                // Build the user that will be added
-                val userUpdated = User(
-                    user.idUser,
-                    user.userName,
-                    correctDateTime,
-                    user.codType,
-                    user.pass,
-                    user.email,
-                    user.contact,
-                    user.gender,
-                    user.address,
-                    user.nin,
-                    user.imageUrl,
-                    user.postalCode,
-                    0,
-                    0,
-                    user.idTeam,
-                    user.activities,
-                    user.actAccepted
-                )
+                user.userActive = 0
+                user.birthDate = Utils.mySqlDateToString(user.birthDate!!)
+
 
                 // Edit user
-                Backend.editUser(userUpdated, changeActivity)
+                Backend.editUser(user, changeActivity)
 
             }
 

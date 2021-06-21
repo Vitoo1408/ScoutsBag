@@ -4,11 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import org.json.JSONObject
+import pt.ipca.scoutsbag.activityManagement.FragmentInvite
+import pt.ipca.scoutsbag.catalogManagement.FragmentCatalog
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 
 class MainActivity : AppCompatActivity() {
@@ -43,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         //load all user details if not loaded yet
-
         //shared preferences initialization
         val preferences = getSharedPreferences("userLogin", MODE_PRIVATE)
         val userDetails = preferences.getString("userDetails", "")
@@ -71,5 +76,4 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("UserLoggedIn", UserLoggedIn.imageUrl.toString())
     }
-
 }

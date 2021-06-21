@@ -50,6 +50,15 @@ class AddTeam: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_team)
 
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Adicionar equipa"
+        //set back button
+        actionbar.setDisplayHomeAsUpEnabled(true)
+        //set back icon on action bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
+
         //check internet connection
         Utils.connectionLiveData(this)
 
@@ -95,6 +104,12 @@ class AddTeam: AppCompatActivity() {
         }
 
         return sectionId + 1
+    }
+
+    //when the support action bar back button is pressed, the app will go back to the previous activity
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }
