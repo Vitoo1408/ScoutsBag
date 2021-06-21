@@ -58,6 +58,7 @@ class ProfileActivity : AppCompatActivity() {
         // Variables
         val textName = findViewById<TextView>(R.id.scoutName)
         val textSection = findViewById<TextView>(R.id.scoutSection)
+        val textNin = findViewById<TextView>(R.id.TextViewNin)
         val textTeam = findViewById<TextView>(R.id.scoutTeam)
         val textPhone = findViewById<TextView>(R.id.textPhone)
         val textMail = findViewById<TextView>(R.id.textMail)
@@ -85,6 +86,7 @@ class ProfileActivity : AppCompatActivity() {
         textBirthDate.text = user.birthDate
         textAddress.text = user.address
         textPostalCode.text = user.postalCode
+        textNin.text = user.nin
 
 
         butEdit.setOnClickListener() {
