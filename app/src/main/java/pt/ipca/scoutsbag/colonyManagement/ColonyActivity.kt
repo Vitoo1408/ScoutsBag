@@ -128,7 +128,7 @@ class ColonyActivity : AppCompatActivity() {
             if(user.nin != "" && user.nin != null && user.nin != "null") {
                 textViewNin.text = "Nin: " + user.nin.toString()
             } else {
-                textViewNin.text = "Nin :"
+                textViewNin.text = "Nin : Não tem"
             }
 
             if(!user.imageUrl.isNullOrEmpty()) {

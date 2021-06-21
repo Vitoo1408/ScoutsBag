@@ -62,14 +62,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/editTextNIN">
 
                 <ImageView
-                    android:id="@+id/imageViewCaminheiros2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    app:srcCompat="@drawable/icon_caminheiros" />
-
-                <ImageView
                     android:id="@+id/imageViewLobitos2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,6 +83,15 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     app:srcCompat="@drawable/icon_pioneiros" />
+
+                <ImageView
+                    android:id="@+id/imageViewCaminheiros2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@drawable/icon_caminheiros" />
+
             </LinearLayout>
 
             <Button
@@ -121,6 +122,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/user" />
+
+            <ListView
+                android:id="@+id/listViewTeams"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/butSaveChangesProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
             <CheckBox
                 android:id="@+id/checkBoxDirigente"

@@ -92,7 +92,7 @@ class ProfileActivity : AppCompatActivity() {
 
         textPhone.text = user.contact
         textMail.text = user.email
-        textBirthDate.text = user.birthDate
+        textBirthDate.text = Utils.mySqlDateToString(user.birthDate!!)
         textAddress.text = user.address
         textPostalCode.text = user.postalCode
         textNin.text = user.nin
