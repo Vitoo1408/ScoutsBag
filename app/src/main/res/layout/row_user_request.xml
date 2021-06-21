@@ -1,39 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/textView_user_team"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif"
-        android:text="Team"
-        android:textColor="#707070"
-        android:textSize="12sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView_user_section"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
-
-    <TextView
-        android:id="@+id/textView_user_section"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="sans-serif"
-        android:text="Section"
-        android:textColor="#707070"
-        android:textSize="12sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.035"
-        app:layout_constraintStart_toEndOf="@+id/profileImageColony"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
 
     <TextView
         android:id="@+id/textView_user_name"
@@ -68,7 +38,7 @@
         android:id="@+id/textView_user_nin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="sans-serif"
         android:text="NIN: 000111222"
         android:textColor="#707070"
@@ -77,6 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toEndOf="@+id/profileImageColony"
-        app:layout_constraintTop_toBottomOf="@+id/textView_user_team" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_user_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

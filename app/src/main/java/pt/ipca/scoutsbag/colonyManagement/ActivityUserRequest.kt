@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -98,10 +99,16 @@ class ActivityUserRequest : AppCompatActivity() {
             // Variables in the row
             val textViewName    = rowView.findViewById<TextView>(R.id.textView_user_name)
             val textViewNin     = rowView.findViewById<TextView>(R.id.textView_user_nin)
+            val profileImage    = rowView.findViewById<ImageView>(R.id.profileImageColony)
 
             // Set values in the row
             textViewName.text = user.userName.toString()
-            textViewNin.text = user.nin.toString()
+            if(user.nin != "" && user.nin != "null" && user.nin != null) {
+                textViewNin.text = "Nin: " + user.nin.toString()
+            } else {
+                textViewNin.text = "Nin: não tem"
+            }
+            profileImage.setImageResource(R.drawable.ic_perfil)
 
             rowView.setOnClickListener {
                 val intent = Intent(this@ActivityUserRequest, ActivityReplyRequest::class.java)
