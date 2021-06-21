@@ -87,8 +87,11 @@ class EditScoutProfileActivity : AppCompatActivity() {
         }
 
         //only show "Dirigente" check box when logged in user is admin
-        if(user.codType == "Adm") {
+        if(UserLoggedIn.codType == "Adm") {
             checkBoxDirigente?.visibility = View.VISIBLE
+            if(user.codType == "Dir") {
+                checkBoxDirigente?.isChecked = true
+            }
         }
 
         //load profile image
@@ -106,10 +109,12 @@ class EditScoutProfileActivity : AppCompatActivity() {
         buttonSave?.setOnClickListener {
 
             //check if user is a "Dirigente"
-            if(checkBoxDirigente?.isChecked == true) {
-                user.codType == "Dir"
-            } else {
-                user.codType = "Esc"
+            if(UserLoggedIn.codType =="Adm") {
+                if(checkBoxDirigente?.isChecked() == true) {
+                    user.codType = "Dir"
+                } else {
+                    user.codType = "Esc"
+                }
             }
 
             //set user nin from edit text nin

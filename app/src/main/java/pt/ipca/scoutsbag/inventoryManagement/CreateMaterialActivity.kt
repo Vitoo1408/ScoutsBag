@@ -30,7 +30,7 @@ class CreateMaterialActivity : ActivityImageHelper() {
 
     var returnActivity: ()->Unit = {
         val returnIntent = Intent(this, InventoryActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        returnIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(returnIntent)
     }
 
