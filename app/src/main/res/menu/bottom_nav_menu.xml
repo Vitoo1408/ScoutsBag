@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_activity"
+        android:icon="@drawable/ic_agenda_icon"
+        android:title="Agenda" />
+
+    <item
+        android:id="@+id/navigation_invites"
+        android:icon="@drawable/ic_convites_icon"
+        android:title="Convites" />
+
+    <item
+        android:id="@+id/navigation_catalog"
+        android:icon="@drawable/ic_instrucoes_icon"
+        android:title="Catalogo" />
+
+    <item
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_opcoes_icon"
+        android:title="Mais" />
+
+</menu>
