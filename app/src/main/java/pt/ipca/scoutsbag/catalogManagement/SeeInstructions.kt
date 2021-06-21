@@ -84,14 +84,14 @@ class SeeInstructions : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.delete_edit_menu, menu)
         title = nameCatalog
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //set back icon on action bar
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_green_arrow_back_24)
 
-        return true
+        return UserLoggedIn.codType != "Esc"
+
+
     }
 
     inner class InstructionsAdapter : BaseAdapter(){
