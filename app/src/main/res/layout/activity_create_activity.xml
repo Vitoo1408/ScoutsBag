@@ -125,81 +125,235 @@
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintTop_toBottomOf="@+id/editTextActivityDescription">
 
-            <ImageView
-                android:id="@+id/imageViewActivityType1"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:scaleX="1"
-                android:scaleY="1"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_walk" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageViewActivityType2"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_camping" />
+              <ImageView
+                  android:id="@+id/imageViewActivityType1"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_walk" />
 
-            <ImageView
-                android:id="@+id/imageViewActivityType3"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_charity" />
+              <TextView
+                  android:id="@+id/textViewActivityType1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Caminhada"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="12sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType1"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType1"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType1" />
 
-            <ImageView
-                android:id="@+id/imageViewActivityType4"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_peddy_paper" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:id="@+id/imageViewActivityType5"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType4"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_acantonamento" />
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType1"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageViewActivityType6"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType5"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_mass" />
+              <ImageView
+                  android:id="@+id/imageViewActivityType2"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_camping" />
 
-            <ImageView
-                android:id="@+id/imageViewActivityType7"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+              <TextView
+                  android:id="@+id/textViewActivityType2"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Acampar"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="12sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType2"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType2"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:scaleX="1"
-                android:scaleY="1"
-                app:layout_constraintStart_toEndOf="@+id/imageViewActivityType6"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_meeting" />
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType2"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageViewActivityType3"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_charity" />
+
+              <TextView
+                  android:id="@+id/textViewActivityType3"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Caridade"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="12sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType3"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType3"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType3" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType3"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageViewActivityType4"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_peddy_paper" />
+
+              <TextView
+                  android:id="@+id/textViewActivityType4"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Peddy Paper"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="11sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType4"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType4"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType4"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageViewActivityType5"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_acantonamento" />
+
+              <TextView
+                  android:id="@+id/textViewActivityType5"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Acantonar"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="11sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType5"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType5"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType5"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageViewActivityType6"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_mass" />
+
+              <TextView
+                  android:id="@+id/textViewActivityType6"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Missa"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="12sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType6"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType6"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType6" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutActivityType7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayoutActivityType6"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <ImageView
+                  android:id="@+id/imageViewActivityType7"
+                  android:layout_width="64dp"
+                  android:layout_height="64dp"
+                  android:scaleX="1"
+                  android:scaleY="1"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:srcCompat="@drawable/ic_meeting" />
+
+              <TextView
+                  android:id="@+id/textViewActivityType7"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="Reunião"
+                  android:textAlignment="center"
+                  android:textColor="#707070"
+                  android:textSize="12sp"
+                  android:textStyle="normal"
+                  app:layout_constraintEnd_toEndOf="@+id/imageViewActivityType7"
+                  app:layout_constraintStart_toStartOf="@+id/imageViewActivityType7"
+                  app:layout_constraintTop_toBottomOf="@+id/imageViewActivityType7" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
           </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -400,45 +554,6 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/buttonMaterial">
 
-        <ImageView
-            android:id="@+id/imageViewLobitos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-            app:srcCompat="@drawable/icon_lobitos" />
-
-        <ImageView
-            android:id="@+id/imageViewExploradores"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-            app:srcCompat="@drawable/icon_exploradores" />
-
-        <ImageView
-            android:id="@+id/imageViewPioneiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@+id/imageViewExploradores"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-            app:srcCompat="@drawable/icon_pioneiros" />
-
-        <ImageView
-            android:id="@+id/imageViewCaminheiros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSections"
-            app:srcCompat="@drawable/icon_caminheiros" />
-
         <TextView
             android:id="@+id/textViewSections"
             android:layout_width="0dp"
@@ -449,6 +564,52 @@
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutSections2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSections">
+
+          <ImageView
+              android:id="@+id/imageViewLobitos"
+              android:layout_width="65dp"
+              android:layout_height="65dp"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toTopOf="parent"
+              app:srcCompat="@drawable/icon_lobitos" />
+
+          <ImageView
+              android:id="@+id/imageViewExploradores"
+              android:layout_width="65dp"
+              android:layout_height="65dp"
+              android:layout_marginStart="16dp"
+              app:layout_constraintStart_toEndOf="@+id/imageViewLobitos"
+              app:layout_constraintTop_toTopOf="parent"
+              app:srcCompat="@drawable/icon_exploradores" />
+
+          <ImageView
+              android:id="@+id/imageViewPioneiros"
+              android:layout_width="65dp"
+              android:layout_height="65dp"
+              android:layout_marginStart="16dp"
+              app:layout_constraintStart_toEndOf="@+id/imageViewExploradores"
+              app:layout_constraintTop_toTopOf="parent"
+              app:srcCompat="@drawable/icon_pioneiros" />
+
+          <ImageView
+              android:id="@+id/imageViewCaminheiros"
+              android:layout_width="65dp"
+              android:layout_height="65dp"
+              android:layout_marginStart="16dp"
+              app:layout_constraintStart_toEndOf="@+id/imageViewPioneiros"
+              app:layout_constraintTop_toTopOf="parent"
+              app:srcCompat="@drawable/icon_caminheiros" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
