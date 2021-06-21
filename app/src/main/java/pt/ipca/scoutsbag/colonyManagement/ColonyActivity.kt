@@ -116,7 +116,11 @@ class ColonyActivity : AppCompatActivity() {
             val profileImage    = rowView.findViewById<ImageView>(R.id.profileImageColony)
 
             // Set values in the row
-            textViewName.text = user.userName.toString()
+            var userName = user.userName
+            if(user.codType == "Dir") {
+                userName += " (Dirigente)"
+            }
+            textViewName.text = userName
             if(user.idTeam!! != null) {
                 textViewSection.text = Backend.getSectionName(Backend.getTeamById(user.idTeam!!, teams).idSection!!)
                 textViewTeam.text = Backend.getTeamById(user.idTeam!!, teams).teamName
