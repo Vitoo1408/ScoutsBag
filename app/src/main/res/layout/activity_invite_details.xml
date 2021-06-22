@@ -274,16 +274,16 @@
 
                 <ImageView
                     android:id="@+id/imageViewSlot1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewSections" />
 
                 <ImageView
                     android:id="@+id/imageViewSlot2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toEndOf="@+id/imageViewSlot1"
@@ -291,8 +291,8 @@
 
                 <ImageView
                     android:id="@+id/imageViewSlot3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toEndOf="@+id/imageViewSlot2"
@@ -300,8 +300,8 @@
 
                 <ImageView
                     android:id="@+id/imageViewSlot4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     app:layout_constraintStart_toEndOf="@+id/imageViewSlot3"
