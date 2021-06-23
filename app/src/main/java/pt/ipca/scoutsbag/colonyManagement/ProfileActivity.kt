@@ -114,7 +114,6 @@ class ProfileActivity : AppCompatActivity() {
             intent.putExtra("user", userJsonStr)
             startActivity(intent)
         }
-
     }
 
     //when the support action bar back button is pressed, the app will go back to the previous activity
@@ -135,18 +134,12 @@ class ProfileActivity : AppCompatActivity() {
         Backend.getAllUserInvites(user.idUser!!) {
             invites = it
 
-            // Add to the total counter if the user have accepted or rejected
-            for (i in it) {
-                if (i.acceptedInvite != null) {
-                    totalInvites++
-                }
-                // Add to the total counter if the invite is pending but is outdated
-                else {
-                    val activity = Backend.getActivity(i.idActivity!!)
-                    if (i.acceptedInvite == null && Utils.outdatedActivity(activity))
-                        totalInvites++
-                }
+            for (i in it)  {
+                println("$i -> idA -> ${i.idActivity}")
             }
+
+            totalInvites = it.size.toFloat()
+            println("total: $totalInvites")
         }
 
         // Get the accepted amount
@@ -154,7 +147,7 @@ class ProfileActivity : AppCompatActivity() {
             if (i.acceptedInvite == 1)
                 acceptedInvites++
         }
-
+        println("acceptedInvites: $acceptedInvites")
         // Return the percentage
         val result = (acceptedInvites / totalInvites) * 100
         return if (result.isNaN()) 0f else result
@@ -171,24 +164,13 @@ class ProfileActivity : AppCompatActivity() {
         val invites : MutableList<Invite> = arrayListOf()
         Backend.getAllUserInvites(user.idUser!!) {
 
+            totalInvites = it.size.toFloat()
+
             // Verify if the invite is from the last month
             for (i in it) {
                 val activity = Backend.getActivity(i.idActivity!!)
                 if (dateLatestThanLastMonth(activity.startDate!!))
                     invites.add(i)
-            }
-        }
-
-        // Add to the total counter if the user have accepted or rejected
-        for (i in invites) {
-            if (i.acceptedInvite != null) {
-                totalInvites++
-            }
-            // Add to the total counter if the invite is pending but is outdated
-            else {
-                val activity = Backend.getActivity(i.idActivity!!)
-                if (i.acceptedInvite == null && Utils.outdatedActivity(activity))
-                    totalInvites++
             }
         }
 
@@ -214,24 +196,13 @@ class ProfileActivity : AppCompatActivity() {
         val invites : MutableList<Invite> = arrayListOf()
         Backend.getAllUserInvites(user.idUser!!) {
 
+            totalInvites = it.size.toFloat()
+
             // Verify if the invite is from the last month
             for (i in it) {
                 val activity = Backend.getActivity(i.idActivity!!)
-                if (dateLatestThanLastYear(activity.startDate!!))
+                if (!dateLatestThanLastYear(activity.startDate!!))
                     invites.add(i)
-            }
-        }
-
-        // Add to the total counter if the user have accepted or rejected
-        for (i in invites) {
-            if (i.acceptedInvite != null) {
-                totalInvites++
-            }
-            // Add to the total counter if the invite is pending but is outdated
-            else {
-                val activity = Backend.getActivity(i.idActivity!!)
-                if (i.acceptedInvite == null && Utils.outdatedActivity(activity))
-                    totalInvites++
             }
         }
 
@@ -285,6 +256,6 @@ class ProfileActivity : AppCompatActivity() {
         val cYear  = c.get(Calendar.YEAR)
 
         // Check if it is outdated
-        return dYear <= cYear
+        return dYear < cYear
     }
 }

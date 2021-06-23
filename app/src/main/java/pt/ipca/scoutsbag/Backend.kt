@@ -13,6 +13,7 @@ import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import pt.ipca.scoutsbag.models.*
+import kotlin.math.roundToInt
 
 
 object Backend {
@@ -273,6 +274,44 @@ object Backend {
 
             // Return list
             callBack(invites)
+        }
+    }
+
+    /*
+        This function returns the percentage of accepted invites for an activity
+        @idUser = id of the logged user
+        @callBack = return the percentage
+     */
+    fun getAllActivityInvitesPercentage(idActivity: Int, callBack: (Int)->Unit) {
+
+        var percentage = 0f
+        var acceptedCounter = 0f
+        var totalInvites = 0
+
+        // Create the http request
+        val request = Request.Builder().url("http://" + MainActivity.IP + ":" + MainActivity.PORT + "/api/v1/activitiesInvites/$idActivity").build()
+
+        // Send the request and analyze the response
+        OkHttpClient().newCall(request).execute().use { response ->
+
+            // Convert the response into string then into JsonArray
+            val jsonArrayStr : String = response.body!!.string()
+            val jsonArray = JSONArray(jsonArrayStr)
+            totalInvites = jsonArray.length()
+
+            // Add the elements in the list
+            for (index in 0 until jsonArray.length()) {
+                val jsonArticle = jsonArray.get(index) as JSONObject
+                val invite = Invite.fromJson(jsonArticle)
+                if(invite.acceptedInvite == 1) {
+                    acceptedCounter++
+                }
+            }
+
+            percentage = (acceptedCounter / totalInvites) * 100
+
+            // Return list
+            callBack(percentage.roundToInt())
         }
     }
 

@@ -1,26 +1,19 @@
 package pt.ipca.scoutsbag.activityManagement
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
-import com.example.scoutsteste1.ScoutActivity
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import pt.ipca.scoutsbag.Backend
-import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
-import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.*
 
 class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
 
+    var percentage: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -44,6 +37,7 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         val textViewLocal = findViewById<TextView>(R.id.textViewActivityLocalization)
         val textViewStartLocal = findViewById<TextView>(R.id.textViewLocalizationStart)
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
+        val textViewStatistics = findViewById<TextView>(R.id.textViewStatistics)
         val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
 
         // Set data in the views
@@ -55,6 +49,18 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         textViewLocal.text = activity.activitySite
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
+
+        // Get invites accepted percentage
+
+        GlobalScope.launch(Dispatchers.IO) {
+            Backend.getAllActivityInvitesPercentage(activity.idActivity!!) {
+                percentage = it
+            }
+
+            GlobalScope.launch(Dispatchers.Main) {
+                textViewStatistics.text = "$percentage%"
+            }
+        }
 
         // View requested material list
         buttonMaterial.setOnClickListener {

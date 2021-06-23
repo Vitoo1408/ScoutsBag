@@ -197,6 +197,7 @@ class ActivityReplyRequest : AppCompatActivity() {
 
                 // Build the user that will be added
                 user.accepted = 1
+                user.codType = "Esc"
                 user.birthDate = Utils.mySqlDateToString(user.birthDate!!)
                 user.idTeam = selectedTeam?.idTeam
 

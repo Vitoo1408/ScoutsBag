@@ -11,6 +11,7 @@ import android.os.Build
 import android.provider.OpenableColumns
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import com.example.scoutsteste1.ScoutActivity
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,6 +22,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 import java.io.File
+import java.time.LocalDate
+import java.time.Month
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
@@ -30,11 +33,12 @@ object Utils {
     /*
         This function returns true if the activity is older than the current date.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun outdatedActivity(activity: ScoutActivity): Boolean {
 
         // Variables
         val activityDate: String = activity.finishDate!!
-        val c: Calendar = Calendar.getInstance()
+        val c = LocalDate.now()
 
         // Activity Date
         val aDay   = getDay(activityDate).toInt()
@@ -42,9 +46,9 @@ object Utils {
         val aYear  = getYear(activityDate).toInt()
 
         // Current Date
-        val cDay   = c.get(Calendar.DAY_OF_MONTH)
-        val cMonth = c.get(Calendar.MONTH) + 1
-        val cYear  = c.get(Calendar.YEAR)
+        val cDay   = c.dayOfMonth
+        val cMonth = c.month.value
+        val cYear  = c.year
 
         // Check if it is outdated
         return if (cYear > aYear) {

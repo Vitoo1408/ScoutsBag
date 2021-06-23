@@ -19,6 +19,7 @@ import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.MainActivity
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
+import pt.ipca.scoutsbag.models.Invite
 import pt.ipca.scoutsbag.models.Material
 import pt.ipca.scoutsbag.models.Section
 import pt.ipca.scoutsbag.models.Team
@@ -29,7 +30,6 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
     lateinit var activity: ScoutActivity
     var materials: List<Material> = arrayListOf()
     var teams: List<Team> = arrayListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -55,6 +55,7 @@ open class ScoutActivityDetailsHelper: AppCompatActivity() {
 
             // Display all invited sections
             getAllInvitedSections()
+
         }
 
     }
