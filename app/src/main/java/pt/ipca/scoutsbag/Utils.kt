@@ -51,8 +51,6 @@ object Utils {
         val cYear  = c.year
 
 
-
-
         // Check if it is outdated
         return if (cYear > aYear) {
             true
