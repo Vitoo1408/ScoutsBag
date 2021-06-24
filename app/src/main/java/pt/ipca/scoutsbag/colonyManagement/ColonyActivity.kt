@@ -38,6 +38,7 @@ class ColonyActivity : AppCompatActivity() {
     /*
         This function create the view
      */
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Initial Settings

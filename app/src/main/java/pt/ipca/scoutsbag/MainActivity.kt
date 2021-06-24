@@ -74,6 +74,9 @@ class MainActivity : AppCompatActivity() {
         if(userDetailsJsonObject.getString("id_team") != "null") UserLoggedIn.idTeam = userDetailsJsonObject.getString("id_team").toInt() else UserLoggedIn.idTeam = 0
         UserLoggedIn.imageUrl = userDetailsJsonObject.getString("image_url")
 
-        Log.d("UserLoggedIn", userDetails)
+        if (userDetails != null) {
+            Log.d("UserLoggedIn", userDetails)
+        }
+        
     }
 }

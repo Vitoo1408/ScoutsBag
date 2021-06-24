@@ -90,6 +90,7 @@ class EditProfileActivity : ActivityImageHelper() {
             "M" -> findViewById<RadioButton>(R.id.genderMasc).isChecked = true
             "O" -> findViewById<RadioButton>(R.id.genderOther).isChecked = true
         }
+
         editGender = UserLoggedIn.gender
         editName?.setText(UserLoggedIn.userName)
         if(UserLoggedIn.nin != "null") editNIN?.setText(UserLoggedIn.nin)
