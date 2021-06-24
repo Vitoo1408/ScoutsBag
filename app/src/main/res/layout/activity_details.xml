@@ -19,7 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp">
 
             <TextView
                 android:id="@+id/textViewName"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="16dp"
                 android:text="Descrição:"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewName" />
@@ -66,13 +66,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/custom_button_black"
-                android:ems="10"
-                android:gravity="start|top"
                 android:drawableStart="@drawable/icon_euro"
                 android:drawablePadding="10dp"
-                android:text="Preço"
+                android:ems="10"
+                android:gravity="start|top"
                 android:inputType="numberDecimal"
                 android:padding="10dp"
+                android:text="Preço"
                 android:textColor="#707070"
                 android:textSize="12sp"
                 android:textStyle="normal"
@@ -174,9 +174,9 @@
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:gravity="start|top"
-                    android:text="Localização da Atividade"
                     android:inputType="textMultiLine"
                     android:padding="10dp"
+                    android:text="Localização da Atividade"
                     android:textColor="#707070"
                     android:textSize="12sp"
                     android:textStyle="normal"
@@ -237,7 +237,7 @@
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutLocalization"/>
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutLocalization" />
 
             <TextView
                 android:id="@+id/buttonMaterial"
@@ -252,9 +252,9 @@
                 android:drawablePadding="10dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:text="Ver material requisitado."
                 android:inputType="textNoSuggestions"
                 android:padding="10dp"
+                android:text="Ver material requisitado."
                 android:textSize="12sp"
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -268,11 +268,12 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonMaterial">
+                app:layout_constraintTop_toBottomOf="@+id/buttonMaterial"
+                app:layout_constraintVertical_bias="0.110000014">
 
                 <ImageView
                     android:id="@+id/imageViewSlot1"
@@ -327,13 +328,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/textViewDescriptionTitle"
+                android:layout_marginBottom="32dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewName">
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutSections">
 
                 <TextView
                     android:id="@+id/textView24"

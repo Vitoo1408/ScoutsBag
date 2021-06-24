@@ -3,12 +3,14 @@ package pt.ipca.scoutsbag.activityManagement
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pt.ipca.scoutsbag.Backend
 import pt.ipca.scoutsbag.R
 import pt.ipca.scoutsbag.Utils
+import pt.ipca.scoutsbag.loginAndRegister.UserLoggedIn
 import pt.ipca.scoutsbag.models.*
 
 class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
@@ -39,6 +41,7 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         val textViewEndLocal = findViewById<TextView>(R.id.textViewLocalizationEnd)
         val textViewStatistics = findViewById<TextView>(R.id.textViewStatistics)
         val buttonMaterial = findViewById<TextView>(R.id.buttonMaterial)
+        val rowStatistics = findViewById<ConstraintLayout>(R.id.constraintLayoutEstatistica)
 
         // Set data in the views
         textViewName.text = activity.nameActivity
@@ -50,15 +53,17 @@ class ActivityDetailsActivity: ScoutActivityDetailsHelper() {
         textViewStartLocal.text = activity.startSite
         textViewEndLocal.text = activity.finishSite
 
-        // Get invites accepted percentage
+        if(UserLoggedIn.codType != "Esc") {
+            // Get invites accepted percentage
+            GlobalScope.launch(Dispatchers.IO) {
+                Backend.getAllActivityInvitesPercentage(activity.idActivity!!) {
+                    percentage = it
+                }
 
-        GlobalScope.launch(Dispatchers.IO) {
-            Backend.getAllActivityInvitesPercentage(activity.idActivity!!) {
-                percentage = it
-            }
-
-            GlobalScope.launch(Dispatchers.Main) {
-                textViewStatistics.text = "$percentage%"
+                GlobalScope.launch(Dispatchers.Main) {
+                    rowStatistics.visibility = View.VISIBLE
+                    textViewStatistics.text = "$percentage%"
+                }
             }
         }
 

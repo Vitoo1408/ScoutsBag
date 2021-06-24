@@ -95,8 +95,11 @@ class EditProfileActivity : ActivityImageHelper() {
         //load all user data into text views
         when (UserLoggedIn.gender) {
             "F" -> findViewById<RadioButton>(R.id.genderFem).isChecked = true
+            "f" -> findViewById<RadioButton>(R.id.genderFem).isChecked = true
             "M" -> findViewById<RadioButton>(R.id.genderMasc).isChecked = true
+            "m" -> findViewById<RadioButton>(R.id.genderMasc).isChecked = true
             "O" -> findViewById<RadioButton>(R.id.genderOther).isChecked = true
+            "o" -> findViewById<RadioButton>(R.id.genderOther).isChecked = true
         }
 
         // Create the pop up window to select the date

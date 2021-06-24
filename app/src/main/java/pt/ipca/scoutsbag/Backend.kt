@@ -1,5 +1,7 @@
 package pt.ipca.scoutsbag
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.scoutsteste1.Catalog
 import com.example.scoutsteste1.Instruction
 import com.example.scoutsteste1.ScoutActivity
@@ -321,6 +323,7 @@ object Backend {
         @idUser = id of the logged user
         @callBack = return the list
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getAllAcceptedActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
 
         val activities : MutableList<ScoutActivity> = arrayListOf()
@@ -362,6 +365,7 @@ object Backend {
         @idUserTeam = team id of the selected user
         @callBack = return the list
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getAllUserPendingActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
 
         val activities : MutableList<ScoutActivity> = arrayListOf()
@@ -437,6 +441,7 @@ object Backend {
         @idUserTeam = team id of the selected user
         @callBack = return the list
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getAllUserPastActivities(idUser: Int, callBack: (List<ScoutActivity>)->Unit) {
 
         val activities : MutableList<ScoutActivity> = arrayListOf()
