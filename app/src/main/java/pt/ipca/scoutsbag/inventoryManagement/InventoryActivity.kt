@@ -102,6 +102,10 @@ class InventoryActivity : AppCompatActivity(){
 
             holder.materialImage.setOnClickListener {
                 val materialJsonString = inventoryItem.toJson().toString()
+
+                var dialog = MaterialDetailsDialog.newInstance(materialJsonString)
+
+
                 MaterialDetailsDialog.newInstance(materialJsonString).show(this@InventoryActivity.supportFragmentManager, MaterialDetailsDialog.TAG)
             }
 

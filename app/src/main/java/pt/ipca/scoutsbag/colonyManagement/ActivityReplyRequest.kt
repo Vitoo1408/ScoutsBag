@@ -164,7 +164,12 @@ class ActivityReplyRequest : AppCompatActivity() {
 
         // Set data
         textName.text = user.userName
-        textNIN.text = user.nin
+        if(user.nin != null) {
+            textNIN.text = user.nin
+        } else {
+            textNIN.text = "Não tem"
+        }
+
         textPhone.text = user.contact
         textMail.text = user.email
         textBirthDate.text = Utils.mySqlDateTimeToString(user.birthDate!!)
@@ -192,6 +197,7 @@ class ActivityReplyRequest : AppCompatActivity() {
 
                 // Build the user that will be added
                 user.accepted = 1
+                user.codType = "Esc"
                 user.birthDate = Utils.mySqlDateToString(user.birthDate!!)
                 user.idTeam = selectedTeam?.idTeam
 

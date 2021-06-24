@@ -17,6 +17,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -456,11 +457,16 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
             val material = materials[position]
             val textViewName     = rowView.findViewById<TextView>(R.id.textViewMaterialName)
             val textViewQuantity = rowView.findViewById<TextView>(R.id.editViewMaterialQuantity)
+            val imageView = rowView.findViewById<ImageView>(R.id.materialImage)
             val checkBoxMaterial = rowView.findViewById<CheckBox>(R.id.checkBoxMaterial)
 
             // Set data
             textViewName.text = material.nameMaterial
             textViewQuantity.text = material.qntStock.toString()
+
+            if (material.imageUrl != "") {
+                Picasso.with(this@ScoutActivityCreationHelper).load(material.imageUrl).into(imageView)
+            }
 
             // Selected all the previous selected materials
             for (i in 0 until selectedMaterials.size) {
@@ -472,7 +478,7 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
 
             // Change the quantity of the material by his index (amId) in the selected materials list
             textViewQuantity.doAfterTextChanged {
-                val text = it.toString()
+                var text = it.toString()
 
                 // Activity material Id, this variable is the id of the materialActivity object in the selected materials list
                 var amId: Int? = null
@@ -491,14 +497,14 @@ open class ScoutActivityCreationHelper: AppCompatActivity()  {
                     else {
                         selectedMaterials[amId].qnt = 0
                         checkBoxMaterial.isChecked = false
-
                         selectedMaterials.removeAt(amId)
                     }
                 }
 
+                if (text != "") {
                 if (textViewQuantity.text.toString().toInt() > material.qntStock!!)
                     textViewQuantity.text = material.qntStock.toString()
-
+                }
             }
 
             // Remove or Add the material to this activity by clicking on the checkBox

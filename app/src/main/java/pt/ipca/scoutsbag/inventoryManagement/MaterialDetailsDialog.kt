@@ -30,6 +30,8 @@ class MaterialDetailsDialog : AppCompatDialogFragment() {
             val materialJson = Material.fromJson(JSONObject(materialJsonString))
             material = materialJson
         }
+
+        setStyle(STYLE_NO_TITLE, 0)
     }
 
 

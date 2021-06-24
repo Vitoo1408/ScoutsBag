@@ -11,6 +11,7 @@ import android.os.Build
 import android.provider.OpenableColumns
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
 import com.example.scoutsteste1.ScoutActivity
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,6 +22,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import pt.ipca.scoutsbag.colonyManagement.EditProfileActivity
 import java.io.File
+import java.time.LocalDate
+import java.time.Month
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.system.exitProcess
@@ -30,11 +33,12 @@ object Utils {
     /*
         This function returns true if the activity is older than the current date.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun outdatedActivity(activity: ScoutActivity): Boolean {
 
         // Variables
         val activityDate: String = activity.finishDate!!
-        val c: Calendar = Calendar.getInstance()
+        val c = LocalDate.now()
 
         // Activity Date
         val aDay   = getDay(activityDate).toInt()
@@ -42,9 +46,9 @@ object Utils {
         val aYear  = getYear(activityDate).toInt()
 
         // Current Date
-        val cDay   = c.get(Calendar.DAY_OF_MONTH)
-        val cMonth = c.get(Calendar.MONTH) + 1
-        val cYear  = c.get(Calendar.YEAR)
+        val cDay   = c.dayOfMonth
+        val cMonth = c.month.value
+        val cYear  = c.year
 
         // Check if it is outdated
         return if (cYear > aYear) {
@@ -74,6 +78,34 @@ object Utils {
                 // Call the time pop up window
                 val timePickerDialog = initTimePicker(dateTextView, context)
                 timePickerDialog.show()
+            }
+
+        // Get the data to create the date picker
+        val cal: Calendar = Calendar.getInstance()
+        val year: Int = cal.get(Calendar.YEAR)
+        val month: Int = cal.get(Calendar.MONTH)
+        val day: Int = cal.get(Calendar.DAY_OF_MONTH)
+        val style: Int = AlertDialog.THEME_HOLO_LIGHT
+
+        // Create and return the date picker
+        return DatePickerDialog(context, style, dateSetListener, year, month, day)
+    }
+
+    /*
+        This function create a Date picker
+        @dateTextView = the textView responsible for select the date
+        @context = activity that the date picker is in
+     */
+    fun initOnlyDatePicker(dateTextView: TextView, context: Context): DatePickerDialog {
+
+        // After the user finish selecting a date, change the date in the button
+        val dateSetListener =
+            DatePickerDialog.OnDateSetListener { _, year, month, day ->
+
+                // Add the date to the button
+                val date = "$day-${month+1}-$year"
+                dateTextView.text = date
+
             }
 
         // Get the data to create the date picker
@@ -182,6 +214,34 @@ object Utils {
         val min: String = strTimeArray[1]
 
         return "$year-$month-$day $hour:$min:00"
+    }
+
+    /*
+        This function convert conventional Date format to a format that mySql accept
+        @date = conventional date
+     */
+
+    fun dateToMySql(date: String): String {
+        // Split the Date in day, month and year
+        val strDateArray = Pattern.compile("-").split(date, 3)
+        val day: String = strDateArray[0]
+        val month: String = strDateArray[1]
+        val year: String = strDateArray[2]
+        return "$year-$month-$day"
+    }
+
+    /*
+        This function convert conventional Date format to a format that mySql accept
+        @date = conventional date
+     */
+
+    fun mySqlDateToDate(date: String): String {
+        // Split the Date in day, month and year
+        val strDateArray = Pattern.compile("-").split(date, 3)
+        val year: String = strDateArray[0]
+        val month: String = strDateArray[1]
+        val day: String = strDateArray[2]
+        return "$day-$month-$year"
     }
 
 
